@@ -21,7 +21,7 @@ ESCROW_Email = 'ekehanson@gmail.com'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['jumiaonline-api.onrender.com', 'localhost', '127.0.0.1','jumia-clone-api-11vb.onrender.com']
+ALLOWED_HOSTS = ['artisan-api-e2ih.onrender.com', 'localhost', '127.0.0.1','jumia-clone-api-11vb.onrender.com']
 
 
 # Application definition
