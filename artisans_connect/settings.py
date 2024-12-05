@@ -21,7 +21,7 @@ ESCROW_Email = 'ekehanson@gmail.com'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['artisan-api-e2ih.onrender.com', 'localhost', '127.0.0.1','jumia-clone-api-11vb.onrender.com']
+ALLOWED_HOSTS = ['artisan-api-e2ih.onrender.com', 'localhost', '127.0.0.1']
 
 
 # Application definition
@@ -37,6 +37,7 @@ INSTALLED_APPS = [
     'rest_framework',
     'rest_framework.authtoken',
     'corsheaders',
+
     'users',
     'profiles',
     'jobs',
@@ -47,16 +48,17 @@ INSTALLED_APPS = [
 
 
 MIDDLEWARE = [
+    'corsheaders.middleware.CorsMiddleware',  # Must be before CommonMiddleware
     'django.middleware.security.SecurityMiddleware',
-    'django.contrib.sessions.middleware.SessionMiddleware',
+    
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
+    'django.contrib.sessions.middleware.SessionMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
-
-    'corsheaders.middleware.CorsMiddleware',
 ]
+
 
 ROOT_URLCONF = 'artisans_connect.urls'
 
@@ -83,17 +85,19 @@ WSGI_APPLICATION = 'artisans_connect.wsgi.application'
 
 AUTH_USER_MODEL = 'users.CustomUser'
 
-# # Configure CORS
+
+MIDDLEWARE.insert(0, 'corsheaders.middleware.CorsMiddleware')
+
+# Allow specific origins during development
+CORS_ALLOW_CREDENTIALS = True
 CORS_ALLOWED_ORIGINS = [
-    "https://simul-website.vercel.app", 
-     "http://localhost:3000", # Add your frontend's origin here
-     "http://localhost:5173" # Add your frontend's origin here
-    # Add any other origins you want to allow
+    "http://localhost:5173",  # Vite dev server
+    "https://artisan-nu.vercel.app/"
 ]
 
-
-# Optional: Allow all origins (for development only)
+# If you want to allow all origins during development (not recommended for production):
 # CORS_ALLOW_ALL_ORIGINS = True
+
 
 REST_FRAMEWORK = {
     'DEFAULT_PAGINATION_CLASS': 'rest_framework.pagination.PageNumberPagination',
