@@ -92,7 +92,7 @@ MIDDLEWARE.insert(0, 'corsheaders.middleware.CorsMiddleware')
 CORS_ALLOW_CREDENTIALS = True
 CORS_ALLOWED_ORIGINS = [
     "http://localhost:5173",  # Vite dev server
-    "https://artisan-nu.vercel.app/"
+    "https://artisan-nu.vercel.app"
 ]
 
 # If you want to allow all origins during development (not recommended for production):
