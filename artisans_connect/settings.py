@@ -44,6 +44,7 @@ INSTALLED_APPS = [
     'messaging',
     'payments',
     'chat',
+    'tradeReviews',
 ]
 
 
@@ -136,24 +137,24 @@ DEFAULT_FROM_EMAIL = 'ekenehanson@gmail.com'  # The default email address to use
 # https://docs.djangoproject.com/en/5.1/ref/settings/#databases
 
 
+DATABASES = {
+    'default': {
+        'ENGINE': 'django.db.backends.sqlite3',
+        'NAME': BASE_DIR / 'db.sqlite3',
+    }
+}
+
 # DATABASES = {
 #     'default': {
-#         'ENGINE': 'django.db.backends.sqlite3',
-#         'NAME': BASE_DIR / 'db.sqlite3',
+#         'ENGINE': 'django.db.backends.postgresql',
+#         'NAME': 'db_for_artisan',
+#         'USER': 'db_for_artisan_user',
+#         'PASSWORD': 'xJNTk13vBRdHp8bvuDWejIhjlqz4gYQW',
+#         'HOST': 'dpg-ctbecc68ii6s7381ftag-a.oregon-postgres.render.com',
+#         'PORT': '5432',  # Default port for PostgreSQL
 #     }
 # }
 
-
-DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.postgresql',
-        'NAME': 'artisan_db',
-        'USER': 'artisan_db_user',
-        'PASSWORD': 'jn4Pm2bTsg3Jz4qiBbXDXIeueXECp7bS',
-        'HOST': 'dpg-ct82oed2ng1s73f0ddcg-a.oregon-postgres.render.com',
-        'PORT': '5432',  # Default PostgreSQL port
-    }
-}
 
 
 # Password validation

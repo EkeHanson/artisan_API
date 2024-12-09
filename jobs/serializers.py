@@ -27,7 +27,6 @@ class ServiceCategoryBulkCreateSerializer(serializers.ModelSerializer):
         fields = "__all__"
 
 
-
 class JobRequestSerializer(serializers.ModelSerializer):
     status = serializers.CharField(default='open')
     class Meta:
