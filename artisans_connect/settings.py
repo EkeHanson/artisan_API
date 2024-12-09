@@ -137,14 +137,25 @@ DEFAULT_FROM_EMAIL = 'ekenehanson@gmail.com'  # The default email address to use
 # https://docs.djangoproject.com/en/5.1/ref/settings/#databases
 
 
+# DATABASES = {
+#     'default': {
+#         'ENGINE': 'django.db.backends.sqlite3',
+#         'NAME': BASE_DIR / 'db.sqlite3',
+#     }
+# }
+
+
+
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
+        'ENGINE': 'django.db.backends.postgresql',
+        'NAME': 'artisan_db_i5p3',
+        'USER': 'artisan_db_i5p3_user',
+        'PASSWORD': 'fX9cMh3ODQm9KGAWBOJvyYZN9hdyP9j7',
+        'HOST': 'dpg-ctbfti52ng1s73dtn9h0-a.oregon-postgres.render.com',
+        'PORT': '5432',  # Default PostgreSQL port
     }
 }
-
-
 
 
 # Password validation
