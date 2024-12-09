@@ -144,16 +144,6 @@ DATABASES = {
     }
 }
 
-# DATABASES = {
-#     'default': {
-#         'ENGINE': 'django.db.backends.postgresql',
-#         'NAME': 'db_for_artisan',
-#         'USER': 'db_for_artisan_user',
-#         'PASSWORD': 'xJNTk13vBRdHp8bvuDWejIhjlqz4gYQW',
-#         'HOST': 'dpg-ctbecc68ii6s7381ftag-a.oregon-postgres.render.com',
-#         'PORT': '5432',  # Default port for PostgreSQL
-#     }
-# }
 
 
 

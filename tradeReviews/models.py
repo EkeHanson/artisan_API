@@ -4,7 +4,7 @@ from users.models import CustomUser
 
 
 class TradeReview(models.Model):
-
+    
     service_category = models.ForeignKey(ServiceCategory, on_delete=models.CASCADE, to_field='unique_id')
 
     customer = models.ForeignKey(CustomUser, on_delete=models.CASCADE, to_field='unique_id')
