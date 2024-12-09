@@ -5,7 +5,6 @@ from rest_framework import viewsets
 from .models import JobRequest, Review, ServiceCategory
 from .serializers import JobRequestSerializer, ReviewSerializer
 from rest_framework.permissions import IsAuthenticated, AllowAny
-
 from rest_framework import generics
 from .models import ServiceCategory
 from .serializers import ServiceCategorySerializer, ServiceCategoryBulkCreateSerializer
@@ -28,6 +27,8 @@ class BulkServiceCategoryCreateView(APIView):
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 
+
+
 class ServiceCategoryListCreateView(generics.ListCreateAPIView):
     permission_classes = [AllowAny]
     """
@@ -35,6 +36,7 @@ class ServiceCategoryListCreateView(generics.ListCreateAPIView):
     """
     queryset = ServiceCategory.objects.all().order_by('id')
     serializer_class = ServiceCategorySerializer
+    pagination_class = None  # Disable pagination for this view
 
 
 class ServiceCategoryDetailView(generics.RetrieveUpdateDestroyAPIView):
