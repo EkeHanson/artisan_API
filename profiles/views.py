@@ -14,6 +14,7 @@ class ProfileRequestViewSet(viewsets.ModelViewSet):
     queryset = ArtisanProfile.objects.all().order_by('id')
     serializer_class = ArtisanProfileRequestSerializer
     permission_classes = [AllowAny]
+    pagination_class = None  # Disable pagination for this view
 
     def retrieve(self, request, *args, **kwargs):
         """Handle GET request for a single ArtisanProfile."""
