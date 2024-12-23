@@ -31,7 +31,7 @@ class TradeReviewViewSet(ModelViewSet):
         if not serializer.is_valid():
             # Log and print the errors
             error_message = f"PATCH request errors: {serializer.errors}"
-            print(error_message)  # Print to console
+            #print(error_message)  # Print to console
             return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
         
         self.perform_update(serializer)

@@ -33,7 +33,9 @@ class CustomUser(AbstractBaseUser):
     unique_id = models.UUIDField(default=uuid.uuid4, editable=False, unique=True)  # Custom unique ID
     
     user_type = models.CharField(max_length=11, choices=USER_TYPE_CHOICES)
+
     mobile_number = models.CharField(max_length=15)
+    
     is_verified = models.BooleanField(default=False)
 
     groups = models.ManyToManyField(
