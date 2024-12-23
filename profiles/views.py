@@ -7,7 +7,19 @@ from .serializers import ArtisanProfileRequestSerializer
 from django.db import IntegrityError
 from rest_framework.views import APIView
 from jobs.models import ServiceCategory
+from rest_framework.exceptions import NotFound
 
+class ArtisanProfileByUniqueIdView(APIView):
+    permission_classes = [AllowAny]
+
+    def get(self, request, unique_id, *args, **kwargs):
+        try:
+            # Retrieve ArtisanProfile using the provided unique_id
+            artisan_profile = ArtisanProfile.objects.get(user__unique_id=unique_id)
+            serializer = ArtisanProfileRequestSerializer(artisan_profile)
+            return Response(serializer.data, status=status.HTTP_200_OK)
+        except ArtisanProfile.DoesNotExist:
+            raise NotFound({"error": "ArtisanProfile with this unique_id does not exist."})
 
 
 class ProfileRequestViewSet(viewsets.ModelViewSet):
@@ -38,19 +50,17 @@ class ProfileRequestViewSet(viewsets.ModelViewSet):
         serializer = self.get_serializer(data=request.data)
         if not serializer.is_valid():
             error_message = f"POST request errors: {serializer.errors}"
-            print(error_message)  # Log the errors to the console
+            #print(error_message)  # Log the errors to the console
             return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
         try:
             self.perform_create(serializer)
         except IntegrityError as e:
             error_message = "Foreign key constraint failed. Ensure the 'user' UUID exists and is an 'artisan'."
-            print(f"Database Error: {e}")  # Log the error to the console
+            #print(f"Database Error: {e}")  # Log the error to the console
             return Response({"error": error_message}, status=status.HTTP_400_BAD_REQUEST)
 
         return Response(serializer.data, status=status.HTTP_201_CREATED)
-
-
 
 
 class ArtisanByServiceDetailsView(APIView):
