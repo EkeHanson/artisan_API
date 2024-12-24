@@ -50,6 +50,8 @@ class CustomUser(AbstractBaseUser):
         blank=True
     )
 
+    about_artisan = models.TextField(blank=True, null=True)
+
     phone = models.CharField(max_length=15)
     first_name = models.CharField(max_length=225)
     last_name = models.CharField(max_length=225)

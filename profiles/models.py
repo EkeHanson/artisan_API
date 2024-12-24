@@ -19,7 +19,8 @@ class ArtisanProfile(models.Model):
      blank=True, null=True
     )
 
-    skills = models.TextField()
+    # skills = models.TextField()
+    skills = models.JSONField(default=list)
     experience = models.PositiveIntegerField()
     location = models.CharField(max_length=255)
     certifications = models.CharField(max_length=255, blank=True, null=True)

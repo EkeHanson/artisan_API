@@ -14,6 +14,7 @@ class CustomUserSerializer(serializers.ModelSerializer):
             'last_name',
             'user_type',
             'date_joined',
+            'about_artisan',
         ]
 
 class ServiceCategorySerializer(serializers.ModelSerializer):

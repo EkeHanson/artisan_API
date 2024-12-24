@@ -12,13 +12,30 @@ from django.utils.encoding import force_bytes
 
 
 class UserViewSet(viewsets.ModelViewSet):
-    queryset = CustomUser.objects.all().order_by('id') 
+    queryset = CustomUser.objects.all().order_by('id')
     serializer_class = UserSerializer
-    
+
     def get_permissions(self):
+        # For 'create' and 'list' actions, allow anyone
         if self.action in ['create', 'list']:
             return [AllowAny()]
+        # For 'delete' action, allow anyone (no authentication required)
+        elif self.action == 'destroy':
+            return [AllowAny()]
+        # For all other actions, require authentication
         return [IsAuthenticated()]
+
+        
+# class UserViewSet(viewsets.ModelViewSet):
+#     queryset = CustomUser.objects.all().order_by('id') 
+#     serializer_class = UserSerializer
+#     permission_classes = [AllowAny]
+    
+
+#     def get_permissions(self):
+#         if self.action in ['create', 'list']:
+#             return [AllowAny()]
+#         return [IsAuthenticated()]
 
 
 class LoginView(generics.GenericAPIView): 
