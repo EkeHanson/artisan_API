@@ -149,13 +149,14 @@ DEFAULT_FROM_EMAIL = 'ekenehanson@gmail.com'  # The default email address to use
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
-        'NAME': 'artisan_db_wk8i',
-        'USER': 'artisan_db_wk8i_user',
-        'PASSWORD': 'foApBjDWODpPKvK1vG7Rvt8coCZKJRpT',
-        'HOST': 'dpg-ctduv3ilqhvc73da7v00-a.oregon-postgres.render.com',
+        'NAME': 'artisan_db_6p9j',
+        'USER': 'artisan_db_6p9j_user',
+        'PASSWORD': 'pv9MmWZVdSIdpKUrzFCbXG2l2j5igdub',
+        'HOST': 'dpg-ctl0m1ggph6c739hehrg-a.oregon-postgres.render.com',
         'PORT': '5432',  # Default PostgreSQL port
     }
 }
+
 
 
 # Password validation
