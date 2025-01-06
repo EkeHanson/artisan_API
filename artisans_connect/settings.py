@@ -23,9 +23,6 @@ DEBUG = True
 
 ALLOWED_HOSTS = ['artisan-api-e2ih.onrender.com', 'localhost', '127.0.0.1']
 
-
-# Application definition
-
 INSTALLED_APPS = [
     'django.contrib.admin',
     'django.contrib.auth',
@@ -61,7 +58,6 @@ MIDDLEWARE = [
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 ]
 
-
 ROOT_URLCONF = 'artisans_connect.urls'
 
 
@@ -92,14 +88,17 @@ MIDDLEWARE.insert(0, 'corsheaders.middleware.CorsMiddleware')
 
 # Allow specific origins during development
 CORS_ALLOW_CREDENTIALS = True
+
 CORS_ALLOWED_ORIGINS = [
-    "http://localhost:5173",  # Vite dev server
+    "http://localhost:5173",
+
+    "http://simservicehub.com",
+
     "https://artisan-nu.vercel.app"
 ]
 
 # If you want to allow all origins during development (not recommended for production):
 # CORS_ALLOW_ALL_ORIGINS = True
-
 
 REST_FRAMEWORK = {
     'DEFAULT_PAGINATION_CLASS': 'rest_framework.pagination.PageNumberPagination',
@@ -115,16 +114,6 @@ REST_FRAMEWORK = {
 }
 
 # Email configuration
-# EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
-# EMAIL_HOST = 'smtp.gmail.com'
-# EMAIL_PORT = 587
-# EMAIL_USE_TLS = True
-# EMAIL_HOST_USER = 'simultrain001@gmail.com'
-# EMAIL_HOST_PASSWORD = 'ygjb cylv qisl yzmh'  # App-specific password
-# DEFAULT_FROM_EMAIL = 'simultrain001@gmail.com'
-# EMAIL_DEBUG = True
-
-# Email configuration
 EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
 EMAIL_HOST = 'smtp.gmail.com'  # Your SMTP server address
 EMAIL_PORT = 587  # Your SMTP server port (587 is the default for SMTP with TLS)
@@ -132,10 +121,6 @@ EMAIL_USE_TLS = True  # Whether to use TLS (True by default)
 EMAIL_HOST_USER = 'ekenehanson@gmail.com'  # Your email address
 EMAIL_HOST_PASSWORD = 'pduw cpmw dgoq adrp'  # Your email password or app-specific password if using Gmail, etc.
 DEFAULT_FROM_EMAIL = 'ekenehanson@gmail.com'  # The default email address to use for sending emails
-
-
-# Database
-# https://docs.djangoproject.com/en/5.1/ref/settings/#databases
 
 
 # DATABASES = {
