@@ -1,7 +1,7 @@
 from datetime import timedelta
 from pathlib import Path
 import os
-
+import dj_database_url
 from pathlib import Path
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
@@ -146,20 +146,28 @@ DEFAULT_FROM_EMAIL = 'ekenehanson@gmail.com'  # The default email address to use
 # }
 
 
-DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.postgresql',
-        'NAME': 'cmvp_db_nsqr',
-        'USER': 'cmvp_db_nsqr_user',
-        'PASSWORD': 'Z03vjSqFvhOaUEiWnJqPF9bPRDRsb4Ce',
-        'HOST': 'dpg-ctojcdtsvqrc73b8sht0-a.oregon-postgres.render.com',
-        'PORT': '5432',
-        'OPTIONS': {
-            'sslmode': 'require',  # Use SSL for secure connection
-        },
-    }
-}
+# DATABASES = {
+#     'default': {
+#         'ENGINE': 'django.db.backends.postgresql',
+#         'NAME': 'artisan_db_ipi4',
+#         'USER': 'artisan_db_ipi4_user',
+#         'PASSWORD': 'BS36Kf3Pl87Mba9qwCevULel0xidXTV5',
+#         'HOST': 'dpg-cttqfqjqf0us73etl3pg-a.oregon-postgres.render.com',
+#         'PORT': '5432',  # Default PostgreSQL port
+#         'OPTIONS': {
+#             'connect_timeout': 10,  # Increase this value if needed
+#             'sslmode': 'require'  # Ensure secure connection
+#         },
 
+#     }
+# }
+DATABASES = {
+    'default': dj_database_url.parse(
+        'postgresql://artisan_db_ipi4_user:BS36Kf3Pl87Mba9qwCevULel0xidXTV5@dpg-cttqfqjqf0us73etl3pg-a.oregon-postgres.render.com/artisan_db_ipi4',
+        conn_max_age=600,
+        ssl_require=True
+    )
+}
 
 
 # Password validation
