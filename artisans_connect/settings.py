@@ -160,8 +160,6 @@ DEFAULT_FROM_EMAIL = 'ekenehanson@gmail.com'  # The default email address to use
 
 
 
-
-
 DATABASES = {
     'default': dj_database_url.parse(
         'postgresql://artisan_db_ipi4_user:BS36Kf3Pl87Mba9qwCevULel0xidXTV5@dpg-cttqfqjqf0us73etl3pg-a.oregon-postgres.render.com/artisan_db_ipi4',
