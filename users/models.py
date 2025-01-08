@@ -52,6 +52,8 @@ class CustomUser(AbstractBaseUser):
 
     about_artisan = models.TextField(blank=True, null=True)
 
+
+    address = models.CharField(max_length=255, default='Lagos, Nigeria')  # New address field with default value
     phone = models.CharField(max_length=15)
     first_name = models.CharField(max_length=225)
     last_name = models.CharField(max_length=225)

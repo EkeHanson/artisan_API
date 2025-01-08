@@ -9,6 +9,7 @@ from django.core.mail import send_mail
 from django.contrib.auth.tokens import default_token_generator
 from django.utils.http import urlsafe_base64_encode, urlsafe_base64_decode
 from django.utils.encoding import force_bytes
+from django.conf import settings
 
 import random
 from django.core.cache import cache
@@ -38,7 +39,7 @@ class SendLoginTokenView(views.APIView):
         # Send the token to the user's email
         subject = 'Your Login Token'
         message = f'Your login token is {token}. It is valid for 5 minutes.'
-        from_email = 'your_email@example.com'
+        from_email = settings.DEFAULT_FROM_EMAIL
         recipient_list = [email]
 
         send_mail(subject, message, from_email, recipient_list, fail_silently=False)
@@ -69,6 +70,7 @@ class VerifyLoginTokenView(views.APIView):
 
                 'email': user.email,
                 'phone': user.phone,
+                'address': user.address,
                 
                 'userId': user.id,
                 'userUnique_id': user.unique_id,
@@ -79,7 +81,6 @@ class VerifyLoginTokenView(views.APIView):
             }, status=status.HTTP_200_OK)
 
         return Response({'error': 'Invalid token'}, status=status.HTTP_400_BAD_REQUEST)
-
 
 
 class UserViewSet(viewsets.ModelViewSet):
@@ -94,7 +95,8 @@ class UserViewSet(viewsets.ModelViewSet):
         elif self.action == 'destroy':
             return [AllowAny()]
         # For all other actions, require authentication
-        return [IsAuthenticated()]
+        #return [IsAuthenticated()]
+        return [AllowAny()]
 
         
 # class UserViewSet(viewsets.ModelViewSet):
