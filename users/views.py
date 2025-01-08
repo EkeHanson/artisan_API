@@ -10,6 +10,77 @@ from django.contrib.auth.tokens import default_token_generator
 from django.utils.http import urlsafe_base64_encode, urlsafe_base64_decode
 from django.utils.encoding import force_bytes
 
+import random
+from django.core.cache import cache
+
+class SendLoginTokenView(views.APIView):
+    permission_classes = [AllowAny]
+
+    def post(self, request, *args, **kwargs):
+        email = request.data.get('email')
+
+        if not email:
+            return Response({'error': 'Email is required'}, status=status.HTTP_400_BAD_REQUEST)
+
+        try:
+            user = CustomUser.objects.get(email=email)
+
+        except CustomUser.DoesNotExist:
+            
+            return Response({'error': 'User with this email does not exist'}, status=status.HTTP_404_NOT_FOUND)
+
+        # Generate a 5-digit token
+        token = random.randint(10000, 99999)
+
+        # Store token in cache or any secure storage with a short expiration time (e.g., 5 minutes)
+        cache.set(f'login_token_{email}', token, timeout=300)
+
+        # Send the token to the user's email
+        subject = 'Your Login Token'
+        message = f'Your login token is {token}. It is valid for 5 minutes.'
+        from_email = 'your_email@example.com'
+        recipient_list = [email]
+
+        send_mail(subject, message, from_email, recipient_list, fail_silently=False)
+
+        return Response({'message': 'Login token has been sent to your email'}, status=status.HTTP_200_OK)
+
+
+class VerifyLoginTokenView(views.APIView):
+    permission_classes = [AllowAny]
+
+    def post(self, request, *args, **kwargs):
+        email = request.data.get('email')
+        token = request.data.get('token')
+
+        if not email or not token:
+            return Response({'error': 'Email and token are required'}, status=status.HTTP_400_BAD_REQUEST)
+
+        # Retrieve the token from cache
+        cached_token = cache.get(f'login_token_{email}')
+
+        if str(cached_token) == str(token):
+            # Token is valid; proceed with the next step, e.g., generating JWT tokens
+            user = CustomUser.objects.get(email=email)
+            refresh = RefreshToken.for_user(user)
+            return Response({
+                'refresh': str(refresh),
+                'access': str(refresh.access_token),
+
+                'email': user.email,
+                'phone': user.phone,
+                
+                'userId': user.id,
+                'userUnique_id': user.unique_id,
+                'first_name': user.first_name,
+                'first_name': user.first_name,
+                'last_name': user.last_name,
+                'date_joined': user.date_joined,
+            }, status=status.HTTP_200_OK)
+
+        return Response({'error': 'Invalid token'}, status=status.HTTP_400_BAD_REQUEST)
+
+
 
 class UserViewSet(viewsets.ModelViewSet):
     queryset = CustomUser.objects.all().order_by('id')
@@ -65,6 +136,7 @@ class LoginView(generics.GenericAPIView):
             }, status=status.HTTP_200_OK)
 
         return Response({'detail': 'Invalid credentials'}, status=status.HTTP_401_UNAUTHORIZED)
+
 
 
 class ResetPasswordView(views.APIView):

@@ -138,14 +138,30 @@ DEFAULT_FROM_EMAIL = 'ekenehanson@gmail.com'  # The default email address to use
 #         'USER': 'artisan_db_ipi4_user',
 #         'PASSWORD': 'BS36Kf3Pl87Mba9qwCevULel0xidXTV5',
 #         'HOST': 'dpg-cttqfqjqf0us73etl3pg-a.oregon-postgres.render.com',
-#         'PORT': '5432',  # Default PostgreSQL port
+#         'PORT': '5432',
 #         'OPTIONS': {
-#             'connect_timeout': 10,  # Increase this value if needed
-#             'sslmode': 'require'  # Ensure secure connection
+#             'connect_timeout': 10,  # Timeout in seconds
 #         },
-
 #     }
 # }
+
+
+
+# DATABASES = {
+#     'default': {
+#         'ENGINE': 'django.db.backends.postgresql',  # Use 'django.db.backends.postgresql_psycopg2' if using an older Django version
+#         'NAME': 'my-first-db',              # Replace with your database name
+#         'USER': 'postgres',              # Replace with your database username
+#         'PASSWORD': 'He8zIl7LCW9oKYvt2u7S',      # Replace with your database password
+#         'HOST': 'my-first-db.ch0224ai8mw7.eu-north-1.rds.amazonaws.com',
+#         'PORT': '5432',
+#     }
+# }
+
+
+
+
+
 DATABASES = {
     'default': dj_database_url.parse(
         'postgresql://artisan_db_ipi4_user:BS36Kf3Pl87Mba9qwCevULel0xidXTV5@dpg-cttqfqjqf0us73etl3pg-a.oregon-postgres.render.com/artisan_db_ipi4',
