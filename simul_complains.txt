@@ -1,0 +1,39 @@
+Follow-up on Pending Actions and Updates for WebApp Development
+Dear Proliance Team,
+We hope this message finds you well. 
+We sincerely appreciate the effort you’ve put into the web application so far. As we move forward, we’d like to gently highlight a few pending action points from our last meeting and reviews that require your attention. Ensuring timely implementation of these tasks will help us keep the project on track.
+Pending Actions:
+  Domain Testing: Could we kindly get an update on the www. domain? Testing was expected to begin today.
+Postcode Implementation: A response was anticipated by the end of yesterday. Kindly confirm the status.
+Trade Search Feature: The search should narrow down results to a specific postcode or area, showing premium users first. A video sample has been added to the master document.
+Artisan Sign-Up Page Issues:
+
+
+(i) Categories are not reflecting after selection.
+(ii) Errors are occurring during submission, particularly for categories and passwords. The password format requirements are yet to be updated
+"Leave a Review" Page Update: Kindly change "Which trade would you like to review" to "Which artisan would you like to review."  From the customer’s page.
+Submission Errors: Clicking "Submit" (e.g., Artisan Login) does not seem to post the required data.
+Floating Box Update: On the Artisan signup page, change "See our prices" to "Call now."
+Customer Login: Kindly include a field for either email or phone number. Additionally:
+(i) The API for Mr. Michael to register (as it’s a paid service) – please provide an ETA.
+(ii) I didn’t receive an email verification code during testing. Kindly confirm the status of this functionality as the customer signup page sample is on the master document.
+Artisan Signup Page: Kindly remove the map feature as discussed in the last 3 meetings.
+“Remember Me” Functionality for passwords: This hasn’t been implemented yet.
+
+
+
+Additional Fields:
+(i) Add a field for time availability and an optional box for the cost of services/skills after the "Skill" section on the Artisan signup page. These fields should reflect on their profile.
+Step-by-Step Guide: A detailed guide to the Artisan profile setup (from signup) has been included in the review section of the master document.
+OTP Implementation: This is still pending.
+Revised Timelines: We are yet to receive an updated project timeline as noted yesterday (January 9)
+Additional Requests:
+Kindly let us know if there’s anything you need from the Simul team to help streamline the workflow and speedup the progress.
+Could updates be shared with us each time a task is completed or implemented on the web app?
+We trust your expertise and value your partnership in this project. Kindly prioritize the tasks as discussed, and we’re happy to assist in any way possible to ensure a smooth workflow.
+Looking forward to your updates soon.
+Warm regards,
+Onyinyechi Kalu
+Project Manager
+has context menu
+

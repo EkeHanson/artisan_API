@@ -92,9 +92,11 @@ CORS_ALLOW_CREDENTIALS = True
 CORS_ALLOWED_ORIGINS = [
     "http://localhost:5173",
 
-    "http://simservicehub.com",
+    # "http://simservicehub.com",
 
     "https://artisan-nu.vercel.app"
+
+    "https://www.simservicehub.com/"
 ]
 
 # If you want to allow all origins during development (not recommended for production):
@@ -157,7 +159,6 @@ REST_FRAMEWORK = {
 #         'PORT': '5432',
 #     }
 # }
-
 
 
 DATABASES = {
