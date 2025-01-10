@@ -96,7 +96,7 @@ CORS_ALLOWED_ORIGINS = [
 
     "https://artisan-nu.vercel.app"
 
-    "https://www.simservicehub.com/"
+    "https://www.simservicehub.com"
 ]
 
 # If you want to allow all origins during development (not recommended for production):
