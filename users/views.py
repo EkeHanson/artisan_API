@@ -73,6 +73,8 @@ class VerifyLoginTokenView(views.APIView):
                 'address': user.address,
                 
                 'userId': user.id,
+                'user_type': user.user_type,
+                
                 'userUnique_id': user.unique_id,
                 'first_name': user.first_name,
                 'first_name': user.first_name,
