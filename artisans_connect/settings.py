@@ -89,18 +89,18 @@ MIDDLEWARE.insert(0, 'corsheaders.middleware.CorsMiddleware')
 # Allow specific origins during development
 CORS_ALLOW_CREDENTIALS = True
 
-CORS_ALLOWED_ORIGINS = [
-    "http://localhost:5173",
+# CORS_ALLOWED_ORIGINS = [
+#     "http://localhost:5173",
 
-    # "http://simservicehub.com",
+#     # "http://simservicehub.com",
 
-    "https://artisan-nu.vercel.app"
+#     "https://artisan-nu.vercel.app"
 
-    "https://www.simservicehub.com"
-]
+#     "https://www.simservicehub.com"
+# ]
 
 # If you want to allow all origins during development (not recommended for production):
-# CORS_ALLOW_ALL_ORIGINS = True
+CORS_ALLOW_ALL_ORIGINS = True
 
 REST_FRAMEWORK = {
     'DEFAULT_PAGINATION_CLASS': 'rest_framework.pagination.PageNumberPagination',
