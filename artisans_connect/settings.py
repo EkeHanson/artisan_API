@@ -220,7 +220,7 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 # ebiodumah@yahoo.com       ebiodumah@yahoo.com
 
 
-Email settings for Hostinger
+# Email settings for Hostinger
 EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
 EMAIL_HOST = 'smtp.hostinger.com'
 EMAIL_PORT = 465  # SSL port
