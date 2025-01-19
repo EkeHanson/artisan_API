@@ -159,28 +159,26 @@ REST_FRAMEWORK = {
 #     }
 # }
 
-DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.postgresql',
-        'NAME': 'artisan_db_xtgx',
-        'USER': 'artisan_db_xtgx_user',
-        'PASSWORD': '0HbucQWFv2Vxb79rpEGXxUtiAVzzypNK',
-        'HOST': 'dpg-cu652edsvqrc738ffn0g-a.oregon-postgres.render.com',
-        'PORT': '5432',  # Default PostgreSQL port
-    }
-}
-
-
-
-
-
 # DATABASES = {
-#     'default': dj_database_url.parse(
-#         'postgresql://artisan_db_xtgx_user:0HbucQWFv2Vxb79rpEGXxUtiAVzzypNK@dpg-cu652edsvqrc738ffn0g-a.oregon-postgres.render.com/artisan_db_xtgx',
-#         conn_max_age=600,
-#         ssl_require=True
-#     )
+#     'default': {
+#         'ENGINE': 'django.db.backends.postgresql',
+#         'NAME': 'artisan_db_xtgx',
+#         'USER': 'artisan_db_xtgx_user',
+#         'PASSWORD': '0HbucQWFv2Vxb79rpEGXxUtiAVzzypNK',
+#         'HOST': 'dpg-cu652edsvqrc738ffn0g-a.oregon-postgres.render.com',
+#         'PORT': '5432',  # Default PostgreSQL port
+#     }
 # }
+
+
+
+DATABASES = {
+    'default': dj_database_url.parse(
+        'postgresql://artisan_db_xtgx_user:0HbucQWFv2Vxb79rpEGXxUtiAVzzypNK@dpg-cu652edsvqrc738ffn0g-a.oregon-postgres.render.com/artisan_db_xtgx',
+        conn_max_age=600,
+        ssl_require=True
+    )
+}
 
 
 
