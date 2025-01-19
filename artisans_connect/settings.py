@@ -243,5 +243,3 @@ EMAIL_HOST_USER = 'ekenehanson@sterlingspecialisthospitals.com'  # Your Hostinge
 EMAIL_HOST_PASSWORD = '123@Qwertyqwerty@123'  # Your Hostinger email password
 DEFAULT_FROM_EMAIL = 'ekenehanson@sterlingspecialisthospitals.com'  # Default sender email
 
-DEFAULT_account_sid = 'AC500ccdccd6ebc368dc82d8e36731e000'  # Your Twilio Account SID
-DEFAULT_auth_token = 'cc78f85b4552f9c448fcfbac0226b72c'    # Your Twilio Auth Token
