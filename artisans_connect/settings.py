@@ -171,10 +171,6 @@ REST_FRAMEWORK = {
 # }
 
 
-TWILIO_AUTH_TOKEN = os.getenv('TWILIO_AUTH_TOKEN')
-TWILIO_ACCOUNT_SID = os.getenv('TWILIO_ACCOUNT_SID')
-TWILIO_PHONE_NUMBER = os.getenv('TWILIO_PHONE_NUMBER')
-
 
 DATABASES = {
     'default': dj_database_url.parse(
@@ -245,3 +241,16 @@ EMAIL_HOST_USER = 'ekenehanson@sterlingspecialisthospitals.com'  # Your Hostinge
 EMAIL_HOST_PASSWORD = '123@Qwertyqwerty@123'  # Your Hostinger email password
 DEFAULT_FROM_EMAIL = 'ekenehanson@sterlingspecialisthospitals.com'  # Default sender email
 
+
+
+# TWILIO_ACCOUNT_SID = 'SKde171cdf412a3ac995ee5add5b35fc10'  # Your Twilio Account SID
+# TWILIO_AUTH_TOKEN = 'DukdZ3OOflJhKJVcrCfkeb9Ab1nMv5Sl'
+# TWILIO_PHONE_NUMBER = '+15074426880'
+
+TWILIO_AUTH_TOKEN = os.getenv('TWILIO_AUTH_TOKEN')
+TWILIO_ACCOUNT_SID = os.getenv('TWILIO_ACCOUNT_SID')
+TWILIO_PHONE_NUMBER = os.getenv('TWILIO_PHONE_NUMBER')
+
+# TWILIO_ACCOUNT_SID = 'AC500ccdccd6ebc368dc82d8e36731e000'  # Your Twilio Account SID
+# TWILIO_AUTH_TOKEN = 'ba57440dbf551131d0eb006dd9fdedc2'
+# TWILIO_PHONE_NUMBER = '+15074426880'
