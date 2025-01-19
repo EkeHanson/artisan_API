@@ -53,9 +53,11 @@ class SendLoginTokenView(views.APIView):
             return Response({'message': 'Login token has been sent to your email'}, status=status.HTTP_200_OK)
         elif phone_number:
             try:
-                client = Client(settings.TWILIO_ACCOUNT_SID, settings.TWILIO_AUTH_TOKEN)
+                # client = Client(settings.TWILIO_ACCOUNT_SID, settings.TWILIO_AUTH_TOKEN)
+                client = Client('AC500ccdccd6ebc368dc82d8e36731e000', 'ba57440dbf551131d0eb006dd9fdedc2')
                 client.messages.create(
-                    from_=settings.TWILIO_PHONE_NUMBER,
+                    from_='+15074426880',
+                    # from_=settings.TWILIO_PHONE_NUMBER,
                     body=message_body,
                     to=phone_number
                 )
