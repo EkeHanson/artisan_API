@@ -53,19 +53,68 @@ class SendLoginTokenView(views.APIView):
             return Response({'message': 'Login token has been sent to your email'}, status=status.HTTP_200_OK)
         elif phone_number:
             try:
-
-                DEFAULT_account_sid = 'AC500ccdccd6ebc368dc82d8e36731e000'  # Your Twilio Account SID
-                DEFAULT_auth_token = 'cc78f85b4552f9c448fcfbac0226b72c' 
-                TWILIO_PHONE_NUMBER = '+15074426880'
-                client = Client(DEFAULT_account_sid, DEFAULT_auth_token)
+                client = Client(settings.TWILIO_ACCOUNT_SID, settings.TWILIO_AUTH_TOKEN)
                 client.messages.create(
-                    from_=TWILIO_PHONE_NUMBER,
+                    from_=settings.TWILIO_PHONE_NUMBER,
                     body=message_body,
                     to=phone_number
                 )
                 return Response({'message': 'Login token has been sent via SMS'}, status=status.HTTP_200_OK)
             except Exception as e:
                 return Response({'error': str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+
+
+# class SendLoginTokenView(views.APIView):
+#     permission_classes = [AllowAny]
+
+#     def post(self, request, *args, **kwargs):
+#         email = request.data.get('email')
+#         phone_number = request.data.get('phone')
+
+#         if not email and not phone_number:
+#             return Response({'error': 'Either email or phone number is required'}, status=status.HTTP_400_BAD_REQUEST)
+
+#         if email:
+#             user = CustomUser.objects.filter(email=email).first()
+#         elif phone_number:
+#             user = CustomUser.objects.filter(phone=phone_number).first()
+
+#         if not user:
+#             return Response({'error': 'User does not exist'}, status=status.HTTP_404_NOT_FOUND)
+
+#         token = random.randint(10000, 99999)
+#         cache_key = f'login_token_{email or phone_number}'
+#         cache.set(cache_key, token, timeout=300)
+
+#         message_body = f'Your login token is {token}. It is valid for 5 minutes.'
+
+#         if email:
+#             send_mail(
+#                 'Your Login Token',
+#                 message_body,
+#                 settings.DEFAULT_FROM_EMAIL,
+#                 [email],
+#                 fail_silently=False
+#             )
+#             return Response({'message': 'Login token has been sent to your email'}, status=status.HTTP_200_OK)
+#         elif phone_number:
+#             try:
+
+#                 #DEFAULT_account_sid = 'AC500ccdccd6ebc368dc82d8e36731e000'  # Your Twilio Account SID
+#                 # DEFAULT_auth_token = 'cc78f85b4552f9c448fcfbac0226b72c'
+
+#                 DEFAULT_account_sid = 'AC78c683b23aae439dc578e492597cd40e'  # Your Twilio Account SID
+#                 DEFAULT_auth_token = '39d70a911f789435ac3554dfccd066b2' 
+#                 TWILIO_PHONE_NUMBER = '+15074426880'
+#                 client = Client(DEFAULT_account_sid, DEFAULT_auth_token)
+#                 client.messages.create(
+#                     from_=TWILIO_PHONE_NUMBER,
+#                     body=message_body,
+#                     to=phone_number
+#                 )
+#                 return Response({'message': 'Login token has been sent via SMS'}, status=status.HTTP_200_OK)
+#             except Exception as e:
+#                 return Response({'error': str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
 
 
 class VerifyLoginTokenView(views.APIView):
