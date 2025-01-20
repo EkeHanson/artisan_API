@@ -155,6 +155,47 @@ class UserViewSet(viewsets.ModelViewSet):
     queryset = CustomUser.objects.all().order_by('id')
     serializer_class = UserSerializer
 
+    
+    def create(self, request, *args, **kwargs):
+        """Handle POST requests with detailed error logging."""
+        serializer = self.get_serializer(data=request.data)
+        if not serializer.is_valid():
+            # Log and print the errors
+            error_message = f"POST request errors: {serializer.errors}"
+            print(error_message)  # Print to console
+            return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+        
+        self.perform_create(serializer)
+        return Response(serializer.data, status=status.HTTP_201_CREATED)
+
+    def partial_update(self, request, *args, **kwargs):
+        """Handle PATCH requests with detailed error logging."""
+        partial = kwargs.pop('partial', True)
+        instance = self.get_object()
+        serializer = self.get_serializer(instance, data=request.data, partial=partial)
+        if not serializer.is_valid():
+            # Log and print the errors
+            error_message = f"PATCH request errors: {serializer.errors}"
+            #print(error_message)  # Print to console
+            return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+        
+        self.perform_update(serializer)
+        return Response(serializer.data, status=status.HTTP_200_OK)
+
+    def get_permissions(self):
+        # For 'create' and 'list' actions, allow anyone
+        if self.action in ['create', 'list']:
+            return [AllowAny()]
+        # For 'delete' action, allow anyone (no authentication required)
+        elif self.action == 'destroy':
+            return [AllowAny()]
+        # For all other actions, require authentication
+        #return [IsAuthenticated()]
+        return [AllowAny()]
+
+
+
+
     def get_permissions(self):
         # For 'create' and 'list' actions, allow anyone
         if self.action in ['create', 'list']:
@@ -268,3 +309,38 @@ class ConfirmResetPasswordView(views.APIView):
 
         return Response({'error': 'Invalid token or user'}, status=status.HTTP_400_BAD_REQUEST)
 
+
+@api_view(['POST'])
+@permission_classes([AllowAny])
+def send_contact_email(request):
+    if request.method == 'POST':
+        email = request.data.get('email')
+        full_name = request.data.get('fullName')
+        phone_number = request.data.get('phone')
+        interest_service = request.data.get('serviceInterest')
+        message_body = request.data.get('message')
+
+        if email:
+            subject = 'Contact Form Submission'
+            message = f'''
+            <html>
+            <body>
+                <h3>Contact Form Submission</h3>
+                <p><strong>Full Name:</strong> {full_name}</p>
+                <p><strong>Email Address:</strong> {email}</p>
+                <p><strong>Phone Number:</strong> {phone_number}</p>
+                <p><strong>Interest Service:</strong> {interest_service}</p>
+                <p><strong>Message:</strong> {message_body}</p>
+            </body>
+            </html>
+            '''
+            recipient_list = [email]
+
+            from_email = settings.DEFAULT_FROM_EMAIL
+
+            send_mail(subject, '', from_email, recipient_list, fail_silently=False, html_message=message)
+            return Response({'message': 'Email sent successfully'})
+        else:
+            return Response({'error': 'Email not provided in POST data'}, status=400)
+    else:
+        return Response({'error': 'Invalid request method'}, status=400)

@@ -26,6 +26,7 @@ class ArtisanProfile(models.Model):
     certifications = models.CharField(max_length=255, blank=True, null=True)
     portfolio = models.JSONField(default=list)  # Store URLs of images/videos
     hourly_rate = models.DecimalField(max_digits=10, decimal_places=2, null=True, blank=True)
+    service_cost = models.DecimalField(max_digits=10, decimal_places=2, null=True, blank=True)
 
     def save(self, *args, **kwargs):
         # Validate that the user is an artisan

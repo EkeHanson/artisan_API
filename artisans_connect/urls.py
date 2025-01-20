@@ -25,6 +25,7 @@ urlpatterns = [
     path('api/profiles/auth/', include('profiles.urls')), 
     path('api/messaging/auth/', include('messaging.urls')), 
     path('api/payments/auth/', include('profiles.urls')), 
+    path('api/quotes/', include('quotes.urls')),
 
     path('admin/', admin.site.urls),
 ]
