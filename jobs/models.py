@@ -21,13 +21,16 @@ class JobRequest(models.Model):
     description = models.TextField()
     location = models.CharField(max_length=255)
     budget = models.DecimalField(max_digits=10, decimal_places=2)
+
+    service_description  = models.CharField(max_length=255, blank=True, null=True)
+
     created_at = models.DateTimeField(auto_now_add=True)
     artisan = models.ForeignKey(
         CustomUser,
         null=True,
         blank=True,
         on_delete=models.SET_NULL,
-        to_field='unique_id',  # Use the custom unique field
+        to_field='unique_id',
         related_name="assigned_jobs"
     )
     status = models.CharField(
@@ -37,13 +40,18 @@ class JobRequest(models.Model):
     service_details = models.ForeignKey(
         ServiceCategory,
         on_delete=models.CASCADE,
-        to_field='unique_id',  # Use the custom unique field
+        to_field='unique_id',
         related_name="job_requests"
     )
-
+    issue_type = models.CharField(
+        max_length=50,
+        choices=[('simple', 'Simple'), ('complex', 'Complex')],
+        default='simple'
+    )
+    attachments = models.FileField(upload_to='job_attachments/', null=True, blank=True)
+    
     def __str__(self):
         return self.title
-
 
 
 
