@@ -34,7 +34,7 @@ class CustomUser(AbstractBaseUser):
     
     user_type = models.CharField(max_length=11, choices=USER_TYPE_CHOICES)
 
-    mobile_number = models.CharField(max_length=15)
+    mobile_number = models.CharField(max_length=15, blank=True, null=True)
     
     is_verified = models.BooleanField(default=False)
 
@@ -65,6 +65,8 @@ class CustomUser(AbstractBaseUser):
 
     username = models.CharField(max_length=80, unique=False, blank=True, null=True)
     email = models.EmailField(max_length=80, unique=True)
+
+    user_image = models.ImageField(upload_to='userImages/', null=True, blank=True)
 
 
     
