@@ -172,13 +172,13 @@ DATABASES = {
 # }
 
 
-# DATABASES = {
-#     'default': dj_database_url.parse(
-#         'postgresql://artisan_db_xtgx_user:0HbucQWFv2Vxb79rpEGXxUtiAVzzypNK@dpg-cu652edsvqrc738ffn0g-a.oregon-postgres.render.com/artisan_db_xtgx',
-#         conn_max_age=600,
-#         ssl_require=True
-#     )
-# }
+DATABASES = {
+    'default': dj_database_url.parse(
+        'postgresql://artisan_db_xtgx_user:0HbucQWFv2Vxb79rpEGXxUtiAVzzypNK@dpg-cu652edsvqrc738ffn0g-a.oregon-postgres.render.com/artisan_db_xtgx',
+        conn_max_age=600,
+        ssl_require=True
+    )
+}
 
 
 
@@ -249,7 +249,6 @@ EMAIL_USE_SSL = True
 EMAIL_HOST_USER = 'support@simservicehub.com'  # Your Hostinger email address
 EMAIL_HOST_PASSWORD = 'qwertyqwerty'  # Your Hostinger email password
 DEFAULT_FROM_EMAIL = 'support@simservicehub.com'  # Default sender email
-
 
 
 
