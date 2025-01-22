@@ -20,7 +20,7 @@ urlpatterns = [
 
     path('api/accounts/auth/', include('users.urls')), 
     path('api/jobs/auth/', include('jobs.urls')), 
-    path('api/tradeReviews/auth/', include('tradeReviews.urls')), 
+    # path('api/tradeReviews/auth/', include('tradeReviews.urls')), 
     path('api/artisanReview/auth/', include('artisanReview.urls')), 
     path('api/profiles/auth/', include('profiles.urls')), 
     path('api/messaging/auth/', include('messaging.urls')), 

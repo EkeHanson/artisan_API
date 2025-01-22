@@ -41,7 +41,7 @@ INSTALLED_APPS = [
     'messaging',
     'payments',
     'chat',
-    'tradeReviews',
+    # 'tradeReviews',
     'artisanReview',
     'quotes',
 ]
@@ -153,12 +153,12 @@ REST_FRAMEWORK = {
 # DEFAULT_FROM_EMAIL = 'ekenehanson@gmail.com'  # The default email address to use for sending emails
 
 
-# DATABASES = {
-#     'default': {
-#         'ENGINE': 'django.db.backends.sqlite3',
-#         'NAME': BASE_DIR / 'db.sqlite3',
-#     }
-# }
+DATABASES = {
+    'default': {
+        'ENGINE': 'django.db.backends.sqlite3',
+        'NAME': BASE_DIR / 'db.sqlite3',
+    }
+}
 
 # DATABASES = {
 #     'default': {
@@ -172,13 +172,13 @@ REST_FRAMEWORK = {
 # }
 
 
-DATABASES = {
-    'default': dj_database_url.parse(
-        'postgresql://artisan_db_xtgx_user:0HbucQWFv2Vxb79rpEGXxUtiAVzzypNK@dpg-cu652edsvqrc738ffn0g-a.oregon-postgres.render.com/artisan_db_xtgx',
-        conn_max_age=600,
-        ssl_require=True
-    )
-}
+# DATABASES = {
+#     'default': dj_database_url.parse(
+#         'postgresql://artisan_db_xtgx_user:0HbucQWFv2Vxb79rpEGXxUtiAVzzypNK@dpg-cu652edsvqrc738ffn0g-a.oregon-postgres.render.com/artisan_db_xtgx',
+#         conn_max_age=600,
+#         ssl_require=True
+#     )
+# }
 
 
 
@@ -233,13 +233,23 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 
 # Email settings for Hostinger
+# EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+# EMAIL_HOST = 'smtp.hostinger.com'
+# EMAIL_PORT = 465  # SSL port
+# EMAIL_USE_SSL = True  # Use SSL for secure connection
+# EMAIL_HOST_USER = 'ekenehanson@sterlingspecialisthospitals.com'  # Your Hostinger email address
+# EMAIL_HOST_PASSWORD = '123@Qwertyqwerty@123'  # Your Hostinger email password
+# DEFAULT_FROM_EMAIL = 'ekenehanson@sterlingspecialisthospitals.com'  # Default sender email
+
+
 EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
-EMAIL_HOST = 'smtp.hostinger.com'
-EMAIL_PORT = 465  # SSL port
-EMAIL_USE_SSL = True  # Use SSL for secure connection
-EMAIL_HOST_USER = 'ekenehanson@sterlingspecialisthospitals.com'  # Your Hostinger email address
-EMAIL_HOST_PASSWORD = '123@Qwertyqwerty@123'  # Your Hostinger email password
-DEFAULT_FROM_EMAIL = 'ekenehanson@sterlingspecialisthospitals.com'  # Default sender email
+EMAIL_HOST = 'mail.privateemail.com'
+EMAIL_PORT = 465
+EMAIL_USE_SSL = True
+EMAIL_HOST_USER = 'support@simservicehub.com'  # Your Hostinger email address
+EMAIL_HOST_PASSWORD = 'qwertyqwerty'  # Your Hostinger email password
+DEFAULT_FROM_EMAIL = 'support@simservicehub.com'  # Default sender email
+
 
 
 

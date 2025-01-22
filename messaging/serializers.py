@@ -1,34 +1,27 @@
 from rest_framework import serializers
 from .models import Message
-from .models import CustomUser  # Import CustomUser model
-
-# class MessageSerializer(serializers.ModelSerializer):
-#     sender = serializers.UUIDField(read_only=True)  # Display UUID of sender
-#     receiver = serializers.PrimaryKeyRelatedField(queryset=CustomUser.objects.all())  # Use PrimaryKeyRelatedField
-
-#     class Meta:
-#         model = Message
-#         fields = ['id', 'sender', 'receiver', 'content', 'created_at']
-
-#     def create(self, validated_data):
-#         user = self.context['request'].user  # Get the currently authenticated user
-#         validated_data['sender'] = user  # Set the sender to the authenticated user
-#         return super().create(validated_data)
-
-from rest_framework import serializers
-from .models import Message
-from .models import CustomUser  # Import CustomUser model
+from users.models import CustomUser
 
 class MessageSerializer(serializers.ModelSerializer):
     sender = serializers.UUIDField(read_only=True)  # Display UUID of sender
-    receiver = serializers.PrimaryKeyRelatedField(queryset=CustomUser.objects.all())  # Use PrimaryKeyRelatedField
-    reply_to = serializers.PrimaryKeyRelatedField(queryset=Message.objects.all(), required=False)  # Allow reply to be optional
+    receiver = serializers.UUIDField()  # Expect UUID for receiver in request data
 
     class Meta:
         model = Message
         fields = ['sender', 'receiver', 'content', 'created_at', 'reply_to']
 
+    def to_internal_value(self, data):
+        data = super().to_internal_value(data)
+
+        # Fetch receiver using the unique_id from data
+        try:
+            data['receiver'] = CustomUser.objects.get(unique_id=data['receiver'])
+        except CustomUser.DoesNotExist:
+            raise serializers.ValidationError({"receiver": "User with this unique_id does not exist."})
+
+        return data
+
     def create(self, validated_data):
-        user = self.context['request'].user  # Get the currently authenticated user
+        user = self.context['request'].user
         validated_data['sender'] = user  # Set the sender to the authenticated user
         return super().create(validated_data)

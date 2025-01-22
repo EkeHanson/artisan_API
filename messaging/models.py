@@ -3,9 +3,8 @@ from django.conf import settings
 from users.models import CustomUser
 
 class Message(models.Model):
-    sender = models.ForeignKey(CustomUser,  on_delete=models.CASCADE, related_name='sent_chat_messages', to_field='unique_id' )
-    receiver = models.ForeignKey(CustomUser, on_delete=models.CASCADE,related_name='received_chat_messages', to_field='unique_id')
-
+    sender = models.ForeignKey(CustomUser, on_delete=models.CASCADE, related_name='sent_chat_messages', to_field='unique_id')
+    receiver = models.ForeignKey(CustomUser, on_delete=models.CASCADE, related_name='received_chat_messages', to_field='unique_id')
     content = models.TextField()
     created_at = models.DateTimeField(auto_now_add=True)
     is_read = models.BooleanField(default=False)
