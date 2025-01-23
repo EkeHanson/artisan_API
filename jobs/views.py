@@ -104,7 +104,7 @@ class ServiceCategoryDetailView(generics.RetrieveUpdateDestroyAPIView):
 
 
 class JobRequestViewSet(viewsets.ModelViewSet):
-    queryset = JobRequest.objects.all().order_by('id')
+    queryset = JobRequest.objects.all().order_by('-id')
     permission_classes = [AllowAny]
 
     def get_serializer_class(self):

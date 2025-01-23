@@ -23,7 +23,7 @@ class ArtisanProfileByUniqueIdView(APIView):
 
 
 class ProfileRequestViewSet(viewsets.ModelViewSet):
-    queryset = ArtisanProfile.objects.all().order_by('id')
+    queryset = ArtisanProfile.objects.all().order_by('-id')
     serializer_class = ArtisanProfileRequestSerializer
     permission_classes = [AllowAny]
     pagination_class = None  # Disable pagination for this view

@@ -25,6 +25,10 @@ class SendLoginTokenView(views.APIView):
         email = request.data.get('email')
         phone_number = request.data.get('phone')
 
+        # print("request.data")
+        # print(request.data)
+        # print("request.data")
+
         if not email and not phone_number:
             return Response({'error': 'Either email or phone number is required'}, status=status.HTTP_400_BAD_REQUEST)
 
@@ -39,6 +43,10 @@ class SendLoginTokenView(views.APIView):
         token = random.randint(10000, 99999)
         cache_key = f'login_token_{email or phone_number}'
         cache.set(cache_key, token, timeout=300)
+
+        # print("token=data")
+        # print(token)
+        # print("token=data")
 
         message_body = f'Your login token is {token}. It is valid for 5 minutes.'
 
@@ -141,6 +149,7 @@ class VerifyLoginTokenView(views.APIView):
                     'access': str(refresh.access_token),
                     'userId': user.id,
                     'unique_user_id': user.unique_id,
+                    'user_type': user.user_type,
                     'email': user.email,
                     'user_type': user.user_type,
                     'phone': user.phone,
@@ -152,7 +161,7 @@ class VerifyLoginTokenView(views.APIView):
 
 
 class UserViewSet(viewsets.ModelViewSet):
-    queryset = CustomUser.objects.all().order_by('id')
+    queryset = CustomUser.objects.all().order_by('-id')
     serializer_class = UserSerializer
 
     
