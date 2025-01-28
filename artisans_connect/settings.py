@@ -129,33 +129,33 @@ REST_FRAMEWORK = {
 }
 
 
-DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
-    }
-}
+# DATABASES = {
+#     'default': {
+#         'ENGINE': 'django.db.backends.sqlite3',
+#         'NAME': BASE_DIR / 'db.sqlite3',
+#     }
+# }
 
 # DATABASES = {
 #     'default': {
 #         'ENGINE': 'django.db.backends.postgresql',
-#         'NAME': 'artisan_db_xtgx',
-#         'USER': 'artisan_db_xtgx_user',
-#         'PASSWORD': '0HbucQWFv2Vxb79rpEGXxUtiAVzzypNK',
-#         'HOST': 'dpg-cu652edsvqrc738ffn0g-a.oregon-postgres.render.com',
+#         'NAME': 'cmvpdb_f4z3',
+#         'USER': 'cmvpdb_f4z3_user',
+#         'PASSWORD': '8TaIUwuTsy4QmAXk47QZR2jolq0bu5p2',
+#         'HOST': 'dpg-cucddjqj1k6c73b95tig-a.oregon-postgres.render.com',
 #         'PORT': '5432',  # Default PostgreSQL port
 #     }
 # }
 
 
-# DATABASES = {
-#     'default': dj_database_url.parse(
-#         'postgresql://artisan_db_xtgx_user:0HbucQWFv2Vxb79rpEGXxUtiAVzzypNK@dpg-cu652edsvqrc738ffn0g-a.oregon-postgres.render.com/artisan_db_xtgx',
-#         conn_max_age=600,
-#         ssl_require=True
-#     )
-# }
 
+DATABASES = {
+    'default': dj_database_url.parse(
+        "postgresql://cmvpdb_f4z3_user:8TaIUwuTsy4QmAXk47QZR2jolq0bu5p2@dpg-cucddjqj1k6c73b95tig-a.oregon-postgres.render.com/cmvpdb_f4z3",
+        conn_max_age=600,  # Set connection lifetime (in seconds) for persistent connections
+        ssl_require=True   # Enforces SSL if required
+    )
+}
 
 
 # Password validation
