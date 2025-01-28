@@ -88,17 +88,17 @@ AUTH_USER_MODEL = 'users.CustomUser'
 MIDDLEWARE.insert(0, 'corsheaders.middleware.CorsMiddleware')
 
 # Allow specific origins during development
-CORS_ALLOW_CREDENTIALS = True
 
-# CORS_ALLOWED_ORIGINS = [
-#     "http://localhost:5173",
 
-#     # "http://simservicehub.com",
+CORS_ALLOWED_ORIGINS = [
+    "http://localhost:5173",
 
-#     "https://artisan-nu.vercel.app"
+    "http://simservicehub.com",
 
-#     "https://www.simservicehub.com"
-# ]
+    "https://artisan-nu.vercel.app"
+
+    "https://www.simservicehub.com"
+]
 
 # If you want to allow all origins during development (not recommended for production):
 
