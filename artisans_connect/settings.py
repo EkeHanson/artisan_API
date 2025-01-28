@@ -92,29 +92,15 @@ MIDDLEWARE.insert(0, 'corsheaders.middleware.CorsMiddleware')
 
 CORS_ALLOWED_ORIGINS = [
     "http://localhost:5173",
-
     "http://simservicehub.com",
-
-    "https://artisan-nu.vercel.app"
-
-    "https://www.simservicehub.com"
+    "https://artisan-nu.vercel.app",
+    "https://www.simservicehub.com",
 ]
+
 
 # If you want to allow all origins during development (not recommended for production):
 
 
-# REST_FRAMEWORK = {
-#     'DEFAULT_PAGINATION_CLASS': 'rest_framework.pagination.PageNumberPagination',
-#     'PAGE_SIZE': 10,  # 10 messages per page
-
-#     'DEFAULT_AUTHENTICATION_CLASSES': [
-#         'rest_framework.authentication.TokenAuthentication',
-#     ],
-#     'DEFAULT_PERMISSION_CLASSES': [
-#         'rest_framework.permissions.IsAuthenticated',
-#         'rest_framework_simplejwt.authentication.JWTAuthentication',
-#     ],
-# }
 
 REST_FRAMEWORK = {
     'DEFAULT_PAGINATION_CLASS': 'rest_framework.pagination.PageNumberPagination',
