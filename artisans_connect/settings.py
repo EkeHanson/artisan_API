@@ -147,8 +147,6 @@ REST_FRAMEWORK = {
 #     }
 # }
 
-
-
 DATABASES = {
     'default': dj_database_url.parse(
         "postgresql://cmvpdb_f4z3_user:8TaIUwuTsy4QmAXk47QZR2jolq0bu5p2@dpg-cucddjqj1k6c73b95tig-a.oregon-postgres.render.com/cmvpdb_f4z3",
@@ -156,7 +154,6 @@ DATABASES = {
         ssl_require=True   # Enforces SSL if required
     )
 }
-
 
 # Password validation
 # https://docs.djangoproject.com/en/5.1/ref/settings/#auth-password-validators
