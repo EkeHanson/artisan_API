@@ -100,8 +100,6 @@ CORS_ALLOWED_ORIGINS = [
 
 # If you want to allow all origins during development (not recommended for production):
 
-
-
 REST_FRAMEWORK = {
     'DEFAULT_PAGINATION_CLASS': 'rest_framework.pagination.PageNumberPagination',
     'PAGE_SIZE': 10,
@@ -122,24 +120,16 @@ REST_FRAMEWORK = {
 #     }
 # }
 
-# DATABASES = {
-#     'default': {
-#         'ENGINE': 'django.db.backends.postgresql',
-#         'NAME': 'cmvpdb_f4z3',
-#         'USER': 'cmvpdb_f4z3_user',
-#         'PASSWORD': '8TaIUwuTsy4QmAXk47QZR2jolq0bu5p2',
-#         'HOST': 'dpg-cucddjqj1k6c73b95tig-a.oregon-postgres.render.com',
-#         'PORT': '5432',  # Default PostgreSQL port
-#     }
-# }
+
 
 DATABASES = {
-    'default': dj_database_url.parse(
-        "postgresql://cmvpdb_f4z3_user:8TaIUwuTsy4QmAXk47QZR2jolq0bu5p2@dpg-cucddjqj1k6c73b95tig-a.oregon-postgres.render.com/cmvpdb_f4z3",
-        conn_max_age=600,  # Set connection lifetime (in seconds) for persistent connections
-        ssl_require=True   # Enforces SSL if required
+    'default': dj_database_url.config(
+        default='postgresql://new_artisan_db_user:3gsGB20Ta0sbspGYk7iR3TB45emN7sxX@dpg-cucfj9pu0jms7387o5hg-a.oregon-postgres.render.com/new_artisan_db',
+        conn_max_age=600,  # Optional: This sets the connection max age for database connections.
+        ssl_require=True   # Enforces SSL for secure database connections.
     )
 }
+
 
 # Password validation
 # https://docs.djangoproject.com/en/5.1/ref/settings/#auth-password-validators
