@@ -101,7 +101,7 @@ CORS_ALLOW_CREDENTIALS = True
 # ]
 
 # If you want to allow all origins during development (not recommended for production):
-CORS_ALLOW_ALL_ORIGINS = True
+
 
 # REST_FRAMEWORK = {
 #     'DEFAULT_PAGINATION_CLASS': 'rest_framework.pagination.PageNumberPagination',
@@ -129,12 +129,12 @@ REST_FRAMEWORK = {
 }
 
 
-# DATABASES = {
-#     'default': {
-#         'ENGINE': 'django.db.backends.sqlite3',
-#         'NAME': BASE_DIR / 'db.sqlite3',
-#     }
-# }
+DATABASES = {
+    'default': {
+        'ENGINE': 'django.db.backends.sqlite3',
+        'NAME': BASE_DIR / 'db.sqlite3',
+    }
+}
 
 # DATABASES = {
 #     'default': {
@@ -148,13 +148,13 @@ REST_FRAMEWORK = {
 # }
 
 
-DATABASES = {
-    'default': dj_database_url.parse(
-        'postgresql://artisan_db_xtgx_user:0HbucQWFv2Vxb79rpEGXxUtiAVzzypNK@dpg-cu652edsvqrc738ffn0g-a.oregon-postgres.render.com/artisan_db_xtgx',
-        conn_max_age=600,
-        ssl_require=True
-    )
-}
+# DATABASES = {
+#     'default': dj_database_url.parse(
+#         'postgresql://artisan_db_xtgx_user:0HbucQWFv2Vxb79rpEGXxUtiAVzzypNK@dpg-cu652edsvqrc738ffn0g-a.oregon-postgres.render.com/artisan_db_xtgx',
+#         conn_max_age=600,
+#         ssl_require=True
+#     )
+# }
 
 
 
@@ -208,16 +208,6 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 # ebiodumah@yahoo.com       ebiodumah@yahoo.com
 
 
-# Email settings for Hostinger
-# EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
-# EMAIL_HOST = 'smtp.hostinger.com'
-# EMAIL_PORT = 465  # SSL port
-# EMAIL_USE_SSL = True  # Use SSL for secure connection
-# EMAIL_HOST_USER = 'ekenehanson@sterlingspecialisthospitals.com'  # Your Hostinger email address
-# EMAIL_HOST_PASSWORD = '123@Qwertyqwerty@123'  # Your Hostinger email password
-# DEFAULT_FROM_EMAIL = 'ekenehanson@sterlingspecialisthospitals.com'  # Default sender email
-
-
 EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
 EMAIL_HOST = 'mail.privateemail.com'
 EMAIL_PORT = 465
@@ -231,4 +221,13 @@ DEFAULT_FROM_EMAIL = 'support@simservicehub.com'  # Default sender email
 # TWILIO_ACCOUNT_SID = os.getenv('TWILIO_ACCOUNT_SID')
 # TWILIO_PHONE_NUMBER = os.getenv('TWILIO_PHONE_NUMBER')
 
+
+TWILIO_ACCOUNT_SID = 'SKde171cdf412a3ac995ee5add5b35fc10'  # Your Twilio Account SID
+TWILIO_AUTH_TOKEN = 'DukdZ3OOflJhKJVcrCfkeb9Ab1nMv5Sl'
+TWILIO_PHONE_NUMBER = '+15074426880'
+
+
+# TWILIO_ACCOUNT_SID = 'AC500ccdccd6ebc368dc82d8e36731e000'  # Your Twilio Account SID
+# TWILIO_AUTH_TOKEN = 'ba57440dbf551131d0eb006dd9fdedc2'
+# TWILIO_PHONE_NUMBER = '+15074426880'
 
