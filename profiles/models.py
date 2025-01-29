@@ -23,6 +23,10 @@ class ArtisanProfile(models.Model):
     skills = models.JSONField(default=list)
     experience = models.PositiveIntegerField()
     location = models.CharField(max_length=255)
+
+    postcode = models.CharField(max_length=20, blank=True, null=True)  # Added postcode field
+    
+
     certifications = models.CharField(max_length=255, blank=True, null=True)
     portfolio = models.JSONField(default=list)  # Store URLs of images/videos
     hourly_rate = models.DecimalField(max_digits=10, decimal_places=2, null=True, blank=True)
