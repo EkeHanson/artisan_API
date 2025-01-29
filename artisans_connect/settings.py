@@ -120,15 +120,24 @@ REST_FRAMEWORK = {
 #     }
 # }
 
-
-
 DATABASES = {
-    'default': dj_database_url.config(
-        default='postgresql://new_artisan_db_user:3gsGB20Ta0sbspGYk7iR3TB45emN7sxX@dpg-cucfj9pu0jms7387o5hg-a.oregon-postgres.render.com/new_artisan_db',
-        conn_max_age=600,  # Optional: This sets the connection max age for database connections.
-        ssl_require=True   # Enforces SSL for secure database connections.
-    )
+    'default': {
+        'ENGINE': 'django.db.backends.postgresql',
+        'NAME': 'new_artisan_db',  # Database name
+        'USER': 'new_artisan_db_user',  # Database user
+        'PASSWORD': '3gsGB20Ta0sbspGYk7iR3TB45emN7sxX',  # Database password
+        'HOST': 'dpg-cucfj9pu0jms7387o5hg-a.oregon-postgres.render.com',  # Database host
+        'PORT': '5432',  # Default PostgreSQL port
+    }
 }
+
+# DATABASES = {
+#     'default': dj_database_url.config(
+#         default='postgresql://new_artisan_db_user:3gsGB20Ta0sbspGYk7iR3TB45emN7sxX@dpg-cucfj9pu0jms7387o5hg-a.oregon-postgres.render.com/new_artisan_db',
+#         conn_max_age=600,  # Optional: This sets the connection max age for database connections.
+#         ssl_require=True   # Enforces SSL for secure database connections.
+#     )
+# }
 
 
 # Password validation
