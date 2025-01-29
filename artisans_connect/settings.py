@@ -48,9 +48,8 @@ INSTALLED_APPS = [
 
 
 MIDDLEWARE = [
-    'corsheaders.middleware.CorsMiddleware',  # Must be before CommonMiddleware
+    'corsheaders.middleware.CorsMiddleware',  # Must be at the top
     'django.middleware.security.SecurityMiddleware',
-    
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
@@ -58,6 +57,7 @@ MIDDLEWARE = [
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 ]
+
 
 ROOT_URLCONF = 'artisans_connect.urls'
 
@@ -90,18 +90,15 @@ MIDDLEWARE.insert(0, 'corsheaders.middleware.CorsMiddleware')
 # Allow specific origins during development
 
 
-CORS_ALLOWED_ORIGINS = [
-    "http://localhost:5173",
-    "http://simservicehub.com",
-    "https://artisan-nu.vercel.app",
-    "https://www.simservicehub.com",
-]
+# CORS_ALLOWED_ORIGINS = [
+#     "http://localhost:5173",
+#     "http://simservicehub.com",
+#     "https://artisan-nu.vercel.app",
+#     "https://www.simservicehub.com",
+# ]
 
 # Allow credentials if necessary
-# CORS_ALLOW_CREDENTIALS = True
-
-# # # Allow all origins for development (use only if you trust all origins)
-# CORS_ALLOW_ALL_ORIGINS = True
+CORS_ALLOW_ALL_ORIGINS = True
 
 
 REST_FRAMEWORK = {
