@@ -97,8 +97,12 @@ CORS_ALLOWED_ORIGINS = [
     "https://www.simservicehub.com",
 ]
 
+# Allow credentials if necessary
+# CORS_ALLOW_CREDENTIALS = True
 
-# If you want to allow all origins during development (not recommended for production):
+# # # Allow all origins for development (use only if you trust all origins)
+# CORS_ALLOW_ALL_ORIGINS = True
+
 
 REST_FRAMEWORK = {
     'DEFAULT_PAGINATION_CLASS': 'rest_framework.pagination.PageNumberPagination',
@@ -131,13 +135,6 @@ DATABASES = {
     }
 }
 
-# DATABASES = {
-#     'default': dj_database_url.config(
-#         default='postgresql://new_artisan_db_user:3gsGB20Ta0sbspGYk7iR3TB45emN7sxX@dpg-cucfj9pu0jms7387o5hg-a.oregon-postgres.render.com/new_artisan_db',
-#         conn_max_age=600,  # Optional: This sets the connection max age for database connections.
-#         ssl_require=True   # Enforces SSL for secure database connections.
-#     )
-# }
 
 
 # Password validation
@@ -199,14 +196,14 @@ EMAIL_HOST_PASSWORD = 'qwertyqwerty'  # Your Hostinger email password
 DEFAULT_FROM_EMAIL = 'support@simservicehub.com'  # Default sender email
 
 
-# TWILIO_AUTH_TOKEN = os.getenv('TWILIO_AUTH_TOKEN')
-# TWILIO_ACCOUNT_SID = os.getenv('TWILIO_ACCOUNT_SID')
-# TWILIO_PHONE_NUMBER = os.getenv('TWILIO_PHONE_NUMBER')
+TWILIO_AUTH_TOKEN = os.getenv('TWILIO_AUTH_TOKEN')
+TWILIO_ACCOUNT_SID = os.getenv('TWILIO_ACCOUNT_SID')
+TWILIO_PHONE_NUMBER = os.getenv('TWILIO_PHONE_NUMBER')
 
 
-TWILIO_ACCOUNT_SID = 'SKde171cdf412a3ac995ee5add5b35fc10'  # Your Twilio Account SID
-TWILIO_AUTH_TOKEN = 'DukdZ3OOflJhKJVcrCfkeb9Ab1nMv5Sl'
-TWILIO_PHONE_NUMBER = '+15074426880'
+# TWILIO_ACCOUNT_SID = 'SKde171cdf412a3ac995ee5add5b35fc10'  # Your Twilio Account SID
+# TWILIO_AUTH_TOKEN = 'DukdZ3OOflJhKJVcrCfkeb9Ab1nMv5Sl'
+# TWILIO_PHONE_NUMBER = '+15074426880'
 
 
 # TWILIO_ACCOUNT_SID = 'AC500ccdccd6ebc368dc82d8e36731e000'  # Your Twilio Account SID
