@@ -114,23 +114,23 @@ REST_FRAMEWORK = {
 }
 
 
-DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
-    }
-}
-
 # DATABASES = {
 #     'default': {
-#         'ENGINE': 'django.db.backends.postgresql',
-#         'NAME': 'new_artisan_db',  # Database name
-#         'USER': 'new_artisan_db_user',  # Database user
-#         'PASSWORD': '3gsGB20Ta0sbspGYk7iR3TB45emN7sxX',  # Database password
-#         'HOST': 'dpg-cucfj9pu0jms7387o5hg-a.oregon-postgres.render.com',  # Database host
-#         'PORT': '5432',  # Default PostgreSQL port
+#         'ENGINE': 'django.db.backends.sqlite3',
+#         'NAME': BASE_DIR / 'db.sqlite3',
 #     }
 # }
+
+DATABASES = {
+    'default': {
+        'ENGINE': 'django.db.backends.postgresql',
+        'NAME': 'new_artisan_db',  # Database name
+        'USER': 'new_artisan_db_user',  # Database user
+        'PASSWORD': '3gsGB20Ta0sbspGYk7iR3TB45emN7sxX',  # Database password
+        'HOST': 'dpg-cucfj9pu0jms7387o5hg-a.oregon-postgres.render.com',  # Database host
+        'PORT': '5432',  # Default PostgreSQL port
+    }
+}
 
 
 # Password validation
