@@ -124,6 +124,7 @@ REST_FRAMEWORK = {
 #     }
 # }
 
+
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
@@ -134,7 +135,6 @@ DATABASES = {
         'PORT': '5432',  # Default PostgreSQL port
     }
 }
-
 
 
 # Password validation
