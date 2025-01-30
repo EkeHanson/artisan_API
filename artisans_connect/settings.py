@@ -90,15 +90,19 @@ MIDDLEWARE.insert(0, 'corsheaders.middleware.CorsMiddleware')
 # Allow specific origins during development
 
 
-# CORS_ALLOWED_ORIGINS = [
-#     "http://localhost:5173",
-#     "http://simservicehub.com",
-#     "https://artisan-nu.vercel.app",
-#     "https://www.simservicehub.com",
-# ]
+CORS_ALLOWED_ORIGINS = [
+    "http://localhost:5173",
+    "http://localhost:5173",
+    "http://simservicehub.com",
+    "https://artisan-nu.vercel.app",
+    "https://www.simservicehub.com",
+]
 
 # Allow credentials if necessary
-CORS_ALLOW_ALL_ORIGINS = True
+# CORS_ALLOW_ALL_ORIGINS = True
+
+CORS_ALLOW_CREDENTIALS = True  # Allow credentials (cookies, authorization headers, etc.)
+
 
 
 REST_FRAMEWORK = {
@@ -124,13 +128,14 @@ REST_FRAMEWORK = {
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
-        'NAME': 'new_artisan_db',  # Database name
-        'USER': 'new_artisan_db_user',  # Database user
-        'PASSWORD': '3gsGB20Ta0sbspGYk7iR3TB45emN7sxX',  # Database password
-        'HOST': 'dpg-cucfj9pu0jms7387o5hg-a.oregon-postgres.render.com',  # Database host
+        'NAME': 'new_artisan_db_ras0',
+        'USER': 'new_artisan_db_ras0_user',
+        'PASSWORD': '5QlI0QVQ6ZKmj5PNTvz7XxIsNY9WOk7D',
+        'HOST': 'dpg-cudunstsvqrc73d251bg-a.oregon-postgres.render.com',
         'PORT': '5432',  # Default PostgreSQL port
     }
 }
+
 
 
 # Password validation
@@ -205,4 +210,6 @@ TWILIO_PHONE_NUMBER = os.getenv('TWILIO_PHONE_NUMBER')
 # TWILIO_ACCOUNT_SID = 'AC500ccdccd6ebc368dc82d8e36731e000'  # Your Twilio Account SID
 # TWILIO_AUTH_TOKEN = 'ba57440dbf551131d0eb006dd9fdedc2'
 # TWILIO_PHONE_NUMBER = '+15074426880'
+
+
 
