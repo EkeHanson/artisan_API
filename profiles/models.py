@@ -10,7 +10,7 @@ class ArtisanProfile(models.Model):
         to_field='unique_id',
         limit_choices_to={'user_type': 'artisan'}  # Restrict to Artisan users
     )
-
+  
     service_details = models.ForeignKey(
     ServiceCategory,
     on_delete=models.SET_NULL,
@@ -41,8 +41,3 @@ class ArtisanProfile(models.Model):
     def __str__(self):
         return f"ArtisanProfile for {self.user.get_full_name()} ({self.user.email})"
 
-
-
-# class CustomerProfile(models.Model):
-#     user = models.OneToOneField(CustomUser, on_delete=models.CASCADE)
-#     address = models.CharField(max_length=255)

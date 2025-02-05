@@ -1,75 +1,184 @@
 from rest_framework import viewsets
 from rest_framework.response import Response
 from rest_framework.decorators import action
+from rest_framework.permissions import IsAuthenticated, AllowAny
+from rest_framework.exceptions import PermissionDenied
+from rest_framework_simplejwt.authentication import JWTAuthentication
+from django.db.models import Q
+from uuid import UUID
 from .models import Message
 from .serializers import MessageSerializer
-from rest_framework.permissions import IsAuthenticated, AllowAny
-from django.db.models import Q
 from users.models import CustomUser
+
 
 class MessageViewSet(viewsets.ModelViewSet):
     queryset = Message.objects.all()
     serializer_class = MessageSerializer
-    permission_classes = [IsAuthenticated]
+    # authentication_classes = [JWTAuthentication]
+    permission_classes = [AllowAny]
 
-    def get_queryset(self):
-        user = self.request.user
-        return Message.objects.filter(Q(receiver=user) | Q(sender=user))
-
+    
     @action(detail=False, methods=['get'])
     def conversation(self, request):
-        sender = request.query_params.get('sender', None)
-        receiver = request.query_params.get('receiver', None)
-        
-        # Validate input
-        if not sender or not receiver:
-            return Response({"error": "Both sender and receiver parameters are required."}, status=400)
-        
-        try:
-            sender_user = CustomUser.objects.get(unique_id=sender)
-            receiver_user = CustomUser.objects.get(unique_id=receiver)
-        except CustomUser.DoesNotExist:
-            return Response({"error": "User not found."}, status=404)
-        
-        messages = Message.objects.filter(
-            (Q(sender=sender_user) & Q(receiver=receiver_user)) | 
-            (Q(sender=receiver_user) & Q(receiver=sender_user))
-        ).order_by('created_at')
+        sender_id = request.query_params.get('sender')
+        receiver_id = request.query_params.get('receiver')
 
-        serializer = MessageSerializer(messages, many=True)
+        if not sender_id or not receiver_id:
+            return Response({"error": "Both 'sender' and 'receiver' are required."}, status=400)
+
+        # Assuming 'Message' has sender and receiver fields
+        conversation = Message.objects.filter(
+            Q(sender__unique_id=sender_id, receiver__unique_id=receiver_id) |
+            Q(sender__unique_id=receiver_id, receiver__unique_id=sender_id)
+        ).order_by('created_at')  # Use 'created_at' instead of 'timestamp'
+
+        serializer = MessageSerializer(conversation, many=True)
         return Response(serializer.data)
 
 
     @action(detail=False, methods=['post'])
     def send_message(self, request):
-        data = request.data
 
-        data['sender'] = request.user.unique_id
+        sender_id = request.data.get('sender')
+        receiver_id = request.data.get('receiver')
+        content = request.data.get('content')
+
+        if not sender_id or not receiver_id or not content:
+            return Response(
+                {"error": "'sender', 'receiver', and 'content' fields are required."},
+                status=400
+            )
+
+        # Validate sender
+        try:
+            sender_uuid = UUID(sender_id)
+            sender_user = CustomUser.objects.get(unique_id=sender_uuid)
+        except ValueError:
+            return Response({"error": "Invalid sender UUID format."}, status=400)
+        except CustomUser.DoesNotExist:
+            return Response({"error": f"Sender with ID {sender_uuid} not found."}, status=404)
+
+        # Validate receiver
+        try:
+            receiver_uuid = UUID(receiver_id)
+            receiver_user = CustomUser.objects.get(unique_id=receiver_uuid)
+        except ValueError:
+            return Response({"error": "Invalid receiver UUID format."}, status=400)
+        except CustomUser.DoesNotExist:
+            return Response({"error": f"Receiver with ID {receiver_uuid} not found."}, status=404)
+
+        # Prepare data for serialization
+        data = {
+            'sender': sender_user.unique_id,
+            'receiver': receiver_user.unique_id,
+            'content': content,
+        }
 
         serializer = MessageSerializer(data=data, context={'request': request})
-
         if serializer.is_valid():
             message = serializer.save()
-            return Response(serializer.data, status=201)
-        
+            return Response(
+                {"message": "Message sent successfully.", "message_data": serializer.data},
+                status=201
+            )
+
         print("serializer.errors")
         print(serializer.errors)
         print("serializer.errors")
-        return Response(serializer.errors, status=400)
+        return Response(
+            {"error": f"Message failed due to validation errors: {serializer.errors}"},
+            status=400
+        )
 
+
+    @action(detail=False, methods=['post'])
+    def typing_indicator(self, request):
+        # print("Request Data:", request.data)  # Log the request data
+        
+        receiver_id = request.data.get("receiver_id")
+        is_typing = request.data.get("is_typing")
+
+        if not receiver_id or is_typing is None:
+            return Response({"error": "'receiver_id' and 'is_typing' are required."}, status=400)
+
+        # Validate receiver UUID
+        try:
+            receiver_uuid = UUID(receiver_id)
+        except ValueError:
+            return Response({"error": "Invalid UUID format for receiver."}, status=400)
+
+        # Optionally, validate that receiver exists in the database
+        try:
+            receiver_user = CustomUser.objects.get(unique_id=receiver_uuid)
+        except CustomUser.DoesNotExist:
+            return Response({"error": "Receiver not found."}, status=404)
+
+        # Handle the typing indicator logic (e.g., store in database, broadcast to other users)
+        # Placeholder: You can implement your typing indicator state change logic here.
+
+        return Response({"message": "Typing indicator received."}, status=200)
+
+
+    @action(detail=False, methods=['post'])
+    def mark_as_read(self, request):
+        message_ids = request.data.get("message_ids", [])
+        receiver_id = request.data.get("receiver_id")
+
+        if not message_ids or not receiver_id:
+            return Response({"error": "Both 'message_ids' and 'receiver_id' are required."}, status=400)
+
+        try:
+            receiver_uuid = UUID(receiver_id)
+        except ValueError:
+            return Response({"error": "Invalid receiver UUID format."}, status=400)
+
+        messages = Message.objects.filter(
+            id__in=message_ids,
+            receiver__unique_id=receiver_uuid,
+            sender=request.user
+        )
+        updated_count = messages.update(is_read=True)
+
+        return Response({"message": f"{updated_count} messages marked as read."}, status=200)
+    
 
     @action(detail=True, methods=['post'])
     def reply(self, request, pk=None):
-        parent_message = self.get_object()
+        try:
+            parent_message = self.get_object()
+        except Message.DoesNotExist:
+            return Response(
+                {"error": "Parent message not found. Please verify the message ID."},
+                status=404
+            )
+
+        # Ensure the user is authenticated
+        if not request.user.is_authenticated:
+            return Response(
+                {"error": "Authentication required. Please log in to reply to a message."},
+                status=401
+            )
 
         data = request.data
-        data['sender'] = request.user.unique_id
+        data['sender'] = request.user.id
         data['receiver'] = parent_message.sender.id
-        data['reply_to'] = parent_message.id 
+        data['reply_to'] = parent_message.id
 
-        serializer = MessageSerializer(data=data, context={'request': request}) 
+        serializer = MessageSerializer(data=data, context={'request': request})
         
         if serializer.is_valid():
-            message = serializer.save()  
-            return Response(serializer.data, status=201)
-        return Response(serializer.errors, status=400)
+            message = serializer.save()
+            return Response(
+                {"message": "Reply sent successfully.", "message_data": serializer.data},
+                status=201
+            )
+        
+        # Provide detailed error messages if the serializer fails validation
+        return Response(
+            {"error": f"Failed to send reply: {serializer.errors}"},
+            status=400
+        )
+    
+    
+
+

@@ -12,3 +12,13 @@ class Message(models.Model):
 
     def __str__(self):
         return f"Message from {self.sender} to {self.receiver} on {self.created_at}"
+
+    @staticmethod
+    def mark_messages_as_read(sender_id, receiver_id):
+        """Mark all messages between two users as read."""
+        Message.objects.filter(sender=sender_id, receiver=receiver_id, is_read=False).update(is_read=True)
+
+    @staticmethod
+    def get_unread_count(receiver_id):
+        """Get the count of unread messages for a user."""
+        return Message.objects.filter(receiver=receiver_id, is_read=False).count()
