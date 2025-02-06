@@ -15,6 +15,7 @@ from django.core.files.base import ContentFile
 from twilio.rest import Client
 import random
 from django.core.cache import cache
+from django.conf import settings
 
 
 
@@ -48,15 +49,40 @@ class SendLoginTokenView(views.APIView):
         # print(token)
         # print("token=data")
 
-        message_body = f'Your login token is {token}. It is valid for 5 minutes.'
+        sms_message_body = f'Your login token is {token}. It is valid for 5 minutes.'
+        email_message_body = f'''
+            <html>
+            <head>
+                <meta charset="utf-8">
+                <meta name="viewport" content="width=device-width, initial-scale=1">
+                <title>Simservicehub Email Verification Token</title>
+            </head>
+            <body style="margin: 0; padding: 0; font-family: Poppins, sans-serif; font-size: 15px; font-weight: 400; line-height: 1.5; width: 100%; background: #3B4B11; color: #FB9836; overflow-x: hidden; min-height: 100vh; text-align: center;">
+                <div style="position: relative; width: 100%; height: auto; min-height: 100%; display: flex; justify-content: center;">
+                    <div style="position: relative; width: 700px; height: auto; text-align: center; padding: 80px 0px; padding-bottom: 0px !important;">
+                        <img src="https://www.simservicehub.com/assets/site-logo-marnjd0k.png" style="max-width: 150px; margin-bottom: 80px;" />
+                        <h3 style="font-size: 30px; font-weight: 700;">Your login token is: {token}. Only valid for 5 minutes.</h3>
+                        <h3 style="font-size: 30px; font-weight: 700;">Please Note that this token is only valid for 5 minutes.</h3>
+                        <footer style="position: relative; width: 100%; height: auto; margin-top: 50px; padding: 30px; background-color: rgba(255,255,255,0.1);">
+                            <h5>Thanks for using our platform</h5>
+                            <p style="font-size: 13px !important; color: #fff !important;">You can reach us via <a href="mailto:support@simservicehub.com" style="color:#D8F3DC !important; text-decoration: underline !important;">support@simservicehub.com</a></p>
+                            <p style="font-size: 13px !important; color: #fff !important;">© <script>document.write(new Date().getFullYear());</script> Simservicehub. All rights reserved.</p>
+                        </footer>
+                    </div>
+                </div>
+            </body>
+            </html>
+
+            '''
 
         if email:
             send_mail(
                 'Your Login Token',
-                message_body,
+                email_message_body,
                 settings.DEFAULT_FROM_EMAIL,
                 [email],
-                fail_silently=False
+                fail_silently=False,
+                html_message=email_message_body,
             )
             return Response({'message': 'Login token has been sent to your email'}, status=status.HTTP_200_OK)
         elif phone_number:
@@ -66,65 +92,12 @@ class SendLoginTokenView(views.APIView):
                 client.messages.create(
                     from_='+15074426880',
                     # from_=settings.TWILIO_PHONE_NUMBER,
-                    body=message_body,
+                    body=sms_message_body,
                     to=phone_number
                 )
                 return Response({'message': 'Login token has been sent via SMS'}, status=status.HTTP_200_OK)
             except Exception as e:
                 return Response({'error': str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
-
-
-# class SendLoginTokenView(views.APIView):
-#     permission_classes = [AllowAny]
-
-#     def post(self, request, *args, **kwargs):
-#         email = request.data.get('email')
-#         phone_number = request.data.get('phone')
-
-#         if not email and not phone_number:
-#             return Response({'error': 'Either email or phone number is required'}, status=status.HTTP_400_BAD_REQUEST)
-
-#         if email:
-#             user = CustomUser.objects.filter(email=email).first()
-#         elif phone_number:
-#             user = CustomUser.objects.filter(phone=phone_number).first()
-
-#         if not user:
-#             return Response({'error': 'User does not exist'}, status=status.HTTP_404_NOT_FOUND)
-
-#         token = random.randint(10000, 99999)
-#         cache_key = f'login_token_{email or phone_number}'
-#         cache.set(cache_key, token, timeout=300)
-
-#         message_body = f'Your login token is {token}. It is valid for 5 minutes.'
-
-#         if email:
-#             send_mail(
-#                 'Your Login Token',
-#                 message_body,
-#                 settings.DEFAULT_FROM_EMAIL,
-#                 [email],
-#                 fail_silently=False
-#             )
-#             return Response({'message': 'Login token has been sent to your email'}, status=status.HTTP_200_OK)
-#         elif phone_number:
-#             try:
-
-#                 #DEFAULT_account_sid = 'AC500ccdccd6ebc368dc82d8e36731e000'  # Your Twilio Account SID
-#                 # DEFAULT_auth_token = 'cc78f85b4552f9c448fcfbac0226b72c'
-
-#                 DEFAULT_account_sid = 'AC78c683b23aae439dc578e492597cd40e'  # Your Twilio Account SID
-#                 DEFAULT_auth_token = '39d70a911f789435ac3554dfccd066b2' 
-#                 TWILIO_PHONE_NUMBER = '+15074426880'
-#                 client = Client(DEFAULT_account_sid, DEFAULT_auth_token)
-#                 client.messages.create(
-#                     from_=TWILIO_PHONE_NUMBER,
-#                     body=message_body,
-#                     to=phone_number
-#                 )
-#                 return Response({'message': 'Login token has been sent via SMS'}, status=status.HTTP_200_OK)
-#             except Exception as e:
-#                 return Response({'error': str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
 
 
 class VerifyLoginTokenView(views.APIView):
@@ -265,7 +238,7 @@ class ResetPasswordView(views.APIView):
         # Generate reset token and UID
         token = default_token_generator.make_token(user)
         uid = urlsafe_base64_encode(force_bytes(user.pk))
-        reset_link = f"https://swiftlookv1.vercel.app/forgotten_pass_reset/{uid}/{token}/"
+        reset_link = f"https://www.simservicehub.com/forgotten_pass_reset/{uid}/{token}/"
 
         # Prepare email content
         subject = 'Password Reset Request'
@@ -273,16 +246,34 @@ class ResetPasswordView(views.APIView):
         # Use a proper HTML template for the message
         message = f"Please click the following link to reset your password: {reset_link}"
         html_message = f'''
+
+
             <html>
-                <body>
-                    <h3>Please click on the link below to reset your password</h3>
-                    <p><a href="{reset_link}"><strong>Reset Password</strong></a></p>
-                    <p> Note this email will expire in five (5) minutes. </p>
-                </body>
+            <head>
+                <meta charset="utf-8">
+                <meta name="viewport" content="width=device-width, initial-scale=1">
+                <title>CMVP Registration Email Verification </title>
+            </head>
+            <body style="margin: 0; padding: 0; font-family: Poppins, sans-serif; font-size: 15px; font-weight: 400; line-height: 1.5; width: 100%; background: #3B4B11; color: #FB9836; overflow-x: hidden; min-height: 100vh; text-align: center;">
+                <div style="position: relative; width: 100%; height: auto; min-height: 100%; display: flex; justify-content: center;">
+                    <div style="position: relative; width: 700px; height: auto; text-align: center; padding: 80px 0px; padding-bottom: 0px !important;">
+                        <img src="https://www.simservicehub.com/assets/site-logo-marnjd0k.png" style="max-width: 150px; margin-bottom: 80px;" />
+                        <h3 style="font-size: 30px; font-weight: 700;">Please click on the link below to reset your password!</h3>
+                        <p style="margin-top: 10px; color:#D8F3DC;"><a href="{reset_link}"><strong>Reset Password</strong></p><p style="margin-top: 10px; color:#D8F3DC;">Note this email will expire in five (5) minutes.</p>
+
+                        <footer style="position: relative; width: 100%; height: auto; margin-top: 50px; padding: 30px; background-color: rgba(255,255,255,0.1);">
+                            <h5>Thanks for using our platform</h5>
+                            <p style="font-size: 13px !important; color: #fff !important;">You can reach us via <a href="mailto:support@simservicehub.com" style="color:#D8F3DC !important; text-decoration: underline !important;">support@simservicehub.com</a></p>
+                            <p style="font-size: 13px !important; color: #fff !important;">© <script>document.write(new Date().getFullYear());</script> Simservicehub. All rights reserved.</p>
+                        </footer>
+                    </div>
+                </div>
+            </body>
             </html>
+
         '''
 
-        from_email = 'ekenehanson@sterlingspecialisthospitals.com'
+        from_email =  settings.DEFAULT_FROM_EMAIL
         recipient_list = [email]
 
         # Send the email with the HTML content
@@ -332,18 +323,36 @@ def send_contact_email(request):
         if email:
             subject = 'Contact Form Submission'
             message = f'''
+
             <html>
-            <body>
-                <h3>Contact Form Submission</h3>
-                <p><strong>Full Name:</strong> {full_name}</p>
-                <p><strong>Email Address:</strong> {email}</p>
-                <p><strong>Phone Number:</strong> {phone_number}</p>
-                <p><strong>Interest Service:</strong> {interest_service}</p>
-                <p><strong>Message:</strong> {message_body}</p>
+            <head>
+                <meta charset="utf-8">
+                <meta name="viewport" content="width=device-width, initial-scale=1">
+                <title>CMVP Registration Email Verification </title>
+            </head>
+            <body style="margin: 0; padding: 0; font-family: Poppins, sans-serif; font-size: 15px; font-weight: 400; line-height: 1.5; width: 100%; background: #3B4B11; color: #FB9836; overflow-x: hidden; min-height: 100vh; text-align: center;">
+                <div style="position: relative; width: 100%; height: auto; min-height: 100%; display: flex; justify-content: center;">
+                    <div style="position: relative; width: 700px; height: auto; text-align: center; padding: 80px 0px; padding-bottom: 0px !important;">
+                        <img src="https://www.simservicehub.com/assets/site-logo-marnjd0k.png" style="max-width: 150px; margin-bottom: 80px;" />
+                        <h3 style="font-size: 30px; font-weight: 700;">Contact Form Submission</h3>
+                        <p style="margin-top: 10px; color:#D8F3DC;"><strong>Full Name:</strong> {full_name}</p>
+                        <p style="margin-top: 10px; color:#D8F3DC;">Email Address:</strong> {email}</p>
+                        <p style="margin-top: 10px; color:#D8F3DC;">Phone Number:</strong> {phone_number}</p>
+                        <p style="margin-top: 10px; color:#D8F3DC;">Interest Service:</strong> {interest_service}</p>
+                        <p style="margin-top: 10px; color:#D8F3DC;">Message:</strong> {message_body}</p>
+
+                        <footer style="position: relative; width: 100%; height: auto; margin-top: 50px; padding: 30px; background-color: rgba(255,255,255,0.1);">
+                            <h5>Thanks for using our platform</h5>
+                            <p style="font-size: 13px !important; color: #fff !important;">You can reach us via <a href="mailto:support@simservicehub.com" style="color:#D8F3DC !important; text-decoration: underline !important;">support@simservicehub.com</a></p>
+                            <p style="font-size: 13px !important; color: #fff !important;">© <script>document.write(new Date().getFullYear());</script> Simservicehub. All rights reserved.</p>
+                        </footer>
+                    </div>
+                </div>
             </body>
             </html>
+
             '''
-            recipient_list = [email]
+            recipient_list = ['ekehanson@gmail.com']
 
             from_email = settings.DEFAULT_FROM_EMAIL
 
