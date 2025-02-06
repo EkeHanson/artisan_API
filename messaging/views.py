@@ -7,7 +7,7 @@ from rest_framework_simplejwt.authentication import JWTAuthentication
 from django.db.models import Q
 from uuid import UUID
 from .models import Message
-from .serializers import MessageSerializer
+from .serializers import MessageSerializer, MessageWithSenderSerializer, UserProfileSerializer
 from users.models import CustomUser
 
 
@@ -90,6 +90,7 @@ class MessageViewSet(viewsets.ModelViewSet):
             status=400
         )
 
+    
 
     @action(detail=False, methods=['post'])
     def typing_indicator(self, request):
@@ -179,6 +180,36 @@ class MessageViewSet(viewsets.ModelViewSet):
             status=400
         )
     
-    
+    @action(detail=False, methods=['get'])
+    def messages_for_artisan(self, request):
+        """Fetch all messages sent to an artisan and group them by sender"""
+        artisan_id = request.query_params.get('artisan_id')
 
+        if not artisan_id:
+            return Response({"error": "Artisan ID is required."}, status=400)
 
+        try:
+            artisan_uuid = UUID(artisan_id)
+        except ValueError:
+            return Response({"error": "Invalid artisan UUID format."}, status=400)
+
+        # Fetch all messages sent to the artisan
+        messages = Message.objects.filter(receiver__unique_id=artisan_uuid).select_related('sender').order_by('-created_at')
+
+        # Group all messages by the sender's email (or another consistent unique identifier)
+        grouped_messages = {}
+        for message in messages:
+            sender_email = message.sender.email  # Use email or another consistent field
+            
+            # If the sender doesn't exist in the dictionary, add them
+            if sender_email not in grouped_messages:
+                grouped_messages[sender_email] = {
+                    'sender': UserProfileSerializer(message.sender).data,
+                    'messages': []  # Initialize an empty list to store messages
+                }
+
+            # Append the message to the sender's list of messages
+            grouped_messages[sender_email]['messages'].append(MessageWithSenderSerializer(message).data)
+
+        # Return grouped messages
+        return Response(grouped_messages, status=200)

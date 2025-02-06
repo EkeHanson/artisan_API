@@ -42,3 +42,18 @@ class MessageSerializer(serializers.ModelSerializer):
         validated_data['sender'] = CustomUser.objects.get(unique_id=validated_data['sender'])
         validated_data['receiver'] = CustomUser.objects.get(unique_id=validated_data['receiver'])
         return super().create(validated_data)
+
+
+
+class UserProfileSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = CustomUser
+        fields = ['unique_id', 'first_name', 'last_name', 'user_image', 'email', 'address', 'phone']  # Include fields you want to display
+
+
+class MessageWithSenderSerializer(serializers.ModelSerializer):
+    sender = UserProfileSerializer(read_only=True)
+
+    class Meta:
+        model = Message
+        fields = ['id', 'sender', 'content', 'created_at', 'is_read']
