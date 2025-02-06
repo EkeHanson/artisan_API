@@ -61,7 +61,7 @@ class SendLoginTokenView(views.APIView):
                 <div style="position: relative; width: 100%; height: auto; min-height: 100%; display: flex; justify-content: center;">
                     <div style="position: relative; width: 700px; height: auto; text-align: center; padding: 80px 0px; padding-bottom: 0px !important;">
                         <img src="https://www.simservicehub.com/assets/site-logo-marnjd0k.png" style="max-width: 150px; margin-bottom: 80px;" />
-                        <h3 style="font-size: 30px; font-weight: 700;">Your login token is: {token}. Only valid for 5 minutes.</h3>
+                        <h3 style="font-size: 30px; font-weight: 700;">Your login token is: {token}.</h3>
                         <h3 style="font-size: 30px; font-weight: 700;">Please Note that this token is only valid for 5 minutes.</h3>
                         <footer style="position: relative; width: 100%; height: auto; margin-top: 50px; padding: 30px; background-color: rgba(255,255,255,0.1);">
                             <h5>Thanks for using our platform</h5>
