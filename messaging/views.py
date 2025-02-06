@@ -39,9 +39,13 @@ class MessageViewSet(viewsets.ModelViewSet):
     @action(detail=False, methods=['post'])
     def send_message(self, request):
 
-        sender_id = request.data.get('sender')
-        receiver_id = request.data.get('receiver')
-        content = request.data.get('content')
+        print("request.data")
+        print(request.data)
+        print("request.data")
+
+        receiver_id = request.data.get('receiver', '').strip()
+        sender_id = request.data.get('sender', '').strip()
+        content = request.data.get('content').strip()
 
         if not sender_id or not receiver_id or not content:
             return Response(
@@ -96,8 +100,8 @@ class MessageViewSet(viewsets.ModelViewSet):
     def typing_indicator(self, request):
         # print("Request Data:", request.data)  # Log the request data
         
-        receiver_id = request.data.get("receiver_id")
-        is_typing = request.data.get("is_typing")
+        receiver_id = request.data.get("receiver_id").strip()
+        is_typing = True if request.data.get("is_typing") == "true" else False
 
         if not receiver_id or is_typing is None:
             return Response({"error": "'receiver_id' and 'is_typing' are required."}, status=400)
