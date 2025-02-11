@@ -282,7 +282,6 @@ WSGI_APPLICATION = 'artisans_connect.wsgi.application'
 #     }
 # }
 
-
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
