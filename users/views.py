@@ -115,6 +115,7 @@ class VerifyLoginTokenView(views.APIView):
 
         if str(cached_token) == str(token):
             user = CustomUser.objects.filter(email=identifier).first() or CustomUser.objects.filter(phone=identifier).first()
+
             if user:
                 refresh = RefreshToken.for_user(user)
                 return Response({
@@ -123,7 +124,9 @@ class VerifyLoginTokenView(views.APIView):
                     'userId': user.id,
                     'unique_user_id': user.unique_id,
                     'user_type': user.user_type,
+                    'user_date_joined': user.date_joined,
                     'email': user.email,
+                    'address': user.address,
                     'user_type': user.user_type,
                     'phone': user.phone,
                     'first_name': user.first_name,
