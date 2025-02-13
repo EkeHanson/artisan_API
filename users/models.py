@@ -31,6 +31,10 @@ class CustomUser(AbstractBaseUser):
         ('super_admin', 'Super Admin'),
     ]
     unique_id = models.UUIDField(default=uuid.uuid4, editable=False, unique=True)  # Custom unique ID
+
+    proof_of_address = models.ImageField(upload_to='artisan_files/', null=True, blank=True)
+    NIN_doc = models.ImageField(upload_to='artisan_files/', null=True, blank=True)
+    other_doc = models.ImageField(upload_to='artisan_files/', null=True, blank=True)
     
     user_type = models.CharField(max_length=11, choices=USER_TYPE_CHOICES)
 

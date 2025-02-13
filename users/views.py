@@ -16,6 +16,7 @@ from twilio.rest import Client
 import random
 from django.core.cache import cache
 from django.conf import settings
+from django.shortcuts import get_object_or_404
 
 
 
@@ -140,7 +141,6 @@ class UserViewSet(viewsets.ModelViewSet):
     queryset = CustomUser.objects.all().order_by('-id')
     serializer_class = UserSerializer
 
-    
     def create(self, request, *args, **kwargs):
         """Handle POST requests with detailed error logging."""
         serializer = self.get_serializer(data=request.data)
@@ -151,21 +151,33 @@ class UserViewSet(viewsets.ModelViewSet):
             return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
         
         self.perform_create(serializer)
+        print("serializer.data")
+        print(serializer.data)
+        print("serializer.data")
+        
         return Response(serializer.data, status=status.HTTP_201_CREATED)
 
+
     def partial_update(self, request, *args, **kwargs):
-        """Handle PATCH requests with detailed error logging."""
-        partial = kwargs.pop('partial', True)
-        instance = self.get_object()
-        serializer = self.get_serializer(instance, data=request.data, partial=partial)
-        if not serializer.is_valid():
-            # Log and print the errors
-            error_message = f"PATCH request errors: {serializer.errors}"
-            #print(error_message)  # Print to console
-            return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+        unique_id = kwargs.get('unique_id')  # Corrected field name
+
+        # Get the user instance using the unique ID
+        user = get_object_or_404(CustomUser, unique_id=unique_id)
+
+        # Validate and update the user object using the serializer
+        serializer = self.get_serializer(user, data=request.data, partial=True)
+
+        if serializer.is_valid():
+            serializer.save()  # Save the updated data
+            return Response(serializer.data, status=status.HTTP_200_OK)
         
-        self.perform_update(serializer)
-        return Response(serializer.data, status=status.HTTP_200_OK)
+        # print("serializer.errors")
+        # print(serializer.errors)
+        # print("serializer.errors")
+
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+
 
     def get_permissions(self):
         # For 'create' and 'list' actions, allow anyone
