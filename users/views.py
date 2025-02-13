@@ -45,9 +45,9 @@ class SendLoginTokenView(views.APIView):
         cache_key = f'login_token_{email or phone_number}'
         cache.set(cache_key, token, timeout=300)
 
-        # print("token=data")
-        # print(token)
-        # print("token=data")
+        print("token=data")
+        print(token)
+        print("token=data")
 
         sms_message_body = f'Your login token is {token}. It is valid for 5 minutes.'
         email_message_body = f'''

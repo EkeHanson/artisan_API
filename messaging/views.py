@@ -86,16 +86,16 @@ class MessageViewSet(viewsets.ModelViewSet):
                 status=201
             )
 
-        print("serializer.errors")
-        print(serializer.errors)
-        print("serializer.errors")
+        # print("serializer.errors")
+        # print(serializer.errors)
+        # print("serializer.errors")
+
         return Response(
             {"error": f"Message failed due to validation errors: {serializer.errors}"},
             status=400
         )
 
     
-
     @action(detail=False, methods=['post'])
     def typing_indicator(self, request):
         # print("Request Data:", request.data)  # Log the request data
