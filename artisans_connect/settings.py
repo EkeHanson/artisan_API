@@ -253,6 +253,14 @@ MIDDLEWARE = [
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 ]
 
+CORS_ALLOWED_ORIGINS = [  
+    "http://localhost:5173",
+    "https://simservicehub.com",
+    "https://www.simservicehub.com",
+    "https://artisan-nu.vercel.app",
+]
+
+
 ROOT_URLCONF = 'artisans_connect.urls'
 
 TEMPLATES = [
@@ -292,7 +300,6 @@ DATABASES = {
         'PORT': '5432',
     }
 }
-
 
 REST_FRAMEWORK = {
     'DEFAULT_PAGINATION_CLASS': 'rest_framework.pagination.PageNumberPagination',
@@ -344,11 +351,7 @@ EMAIL_HOST_PASSWORD = 'qwertyqwerty'
 DEFAULT_FROM_EMAIL = 'support@simservicehub.com'
 
 # CORS Configuration
-CORS_ALLOWED_ORIGINS = [
-    "http://localhost:5173",
-    "https://simservicehub.com",
-    "https://www.simservicehub.com",
-    "https://artisan-nu.vercel.app",
-]
 
-CORS_ALLOW_CREDENTIALS = True
+
+
+
