@@ -69,6 +69,21 @@ class ArtisanProfileByUniqueIdView(APIView):
 
 #         return Response(serializer.data, status=status.HTTP_201_CREATED)
 
+
+class NonPaginatedProfileRequestViewSet(viewsets.ModelViewSet):
+    """A ViewSet for listing Artisan Profiles without pagination."""
+    queryset = ArtisanProfile.objects.all().order_by('-id')
+    serializer_class = ArtisanProfileRequestSerializer
+    permission_classes = [AllowAny]
+    pagination_class = None  # ✅ Disable pagination for this viewset
+
+    def list(self, request, *args, **kwargs):
+        """Return all ArtisanProfiles without pagination."""
+        queryset = self.get_queryset()
+        serializer = self.get_serializer(queryset, many=True)
+        return Response(serializer.data)
+
+
 class ProfileRequestViewSet(viewsets.ModelViewSet):
     queryset = ArtisanProfile.objects.all().order_by('-id')
     serializer_class = ArtisanProfileRequestSerializer

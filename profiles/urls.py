@@ -1,11 +1,10 @@
 from django.urls import path, include
 from rest_framework.routers import DefaultRouter
-from .views import ProfileRequestViewSet, ArtisanByServiceDetailsView, ArtisanProfileByUniqueIdView
-
+from .views import ProfileRequestViewSet, NonPaginatedProfileRequestViewSet, ArtisanByServiceDetailsView, ArtisanProfileByUniqueIdView
 
 router = DefaultRouter()
-router.register(r'artisan-profile', ProfileRequestViewSet)
-# router.register(r'customerProfile', CustomerProfileViewSet)
+router.register(r'artisan-profile', ProfileRequestViewSet, basename='artisan-profile')  # ✅ Paginated
+router.register(r'artisan-profile-no-pagination', NonPaginatedProfileRequestViewSet, basename='artisan-profile-no-pagination')  # ✅ Non-paginated
 
 urlpatterns = [
     path('api/', include(router.urls)),

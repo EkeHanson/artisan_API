@@ -263,6 +263,7 @@ CORS_ALLOWED_ORIGINS = [
 
 ROOT_URLCONF = 'artisans_connect.urls'
 
+
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
@@ -293,13 +294,18 @@ WSGI_APPLICATION = 'artisans_connect.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
-        'NAME': 'new_artisan_db_ras0',
-        'USER': 'new_artisan_db_ras0_user',
-        'PASSWORD': '5QlI0QVQ6ZKmj5PNTvz7XxIsNY9WOk7D',
-        'HOST': 'dpg-cudunstsvqrc73d251bg-a.oregon-postgres.render.com',
+        'NAME': 'new_artisan_db_g9xw',
+        'USER': 'new_artisan_db_g9xw_user',
+        'PASSWORD': 'F1M5RUJyHGqyn0p2s70TZznXbvW4QldO',
+        'HOST': 'dpg-cumvu6ij1k6c73b4op4g-a.oregon-postgres.render.com',
         'PORT': '5432',
+        'CONN_MAX_AGE': 600,  # Keeps connections open for better performance
+        'OPTIONS': {
+            'sslmode': 'require',  # Enforces SSL for secure connections
+        },
     }
 }
+
 
 REST_FRAMEWORK = {
     'DEFAULT_PAGINATION_CLASS': 'rest_framework.pagination.PageNumberPagination',

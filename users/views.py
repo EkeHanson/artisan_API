@@ -1,4 +1,5 @@
 from .models import CustomUser
+from rest_framework.views import APIView
 from .serializers import UserSerializer, LoginSerializer, ResetPasswordSerializer
 from rest_framework.permissions import AllowAny, IsAuthenticated
 from rest_framework.response import Response
@@ -135,6 +136,7 @@ class VerifyLoginTokenView(views.APIView):
                 }, status=status.HTTP_200_OK)
         
         return Response({'error': 'Invalid token'}, status=status.HTTP_400_BAD_REQUEST)
+
 
 
 class UserViewSet(viewsets.ModelViewSet):
