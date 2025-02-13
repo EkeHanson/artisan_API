@@ -140,6 +140,7 @@ class VerifyLoginTokenView(views.APIView):
 class UserViewSet(viewsets.ModelViewSet):
     queryset = CustomUser.objects.all().order_by('-id')
     serializer_class = UserSerializer
+    lookup_field = "unique_id"  # Ensures that DRF uses unique_id for lookups
 
     def create(self, request, *args, **kwargs):
         """Handle POST requests with detailed error logging."""
@@ -158,26 +159,19 @@ class UserViewSet(viewsets.ModelViewSet):
         return Response(serializer.data, status=status.HTTP_201_CREATED)
 
 
+    def get_object(self):
+        """Retrieve the user object using `unique_id` instead of `pk`."""
+        unique_id = self.kwargs.get("unique_id")
+        return get_object_or_404(CustomUser, unique_id=unique_id)
+
     def partial_update(self, request, *args, **kwargs):
-        unique_id = kwargs.get('unique_id')  # Corrected field name
-
-        # Get the user instance using the unique ID
-        user = get_object_or_404(CustomUser, unique_id=unique_id)
-
-        # Validate and update the user object using the serializer
+        """Update user details using unique_id instead of pk."""
+        user = self.get_object()  # Uses `get_object()` to fetch by `unique_id`
         serializer = self.get_serializer(user, data=request.data, partial=True)
-
         if serializer.is_valid():
-            serializer.save()  # Save the updated data
+            serializer.save()
             return Response(serializer.data, status=status.HTTP_200_OK)
-        
-        # print("serializer.errors")
-        # print(serializer.errors)
-        # print("serializer.errors")
-
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
-
-
 
     def get_permissions(self):
         # For 'create' and 'list' actions, allow anyone
