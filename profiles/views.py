@@ -16,17 +16,6 @@ class ArtisanProfilePagination(PageNumberPagination):
     max_page_size = 100  # Maximum allowed page size
 
 
-# class ArtisanProfileByUniqueIdView(APIView):
-#     permission_classes = [AllowAny]
-
-#     def get(self, request, unique_id, *args, **kwargs):
-#         try:
-#             # Retrieve ArtisanProfile using the provided unique_id
-#             artisan_profile = ArtisanProfile.objects.get(user__unique_id=unique_id)
-#             serializer = ArtisanProfileRequestSerializer(artisan_profile)
-#             return Response(serializer.data, status=status.HTTP_200_OK)
-#         except ArtisanProfile.DoesNotExist:
-#             raise NotFound({"error": "ArtisanProfile with this unique_id does not exist."})
 class ArtisanProfileByUniqueIdView(APIView):
     permission_classes = [AllowAny]
     pagination_class = None  # ✅ Disable pagination for this viewset
