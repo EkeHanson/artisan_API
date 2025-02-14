@@ -8,8 +8,15 @@ class ArtisanProfile(models.Model):
         CustomUser,
         on_delete=models.CASCADE,
         to_field='unique_id',
-        limit_choices_to={'user_type': 'artisan'}  # Restrict to Artisan users
+        limit_choices_to={'user_type': 'artisan'}, # Restrict to Artisan users
+        db_index=True,  # ✅ Improves query speed
     )
+    # user = models.OneToOneField(
+    #     CustomUser,
+    #     on_delete=models.CASCADE,
+    #     to_field='unique_id',
+    #     limit_choices_to={'user_type': 'artisan'}  # Restrict to Artisan users
+    # )
   
     service_details = models.ForeignKey(
     ServiceCategory,
@@ -26,7 +33,6 @@ class ArtisanProfile(models.Model):
 
     postcode = models.CharField(max_length=20, blank=True, null=True)  # Added postcode field
     
-
     certifications = models.CharField(max_length=255, blank=True, null=True)
     portfolio = models.JSONField(default=list)  # Store URLs of images/videos
     hourly_rate = models.DecimalField(max_digits=10, decimal_places=2, null=True, blank=True)

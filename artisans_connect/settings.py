@@ -253,12 +253,31 @@ MIDDLEWARE = [
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 ]
 
-CORS_ALLOWED_ORIGINS = [  
+CORS_ALLOW_CREDENTIALS = True  # Allow credentials
+
+CORS_ALLOWED_ORIGINS = [
     "http://localhost:5173",
     "https://simservicehub.com",
     "https://www.simservicehub.com",
     "https://artisan-nu.vercel.app",
 ]
+
+CORS_ALLOW_HEADERS = [
+    'authorization',
+    'content-type',
+    'x-csrftoken',
+]
+
+CORS_ALLOW_METHODS = [
+    'GET',
+    'POST',
+    'PUT',
+    'PATCH',
+    'DELETE',
+    'OPTIONS'
+]
+
+
 
 
 ROOT_URLCONF = 'artisans_connect.urls'

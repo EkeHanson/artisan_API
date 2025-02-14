@@ -154,9 +154,9 @@ class UserViewSet(viewsets.ModelViewSet):
             return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
         
         self.perform_create(serializer)
-        print("serializer.data")
-        print(serializer.data)
-        print("serializer.data")
+        # print("serializer.data")
+        # print(serializer.data)
+        # print("serializer.data")
         
         return Response(serializer.data, status=status.HTTP_201_CREATED)
 
@@ -201,7 +201,6 @@ class UserViewSet(viewsets.ModelViewSet):
         return [AllowAny()]
 
 
-
 class LoginView(generics.GenericAPIView): 
     serializer_class = LoginSerializer
     permission_classes = [AllowAny]
@@ -229,7 +228,6 @@ class LoginView(generics.GenericAPIView):
             }, status=status.HTTP_200_OK)
 
         return Response({'detail': 'Invalid credentials'}, status=status.HTTP_401_UNAUTHORIZED)
-
 
 
 class ResetPasswordView(views.APIView):

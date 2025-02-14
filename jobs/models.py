@@ -19,6 +19,8 @@ class JobRequest(models.Model):
     customer = models.ForeignKey(CustomUser, on_delete=models.CASCADE, related_name="job_requests", to_field='unique_id')
     title = models.CharField(max_length=255)
     description = models.TextField()
+    num_appllications = models.PositiveIntegerField(default=0)  # New field to track uploaded certificates
+
     location = models.CharField(max_length=255)
     budget = models.DecimalField(max_digits=10, decimal_places=2)
 
