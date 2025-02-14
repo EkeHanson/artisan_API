@@ -367,12 +367,13 @@ MEDIA_ROOT = os.path.join(BASE_DIR, 'media/')
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
+
 EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
 EMAIL_HOST = 'mail.privateemail.com'
 EMAIL_PORT = 465
 EMAIL_USE_SSL = True
 EMAIL_HOST_USER = 'support@simservicehub.com'
-EMAIL_HOST_PASSWORD = 'qwertyqwerty'
+EMAIL_HOST_PASSWORD = 'Michael@2024'
 DEFAULT_FROM_EMAIL = 'support@simservicehub.com'
 
 # CORS Configuration
