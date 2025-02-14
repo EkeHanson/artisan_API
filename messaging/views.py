@@ -39,9 +39,9 @@ class MessageViewSet(viewsets.ModelViewSet):
     @action(detail=False, methods=['post'])
     def send_message(self, request):
 
-        print("request.data")
-        print(request.data)
-        print("request.data")
+        # print("request.data")
+        # print(request.data)
+        # print("request.data")
 
         receiver_id = request.data.get('receiver', '').strip()
         sender_id = request.data.get('sender', '').strip()
@@ -77,6 +77,10 @@ class MessageViewSet(viewsets.ModelViewSet):
             'receiver': receiver_user.unique_id,
             'content': content,
         }
+
+        # print("data")
+        # print(data)
+        # print("data")
 
         serializer = MessageSerializer(data=data, context={'request': request})
         if serializer.is_valid():
@@ -127,20 +131,20 @@ class MessageViewSet(viewsets.ModelViewSet):
     @action(detail=False, methods=['post'])
     def mark_as_read(self, request):
         message_ids = request.data.get("message_ids", [])
-        receiver_id = request.data.get("receiver_id")
+        # receiver_id = request.data.get("receiver_id")
 
-        if not message_ids or not receiver_id:
-            return Response({"error": "Both 'message_ids' and 'receiver_id' are required."}, status=400)
+        # if not message_ids or not receiver_id:
+        #     return Response({"error": "Both 'message_ids' and 'receiver_id' are required."}, status=400)
 
-        try:
-            receiver_uuid = UUID(receiver_id)
-        except ValueError:
-            return Response({"error": "Invalid receiver UUID format."}, status=400)
+        # try:
+        #     receiver_uuid = UUID(receiver_id)
+        # except ValueError:
+        #     return Response({"error": "Invalid receiver UUID format."}, status=400)
 
         messages = Message.objects.filter(
             id__in=message_ids,
-            receiver__unique_id=receiver_uuid,
-            sender=request.user
+            # receiver__unique_id=receiver_uuid,
+            # sender=request.user
         )
         updated_count = messages.update(is_read=True)
 
