@@ -20,7 +20,6 @@ from django.conf import settings
 from django.shortcuts import get_object_or_404
 
 
-
 class SendLoginTokenView(views.APIView):
     permission_classes = [AllowAny]
 

@@ -20,9 +20,67 @@ class ArtisanProfilePagination(PageNumberPagination):
 
 
 
+# class ArtisanProfileByUniqueIdView(APIView):
+#     permission_classes = [AllowAny]
+#     pagination_class = NoPagination
+
+#     def get(self, request, *args, **kwargs):
+#         unique_id = request.query_params.get('unique_id')
+#         if not unique_id:
+#             return Response({"error": "unique_id query parameter is required."}, status=status.HTTP_400_BAD_REQUEST)
+
+#         artisan_profiles = ArtisanProfile.objects.filter(user__unique_id=unique_id)
+
+#         # artisan_profiles = ArtisanProfile.objects.filter(user__unique_id=unique_id).distinct()
+
+#         if not artisan_profiles.exists():
+#             raise NotFound({"error": "ArtisanProfile with this unique_id does not exist."})
+
+#         if artisan_profiles.count() > 1:
+#             return Response({"error": "Multiple artisan profiles found for this unique_id. Data integrity issue."}, status=status.HTTP_400_BAD_REQUEST)
+
+#         serializer = ArtisanProfileRequestSerializer(artisan_profiles.first())
+#         return Response(serializer.data, status=status.HTTP_200_OK)
+
+# class ArtisanProfileByUniqueIdView(APIView):
+#     permission_classes = [AllowAny]
+#     pagination_class = NoPagination
+
+#     def get(self, request, *args, **kwargs):
+#         unique_id = request.query_params.get('unique_id')
+#         if not unique_id:
+#             return Response({"error": "unique_id query parameter is required."}, status=status.HTTP_400_BAD_REQUEST)
+
+#         artisan_profiles = ArtisanProfile.objects.filter(user__unique_id=unique_id)
+
+#         if not artisan_profiles.exists():
+#             raise NotFound({"error": "ArtisanProfile with this unique_id does not exist."})
+
+#         if artisan_profiles.count() > 1:
+#             return Response({"error": "Multiple artisan profiles found for this unique_id. Data integrity issue."}, status=status.HTTP_400_BAD_REQUEST)
+
+#         serializer = ArtisanProfileRequestSerializer(artisan_profiles.first())
+#         return Response(serializer.data, status=status.HTTP_200_OK)
+
+#     def patch(self, request, *args, **kwargs):
+#         unique_id = request.query_params.get('unique_id')
+#         if not unique_id:
+#             return Response({"error": "unique_id query parameter is required."}, status=status.HTTP_400_BAD_REQUEST)
+
+#         try:
+#             artisan_profile = ArtisanProfile.objects.get(user__unique_id=unique_id)
+#         except ArtisanProfile.DoesNotExist:
+#             return Response({"error": "ArtisanProfile with this unique_id does not exist."}, status=status.HTTP_404_NOT_FOUND)
+
+#         serializer = ArtisanProfileRequestSerializer(artisan_profile, data=request.data, partial=True)
+#         if serializer.is_valid():
+#             serializer.save()
+#             return Response({"message": "Profile updated successfully", "data": serializer.data}, status=status.HTTP_200_OK)
+#         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
 class ArtisanProfileByUniqueIdView(APIView):
     permission_classes = [AllowAny]
-    pagination_class = NoPagination
+    pagination_class = None  # Disable pagination for this view
 
     def get(self, request, *args, **kwargs):
         unique_id = request.query_params.get('unique_id')
@@ -30,8 +88,6 @@ class ArtisanProfileByUniqueIdView(APIView):
             return Response({"error": "unique_id query parameter is required."}, status=status.HTTP_400_BAD_REQUEST)
 
         artisan_profiles = ArtisanProfile.objects.filter(user__unique_id=unique_id)
-
-        # artisan_profiles = ArtisanProfile.objects.filter(user__unique_id=unique_id).distinct()
 
         if not artisan_profiles.exists():
             raise NotFound({"error": "ArtisanProfile with this unique_id does not exist."})
@@ -42,7 +98,22 @@ class ArtisanProfileByUniqueIdView(APIView):
         serializer = ArtisanProfileRequestSerializer(artisan_profiles.first())
         return Response(serializer.data, status=status.HTTP_200_OK)
 
+    def patch(self, request, *args, **kwargs):
+        unique_id = request.query_params.get('unique_id')
+        if not unique_id:
+            return Response({"error": "unique_id query parameter is required."}, status=status.HTTP_400_BAD_REQUEST)
 
+        try:
+            artisan_profile = ArtisanProfile.objects.get(user__unique_id=unique_id)
+        except ArtisanProfile.DoesNotExist:
+            return Response({"error": "ArtisanProfile with this unique_id does not exist."}, status=status.HTTP_404_NOT_FOUND)
+
+        # Partial update (PATCH) - only update fields provided in the request
+        serializer = ArtisanProfileRequestSerializer(artisan_profile, data=request.data, partial=True)
+        if serializer.is_valid():
+            serializer.save()
+            return Response({"message": "Profile updated successfully", "data": serializer.data}, status=status.HTTP_200_OK)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 class NonPaginatedProfileRequestViewSet(viewsets.ModelViewSet):
     """A ViewSet for listing Artisan Profiles without pagination."""

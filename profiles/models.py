@@ -11,39 +11,30 @@ class ArtisanProfile(models.Model):
         limit_choices_to={'user_type': 'artisan'}, # Restrict to Artisan users
         db_index=True,  # ✅ Improves query speed
     )
-    # user = models.OneToOneField(
-    #     CustomUser,
-    #     on_delete=models.CASCADE,
-    #     to_field='unique_id',
-    #     limit_choices_to={'user_type': 'artisan'}  # Restrict to Artisan users
-    # )
-  
     service_details = models.ForeignKey(
-    ServiceCategory,
-    on_delete=models.SET_NULL,
-    to_field='unique_id',  # Use the custom unique field
-    related_name="service_details",
-     blank=True, null=True
+        ServiceCategory,
+        on_delete=models.SET_NULL,
+        to_field='unique_id',
+        related_name="service_details",
+        blank=True, null=True
     )
-
-    # skills = models.TextField()
+  
     skills = models.JSONField(default=list)
     experience = models.PositiveIntegerField()
-    location = models.CharField(max_length=255)
-
-    postcode = models.CharField(max_length=20, blank=True, null=True)  # Added postcode field
-    
+    business_name = models.CharField(max_length=255, blank=True, null=True)
+    business_location = models.CharField(max_length=255, blank=True, null=True)
+    postcode = models.CharField(max_length=20, blank=True, null=True)
     certifications = models.CharField(max_length=255, blank=True, null=True)
-    portfolio = models.JSONField(default=list)  # Store URLs of images/videos
+    portfolio = models.JSONField(default=list)
     hourly_rate = models.DecimalField(max_digits=10, decimal_places=2, null=True, blank=True)
-    #service_cost = models.DecimalField(max_digits=10, decimal_places=2, null=True, blank=True)
+
+    # New availability field
+    availability = models.JSONField(default=dict)
 
     def save(self, *args, **kwargs):
-        # Validate that the user is an artisan
         if self.user.user_type != 'artisan':
             raise ValidationError("The associated user must be of type 'artisan'.")
         super().save(*args, **kwargs)
 
     def __str__(self):
         return f"ArtisanProfile for {self.user.get_full_name()} ({self.user.email})"
-
