@@ -32,6 +32,7 @@ class CustomUser(AbstractBaseUser):
     ]
     unique_id = models.UUIDField(default=uuid.uuid4, editable=False, unique=True)  # Custom unique ID
 
+
     proof_of_address = models.ImageField(upload_to='artisan_files/', null=True, blank=True)
     NIN_doc = models.ImageField(upload_to='artisan_files/', null=True, blank=True)
     other_doc = models.ImageField(upload_to='artisan_files/', null=True, blank=True)
