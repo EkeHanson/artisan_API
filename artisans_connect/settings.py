@@ -303,16 +303,15 @@ WSGI_APPLICATION = 'artisans_connect.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
-        'NAME': 'test_artisan_db',  # Database name
-        'USER': 'test_artisan_db_user',  # Database user
-        'PASSWORD': 'UtrnMmHpSKZcOtIsP6tQ8c7zz2gEyXPD',  # Database password
-        'HOST': 'dpg-cuqinu52ng1s73afq830-a.oregon-postgres.render.com',  # Database host
-        'PORT': '5432',  # Default PostgreSQL port
-        'OPTIONS': {
-            'sslmode': 'require',  # Ensures secure connection
-        },
+        'NAME': 'test_artisan_db_sc00',
+        'USER': 'test_artisan_db_sc00_user',
+        'PASSWORD': 'uX56iMstsVwV8lwu1wi6KmnHo6f3KIR3',
+        'HOST': 'dpg-cuqtnftds78s7382mchg-a.oregon-postgres.render.com',
+        'PORT': '5432',
+        'CONN_MAX_AGE': 600,  # Keeps connections open for performance
     }
 }
+
 
 
 # DATABASES = {

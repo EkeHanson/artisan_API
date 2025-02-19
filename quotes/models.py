@@ -4,6 +4,7 @@ from users.models import CustomUser
 from jobs.models import JobRequest
 import uuid
 
+
 class QuoteRequest(models.Model):
     unique_id = models.UUIDField(default=uuid.uuid4, editable=False, unique=True)  # ✅ Correct default UUID
 
@@ -15,7 +16,7 @@ class QuoteRequest(models.Model):
         db_index=True,
     )
 
-    job_request = models.ForeignKey(  # ✅ Renamed from `Quotedetails` to `job_request`
+    job_request = models.ForeignKey(
         JobRequest,
         on_delete=models.CASCADE,
         to_field='unique_id',
@@ -26,6 +27,7 @@ class QuoteRequest(models.Model):
     freelancer_service_fee = models.DecimalField(max_digits=10, decimal_places=2)
     job_duration = models.CharField(max_length=255)
     created_at = models.DateTimeField(default=timezone.now)
+
 
     class Meta:
         constraints = [

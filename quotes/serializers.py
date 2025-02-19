@@ -3,6 +3,7 @@ from .models import QuoteRequest
 from users.models import CustomUser
 from jobs.models import JobRequest
 
+
 class CustomUserSerializer(serializers.ModelSerializer):
     class Meta:
         model = CustomUser
@@ -15,6 +16,7 @@ class CustomUserSerializer(serializers.ModelSerializer):
             "user_type",
             "date_joined",
             "about_artisan",
+            "address",
         ]
 
 class JobRequestSerializer(serializers.ModelSerializer):

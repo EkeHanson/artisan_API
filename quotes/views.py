@@ -6,11 +6,85 @@ from .models import QuoteRequest
 from .serializers import QuoteRequestSerializer
 from users.models import CustomUser
 from jobs.models import JobRequest
+from rest_framework.decorators import action
+from .serializers import CustomUserSerializer  # ✅ Import this
 
 class QuotationViewSet(ModelViewSet):
     permission_classes = [AllowAny]
     queryset = QuoteRequest.objects.all().order_by('-id')
     serializer_class = QuoteRequestSerializer
+
+
+    # @action(detail=False, methods=["get"], url_path="artisans-for-job")
+    # def artisans_for_job(self, request):
+    #     job_id = request.query_params.get("job_id")
+
+    #     if not job_id:
+    #         return Response({"error": "job_id is required."}, status=status.HTTP_400_BAD_REQUEST)
+
+    #     try:
+    #         job = JobRequest.objects.get(unique_id=job_id)
+    #     except JobRequest.DoesNotExist:
+    #         return Response({"error": "Invalid job_id. No job found."}, status=status.HTTP_400_BAD_REQUEST)
+
+    #     quotes = QuoteRequest.objects.filter(job_request=job).select_related("artisan")
+    #     artisans = [quote.artisan for quote in quotes]
+
+    #     serializer = CustomUserSerializer(artisans, many=True)
+    #     return Response(serializer.data, status=status.HTTP_200_OK)
+    
+    # @action(detail=False, methods=["get"], url_path="artisans-for-job")
+    # def artisans_for_job(self, request):
+    #     job_id = request.query_params.get("job_id")
+
+    #     if not job_id:
+    #         return Response({"error": "job_id is required."}, status=status.HTTP_400_BAD_REQUEST)
+
+    #     try:
+    #         job = JobRequest.objects.get(unique_id=job_id)
+    #     except JobRequest.DoesNotExist:
+    #         return Response({"error": "Invalid job_id. No job found."}, status=status.HTTP_400_BAD_REQUEST)
+
+    #     quotes = QuoteRequest.objects.filter(job_request=job).select_related("artisan")
+        
+    #     # Structure the response to include both artisan and their quote data
+    #     response_data = [
+    #         {
+    #             "artisan": CustomUserSerializer(quote.artisan).data,
+    #             "quote": QuoteRequestSerializer(quote).data,  # Assuming you have a serializer for QuoteRequest
+    #         }
+    #         for quote in quotes
+    #     ]
+
+    #     return Response(response_data, status=status.HTTP_200_OK)
+
+    @action(detail=False, methods=["get"], url_path="artisans-for-job")
+    def artisans_for_job(self, request):
+        job_id = request.query_params.get("job_id")
+
+        if not job_id:
+            return Response({"error": "job_id is required."}, status=status.HTTP_400_BAD_REQUEST)
+
+        try:
+            job = JobRequest.objects.get(unique_id=job_id)
+        except JobRequest.DoesNotExist:
+            return Response({"error": "Invalid job_id. No job found."}, status=status.HTTP_400_BAD_REQUEST)
+
+        quotes = QuoteRequest.objects.filter(job_request=job).select_related("artisan")
+
+        # Avoid duplicate artisan information by removing redundant data
+        response_data = [
+            {
+                "artisan": {
+                    **CustomUserSerializer(quote.artisan).data,
+                    "about_artisan": quote.artisan.about_artisan.split("\n\n")[0],  # Remove duplicate paragraphs
+                },
+                "quote": QuoteRequestSerializer(quote).data,
+            }
+            for quote in quotes
+        ]
+
+        return Response(response_data, status=status.HTTP_200_OK)
 
     def create(self, request, *args, **kwargs):
 
