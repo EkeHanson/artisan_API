@@ -35,29 +35,29 @@ class ArtisanProfile(models.Model):
     # New availability field
     availability = models.JSONField(default=dict)
 
+    #New field to store up to 5 qualification files (image/pdf)
+    qualifications = ArrayField(
+        models.FileField(upload_to='qualifications/'),
+        size=5,
+        blank=True,
+        null=True
+    )
     # New field to store up to 5 qualification files (image/pdf)
-    # qualifications = ArrayField(
-    #     models.FileField(upload_to='qualifications/'),
-    #     size=5,
-    #     blank=True,
-    #     null=True
-    # )
-    # # New field to store up to 5 qualification files (image/pdf)
-    # previous_jobs = ArrayField(
-    #     models.FileField(upload_to='previous_jobs/'),
-    #     size=5,
-    #     blank=True,
-    #     null=True
-    # )
+    previous_jobs = ArrayField(
+        models.FileField(upload_to='previous_jobs/'),
+        size=5,
+        blank=True,
+        null=True
+    )
 
-    # def save(self, *args, **kwargs):
-    #     if self.user.user_type != 'artisan':
-    #         raise ValidationError("The associated user must be of type 'artisan'.")
-    #     if self.qualifications and len(self.qualifications) > 5:
-    #         raise ValidationError("You can upload a maximum of 5 qualification files.")
-    #     if self.previous_jobs and len(self.previous_jobs) > 5:
-    #         raise ValidationError("You can upload a maximum of 5 qualification files.")
-    #     super().save(*args, **kwargs)
+    def save(self, *args, **kwargs):
+        if self.user.user_type != 'artisan':
+            raise ValidationError("The associated user must be of type 'artisan'.")
+        if self.qualifications and len(self.qualifications) > 5:
+            raise ValidationError("You can upload a maximum of 5 qualification files.")
+        if self.previous_jobs and len(self.previous_jobs) > 5:
+            raise ValidationError("You can upload a maximum of 5 qualification files.")
+        super().save(*args, **kwargs)
 
     def __str__(self):
         return f"ArtisanProfile for {self.user.get_full_name()} ({self.user.email})"

@@ -35,12 +35,12 @@ class ArtisanProfileRequestSerializer(serializers.ModelSerializer):
     user = CustomUserSerializer(read_only=True)  # Read-only for GET requests
     user_id = serializers.UUIDField(write_only=True)  # Write-only for POST requests
 
-    # qualifications = serializers.ListField(
-    #     child=serializers.FileField(), required=False
-    # )
-    # previous_jobs = serializers.ListField(
-    #     child=serializers.FileField(), required=False
-    # )
+    qualifications = serializers.ListField(
+        child=serializers.FileField(), required=False
+    )
+    previous_jobs = serializers.ListField(
+        child=serializers.FileField(), required=False
+    )
 
 
     class Meta:
