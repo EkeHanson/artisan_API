@@ -242,6 +242,7 @@ INSTALLED_APPS = [
     'quotes',
 ]
 
+
 MIDDLEWARE = [
     'corsheaders.middleware.CorsMiddleware',
     'django.middleware.security.SecurityMiddleware',
@@ -278,8 +279,6 @@ CORS_ALLOW_METHODS = [
 ]
 
 
-
-
 ROOT_URLCONF = 'artisans_connect.urls'
 
 
@@ -301,6 +300,21 @@ TEMPLATES = [
 
 WSGI_APPLICATION = 'artisans_connect.wsgi.application'
 
+DATABASES = {
+    'default': {
+        'ENGINE': 'django.db.backends.postgresql',
+        'NAME': 'test_artisan_db',  # Database name
+        'USER': 'test_artisan_db_user',  # Database user
+        'PASSWORD': 'UtrnMmHpSKZcOtIsP6tQ8c7zz2gEyXPD',  # Database password
+        'HOST': 'dpg-cuqinu52ng1s73afq830-a.oregon-postgres.render.com',  # Database host
+        'PORT': '5432',  # Default PostgreSQL port
+        'OPTIONS': {
+            'sslmode': 'require',  # Ensures secure connection
+        },
+    }
+}
+
+
 # DATABASES = {
 #     'default': {
 #         'ENGINE': 'django.db.backends.sqlite3',
@@ -308,22 +322,20 @@ WSGI_APPLICATION = 'artisans_connect.wsgi.application'
 #     }
 # }
 
-
-
-DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.postgresql',
-        'NAME': 'new_artisan_db_g9xw',
-        'USER': 'new_artisan_db_g9xw_user',
-        'PASSWORD': 'F1M5RUJyHGqyn0p2s70TZznXbvW4QldO',
-        'HOST': 'dpg-cumvu6ij1k6c73b4op4g-a.oregon-postgres.render.com',
-        'PORT': '5432',
-        'CONN_MAX_AGE': 600,  # Keeps connections open for better performance
-        'OPTIONS': {
-            'sslmode': 'require',  # Enforces SSL for secure connections
-        },
-    }
-}
+# DATABASES = {
+#     'default': {
+#         'ENGINE': 'django.db.backends.postgresql',
+#         'NAME': 'new_artisan_db_g9xw',
+#         'USER': 'new_artisan_db_g9xw_user',
+#         'PASSWORD': 'F1M5RUJyHGqyn0p2s70TZznXbvW4QldO',
+#         'HOST': 'dpg-cumvu6ij1k6c73b4op4g-a.oregon-postgres.render.com',
+#         'PORT': '5432',
+#         'CONN_MAX_AGE': 600,  # Keeps connections open for better performance
+#         'OPTIONS': {
+#             'sslmode': 'require',  # Enforces SSL for secure connections
+#         },
+#     }
+# }
 
 
 

@@ -167,11 +167,18 @@ class UserViewSet(viewsets.ModelViewSet):
 
     def partial_update(self, request, *args, **kwargs):
         """Update user details using unique_id instead of pk."""
+
+        # print("request.data")
+        # print(request.data)
+        # print("request.data")
         user = self.get_object()  # Uses `get_object()` to fetch by `unique_id`
         serializer = self.get_serializer(user, data=request.data, partial=True)
         if serializer.is_valid():
             serializer.save()
             return Response(serializer.data, status=status.HTTP_200_OK)
+        # print("serializer.errors")
+        # print(serializer.errors)
+        # print("serializer.errors")
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
     def get_permissions(self):

@@ -1,6 +1,7 @@
 import uuid
 from django.db import models
 from users.models import CustomUser
+import uuid
 
 
 class ServiceCategory(models.Model):
@@ -16,17 +17,21 @@ class ServiceCategory(models.Model):
 
 
 class JobRequest(models.Model):
+    unique_id = models.UUIDField(default=uuid.uuid4, editable=False, unique=True)  # Custom unique ID
+
     customer = models.ForeignKey(CustomUser, on_delete=models.CASCADE, related_name="job_requests", to_field='unique_id')
     title = models.CharField(max_length=255)
     description = models.TextField()
     num_appllications = models.PositiveIntegerField(default=0)  # New field to track uploaded certificates
 
-    location = models.CharField(max_length=255)
+    location = models.CharField(max_length=255, blank=True, null=True)
+    
     budget = models.DecimalField(max_digits=10, decimal_places=2)
 
     service_description  = models.CharField(max_length=255, blank=True, null=True)
 
     created_at = models.DateTimeField(auto_now_add=True)
+
     artisan = models.ForeignKey(
         CustomUser,
         null=True,
