@@ -26,6 +26,8 @@ urlpatterns = [
     path('api/payments/auth/', include('profiles.urls')), 
     path('api/auth/quotes/', include('quotes.urls')),
 
+    path('api/auth/payouts/', include('payouts.urls')),
+
     path('admin/', admin.site.urls),
 ]
 if settings.DEBUG:

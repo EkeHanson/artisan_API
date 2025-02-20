@@ -2,27 +2,60 @@ from rest_framework import serializers
 from .models import CustomUser
 
     
+# class UserSerializer(serializers.ModelSerializer):
+#     user_type = serializers.CharField(default='customer')
+#     password = serializers.CharField(write_only=True)  # Ensure password is write-only
+
+#     class Meta:
+#         model = CustomUser
+#         fields = "__all__"
+
+#     def create(self, validated_data):
+#         # Remove the password from the validated data
+#         password = validated_data.pop('password')
+        
+#         # Create the user without the password initially
+#         user = CustomUser(**validated_data)
+        
+#         # Hash the password using set_password
+#         user.set_password(password)
+        
+#         # Save the user instance
+#         user.save()
+        
+#         return user
 class UserSerializer(serializers.ModelSerializer):
     user_type = serializers.CharField(default='customer')
     password = serializers.CharField(write_only=True)  # Ensure password is write-only
+
+    def validate_proof_of_address(self, value):
+        self.validate_file_type(value)
+        return value
+
+    def validate_NIN_doc(self, value):
+        self.validate_file_type(value)
+        return value
+
+    def validate_other_doc(self, value):
+        self.validate_file_type(value)
+        return value
+
+    def validate_file_type(self, value):
+        import os
+        valid_extensions = ['.png', '.jpg', '.jpeg', '.pdf']
+        ext = os.path.splitext(value.name)[1]  # Extract file extension
+        if ext.lower() not in valid_extensions:
+            raise serializers.ValidationError(f'Unsupported file format. Allowed formats: PNG, JPG, JPEG, PDF')
 
     class Meta:
         model = CustomUser
         fields = "__all__"
 
     def create(self, validated_data):
-        # Remove the password from the validated data
         password = validated_data.pop('password')
-        
-        # Create the user without the password initially
         user = CustomUser(**validated_data)
-        
-        # Hash the password using set_password
         user.set_password(password)
-        
-        # Save the user instance
         user.save()
-        
         return user
 
 

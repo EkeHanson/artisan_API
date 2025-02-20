@@ -16,7 +16,7 @@ class CustomUserSerializer(serializers.ModelSerializer):
             "user_type",
             "date_joined",
             "about_artisan",
-            "address",
+            "business_location",
         ]
 
 class JobRequestSerializer(serializers.ModelSerializer):

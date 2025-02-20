@@ -240,6 +240,7 @@ INSTALLED_APPS = [
     # 'chat',
     'artisanReview',
     'quotes',
+    'payouts',
 ]
 
 
@@ -311,8 +312,6 @@ DATABASES = {
         'CONN_MAX_AGE': 600,  # Keeps connections open for performance
     }
 }
-
-
 
 # DATABASES = {
 #     'default': {

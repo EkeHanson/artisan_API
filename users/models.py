@@ -3,6 +3,17 @@ from django.db import models
 import uuid
 from django.contrib.auth.models import AbstractBaseUser, BaseUserManager
 from django.utils import timezone
+from django.core.exceptions import ValidationError
+
+def validate_file_extension(value):
+    import os
+    from django.core.exceptions import ValidationError
+
+    ext = os.path.splitext(value.name)[1]  # Extract file extension
+    valid_extensions = ['.png', '.jpg', '.jpeg', '.pdf']
+    if ext.lower() not in valid_extensions:
+        raise ValidationError(f'Unsupported file extension. Allowed formats: PNG, JPG, JPEG, PDF')
+
 
 
 class CustomUserManager(BaseUserManager):
@@ -31,16 +42,17 @@ class CustomUser(AbstractBaseUser):
         ('super_admin', 'Super Admin'),
     ]
     unique_id = models.UUIDField(default=uuid.uuid4, editable=False, unique=True)  # Custom unique ID
+    
+    business_location = models.CharField(max_length=255, blank=True, null=True)
 
+    proof_of_address = models.FileField(upload_to='artisan_files/', null=True, blank=True, validators=[validate_file_extension])
+    NIN_doc = models.FileField(upload_to='artisan_files/', null=True, blank=True, validators=[validate_file_extension])
+    other_doc = models.FileField(upload_to='artisan_files/', null=True, blank=True, validators=[validate_file_extension])
+    user_image = models.FileField(upload_to='userImages/', null=True, blank=True, validators=[validate_file_extension])
 
-    proof_of_address = models.ImageField(upload_to='artisan_files/', null=True, blank=True)
-    NIN_doc = models.ImageField(upload_to='artisan_files/', null=True, blank=True)
-    other_doc = models.ImageField(upload_to='artisan_files/', null=True, blank=True)
     
     user_type = models.CharField(max_length=11, choices=USER_TYPE_CHOICES)
-
     mobile_number = models.CharField(max_length=15, blank=True, null=True)
-    
     is_verified = models.BooleanField(default=False)
 
     groups = models.ManyToManyField(
@@ -56,7 +68,6 @@ class CustomUser(AbstractBaseUser):
     )
 
     about_artisan = models.TextField(blank=True, null=True)
-
     address = models.CharField(max_length=255, blank=True, null=True)  # New address field with default value
     phone = models.CharField(max_length=15, unique=True)
     first_name = models.CharField(max_length=225)
@@ -70,9 +81,6 @@ class CustomUser(AbstractBaseUser):
 
     username = models.CharField(max_length=80, unique=False, blank=True, null=True)
     email = models.EmailField(max_length=80, unique=True)
-
-    user_image = models.ImageField(upload_to='userImages/', null=True, blank=True)
-
 
     objects = CustomUserManager()
 

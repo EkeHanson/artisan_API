@@ -1,4 +1,5 @@
 from rest_framework import serializers
+from django.core.validators import FileExtensionValidator
 from .models import ArtisanProfile
 from users.models import CustomUser
 from jobs.models import ServiceCategory
@@ -15,6 +16,7 @@ class CustomUserSerializer(serializers.ModelSerializer):
             'user_type',
             'date_joined',
             'about_artisan',
+            'business_location',
         ]
 
 class ServiceCategorySerializer(serializers.ModelSerializer):
@@ -35,11 +37,26 @@ class ArtisanProfileRequestSerializer(serializers.ModelSerializer):
     user = CustomUserSerializer(read_only=True)  # Read-only for GET requests
     user_id = serializers.UUIDField(write_only=True)  # Write-only for POST requests
 
+    # qualifications = serializers.ListField(
+    #     child=serializers.FileField(), required=False
+    # )
+    # previous_jobs = serializers.ListField(
+    #     child=serializers.FileField(), required=False
+    # )
     qualifications = serializers.ListField(
-        child=serializers.FileField(), required=False
+        child=serializers.FileField(
+            allow_empty_file=False,
+            validators=[FileExtensionValidator(allowed_extensions=['png', 'pdf', 'jpg', 'jpeg'])]
+        ),
+        required=False
     )
+
     previous_jobs = serializers.ListField(
-        child=serializers.FileField(), required=False
+        child=serializers.FileField(
+            allow_empty_file=False,
+            validators=[FileExtensionValidator(allowed_extensions=['png', 'pdf', 'jpg', 'jpeg'])]
+        ),
+        required=False
     )
 
 
