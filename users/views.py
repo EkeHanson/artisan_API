@@ -27,13 +27,10 @@ class SendLoginTokenView(views.APIView):
         email = request.data.get('email')
         phone_number = request.data.get('phone')
 
-        # print("request.data")
-        # print(request.data)
-        # print("request.data")
-
         if not email and not phone_number:
             return Response({'error': 'Either email or phone number is required'}, status=status.HTTP_400_BAD_REQUEST)
 
+        user = None
         if email:
             user = CustomUser.objects.filter(email=email).first()
         elif phone_number:
@@ -42,13 +39,17 @@ class SendLoginTokenView(views.APIView):
         if not user:
             return Response({'error': 'User does not exist'}, status=status.HTTP_404_NOT_FOUND)
 
+        # Check if the user is an artisan and not approved
+        if user.user_type == 'artisan' and not user.is_approved:
+            return Response({
+                'error': 'User has not been approved',
+                'unique_id': str(user.unique_id)
+            }, status=status.HTTP_403_FORBIDDEN)
+
+
         token = random.randint(10000, 99999)
         cache_key = f'login_token_{email or phone_number}'
         cache.set(cache_key, token, timeout=300)
-
-        # print("token=data")
-        # print(token)
-        # print("token=data")
 
         sms_message_body = f'Your login token is {token}. It is valid for 5 minutes.'
         email_message_body = f'''
@@ -73,8 +74,8 @@ class SendLoginTokenView(views.APIView):
                 </div>
             </body>
             </html>
+        '''
 
-            '''
 
         if email:
             send_mail(
@@ -88,17 +89,96 @@ class SendLoginTokenView(views.APIView):
             return Response({'message': 'Login token has been sent to your email'}, status=status.HTTP_200_OK)
         elif phone_number:
             try:
-                # client = Client(settings.TWILIO_ACCOUNT_SID, settings.TWILIO_AUTH_TOKEN)
                 client = Client('AC500ccdccd6ebc368dc82d8e36731e000', 'ba57440dbf551131d0eb006dd9fdedc2')
                 client.messages.create(
                     from_='+15074426880',
-                    # from_=settings.TWILIO_PHONE_NUMBER,
                     body=sms_message_body,
                     to=phone_number
                 )
                 return Response({'message': 'Login token has been sent via SMS'}, status=status.HTTP_200_OK)
             except Exception as e:
                 return Response({'error': str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+
+
+# class SendLoginTokenView(views.APIView):
+#     permission_classes = [AllowAny]
+
+#     def post(self, request, *args, **kwargs):
+#         email = request.data.get('email')
+#         phone_number = request.data.get('phone')
+
+#         # print("request.data")
+#         # print(request.data)
+#         # print("request.data")
+
+#         if not email and not phone_number:
+#             return Response({'error': 'Either email or phone number is required'}, status=status.HTTP_400_BAD_REQUEST)
+
+#         if email:
+#             user = CustomUser.objects.filter(email=email).first()
+#         elif phone_number:
+#             user = CustomUser.objects.filter(phone=phone_number).first()
+
+#         if not user:
+#             return Response({'error': 'User does not exist'}, status=status.HTTP_404_NOT_FOUND)
+
+#         token = random.randint(10000, 99999)
+#         cache_key = f'login_token_{email or phone_number}'
+#         cache.set(cache_key, token, timeout=300)
+
+#         # print("token=data")
+#         # print(token)
+#         # print("token=data")
+
+#         sms_message_body = f'Your login token is {token}. It is valid for 5 minutes.'
+#         email_message_body = f'''
+#             <html>
+#             <head>
+#                 <meta charset="utf-8">
+#                 <meta name="viewport" content="width=device-width, initial-scale=1">
+#                 <title>Simservicehub Email Verification Token</title>
+#             </head>
+#             <body style="margin: 0; padding: 0; font-family: Poppins, sans-serif; font-size: 15px; font-weight: 400; line-height: 1.5; width: 100%; background: #3B4B11; color: #FB9836; overflow-x: hidden; min-height: 100vh; text-align: center;">
+#                 <div style="position: relative; width: 100%; height: auto; min-height: 100%; display: flex; justify-content: center;">
+#                     <div style="position: relative; width: 700px; height: auto; text-align: center; padding: 80px 0px; padding-bottom: 0px !important;">
+#                         <img src="https://www.simservicehub.com/assets/site-logo-marnjd0k.png" style="max-width: 150px; margin-bottom: 80px;" />
+#                         <h3 style="font-size: 30px; font-weight: 700;">Your login token is: {token}.</h3>
+#                         <h3 style="font-size: 30px; font-weight: 700;">Please Note that this token is only valid for 5 minutes.</h3>
+#                         <footer style="position: relative; width: 100%; height: auto; margin-top: 50px; padding: 30px; background-color: rgba(255,255,255,0.1);">
+#                             <h5>Thanks for using our platform</h5>
+#                             <p style="font-size: 13px !important; color: #fff !important;">You can reach us via <a href="mailto:support@simservicehub.com" style="color:#D8F3DC !important; text-decoration: underline !important;">support@simservicehub.com</a></p>
+#                             <p style="font-size: 13px !important; color: #fff !important;">© <script>document.write(new Date().getFullYear());</script> Simservicehub. All rights reserved.</p>
+#                         </footer>
+#                     </div>
+#                 </div>
+#             </body>
+#             </html>
+
+#             '''
+
+#         if email:
+#             send_mail(
+#                 'Your Login Token',
+#                 email_message_body,
+#                 settings.DEFAULT_FROM_EMAIL,
+#                 [email],
+#                 fail_silently=False,
+#                 html_message=email_message_body,
+#             )
+#             return Response({'message': 'Login token has been sent to your email'}, status=status.HTTP_200_OK)
+#         elif phone_number:
+#             try:
+#                 # client = Client(settings.TWILIO_ACCOUNT_SID, settings.TWILIO_AUTH_TOKEN)
+#                 client = Client('AC500ccdccd6ebc368dc82d8e36731e000', 'ba57440dbf551131d0eb006dd9fdedc2')
+#                 client.messages.create(
+#                     from_='+15074426880',
+#                     # from_=settings.TWILIO_PHONE_NUMBER,
+#                     body=sms_message_body,
+#                     to=phone_number
+#                 )
+#                 return Response({'message': 'Login token has been sent via SMS'}, status=status.HTTP_200_OK)
+#             except Exception as e:
+#                 return Response({'error': str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
 
 
 class VerifyLoginTokenView(views.APIView):
