@@ -29,7 +29,7 @@ class SubscriptionPlanViewSet(viewsets.ModelViewSet):
     serializer_class = SubscriptionPlanSerializer
 
     def create(self, request, *args, **kwargs):
-        print("\n🔍 Incoming Request Data:", request.data)  # Debug: Print request payload
+       # print("\n🔍 Incoming Request Data:", request.data)  # Debug: Print request payload
         
         serializer = self.get_serializer(data=request.data)
         if not serializer.is_valid():
