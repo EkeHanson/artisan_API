@@ -6,6 +6,17 @@ from jobs.models import ServiceCategory
 import uuid
 from datetime import datetime
 
+def validate_file_extension(value):
+    import os
+    from django.core.exceptions import ValidationError
+
+    ext = os.path.splitext(value.name)[1]  # Extract file extension
+    valid_extensions = ['.png', '.jpg', '.jpeg', '.pdf']
+    if ext.lower() not in valid_extensions:
+        raise ValidationError(f'Unsupported file extension. Allowed formats: PNG, JPG, JPEG, PDF')
+
+
+
 class ArtisanProfile(models.Model):
     user = models.OneToOneField(
         CustomUser,
@@ -22,7 +33,9 @@ class ArtisanProfile(models.Model):
         blank=True, null=True
     )
 
-    is_approved = models.BooleanField(default=False)
+    user_image = models.FileField(upload_to='userImages/', null=True, blank=True, validators=[validate_file_extension])
+
+    is_suspended = models.BooleanField(default=False)
     is_subscribed = models.BooleanField(default=False)
 
     skills = models.JSONField(default=list)

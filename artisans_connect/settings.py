@@ -32,6 +32,7 @@ INSTALLED_APPS = [
     'artisanReview',
     'quotes',
     'payouts',
+    'subscription',
 ]
 
 

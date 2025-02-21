@@ -25,6 +25,7 @@ urlpatterns = [
     path('api/messaging/auth/', include('messaging.urls')), 
     path('api/payments/auth/', include('profiles.urls')), 
     path('api/auth/quotes/', include('quotes.urls')),
+    path('api/auth/subscriptions/', include('subscription.urls')),
 
     path('api/auth/payouts/', include('payouts.urls')),
 
