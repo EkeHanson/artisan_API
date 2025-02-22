@@ -6,5 +6,5 @@ router = DefaultRouter()
 router.register(r'quote_request', QuotationViewSet)
 
 urlpatterns = [
-    path('api/', include(router.urls)),
+    path('', include(router.urls)),  # Ensure router URLs are included
 ]

@@ -2,8 +2,8 @@ from rest_framework import viewsets
 from rest_framework.response import Response
 from rest_framework.decorators import action
 from rest_framework.permissions import IsAuthenticated, AllowAny
-from rest_framework.exceptions import PermissionDenied
-from rest_framework_simplejwt.authentication import JWTAuthentication
+from rest_framework.pagination import PageNumberPagination
+from django.db.models import Count, Q
 from django.db.models import Q
 from uuid import UUID
 from .models import Message
@@ -17,6 +17,39 @@ class MessageViewSet(viewsets.ModelViewSet):
     # authentication_classes = [JWTAuthentication]
     permission_classes = [AllowAny]
 
+
+
+    @action(detail=False, methods=['get'])
+    def senders_to_user(self, request):
+        """Fetch paginated list of users who have sent messages to a particular user along with message counts."""
+        receiver_id = request.query_params.get('receiver_id')
+
+        if not receiver_id:
+            return Response({"error": "Receiver ID is required."}, status=400)
+
+        try:
+            receiver_uuid = UUID(receiver_id)
+        except ValueError:
+            return Response({"error": "Invalid receiver UUID format."}, status=400)
+
+        # Get distinct senders who have messaged the receiver and count their messages
+        senders = CustomUser.objects.filter(
+            sent_chat_messages__receiver__unique_id=receiver_uuid
+        ).annotate(
+            message_count=Count('sent_chat_messages', filter=Q(sent_chat_messages__receiver__unique_id=receiver_uuid))
+        ).distinct().order_by('id')  # Ensure ordering for pagination
+
+        # Apply pagination
+        paginator = PageNumberPagination()
+        paginated_senders = paginator.paginate_queryset(senders, request)
+
+        # Serialize paginated results and include message count
+        serialized_data = UserProfileSerializer(paginated_senders, many=True).data
+        for sender in serialized_data:
+            sender_instance = next((s for s in paginated_senders if str(s.unique_id) == sender['unique_id']), None)
+            sender['message_count'] = sender_instance.message_count if sender_instance else 0
+
+        return paginator.get_paginated_response(serialized_data)
     
     @action(detail=False, methods=['get'])
     def conversation(self, request):

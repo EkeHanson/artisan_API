@@ -5,6 +5,8 @@ from jobs.models import JobRequest
 import uuid
 
 
+
+
 class QuoteRequest(models.Model):
     unique_id = models.UUIDField(default=uuid.uuid4, editable=False, unique=True)  # ✅ Correct default UUID
 
@@ -36,3 +38,26 @@ class QuoteRequest(models.Model):
 
     def __str__(self):
         return f"{self.artisan} - {self.job_request} - {self.bid_amount}"
+
+
+
+class Booking(models.Model):
+    unique_id = models.UUIDField(default=uuid.uuid4, editable=False, unique=True)  
+    quote = models.OneToOneField(QuoteRequest, on_delete=models.CASCADE, related_name="booking")
+    customer = models.ForeignKey(CustomUser, on_delete=models.CASCADE, to_field="unique_id", related_name="bookings")
+    artisan = models.ForeignKey(CustomUser, on_delete=models.CASCADE, to_field="unique_id", related_name="booked_jobs")
+    job_request = models.ForeignKey(JobRequest, on_delete=models.CASCADE, to_field="unique_id", related_name="bookings")
+    accepted_at = models.DateTimeField(default=timezone.now)
+    status = models.CharField(
+        max_length=20,
+        choices=[
+            ("pending", "Pending"),
+            ("ongoing", "Ongoing"),
+            ("completed", "Completed"),
+            ("cancelled", "Cancelled"),
+        ],
+        default="pending"
+    )
+
+    def __str__(self):
+        return f"Booking for {self.quote} - Status: {self.status}"

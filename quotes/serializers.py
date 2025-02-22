@@ -2,7 +2,7 @@ from rest_framework import serializers
 from .models import QuoteRequest
 from users.models import CustomUser
 from jobs.models import JobRequest
-
+from .models import Booking
 
 class CustomUserSerializer(serializers.ModelSerializer):
     class Meta:
@@ -75,3 +75,11 @@ class QuoteRequestSerializer(serializers.ModelSerializer):
         validated_data["job_request"] = job_request
 
         return super().create(validated_data)
+
+
+class BookingSerializer(serializers.ModelSerializer):
+    quote = QuoteRequestSerializer(read_only=True)  # ✅ Expand quote details
+
+    class Meta:
+        model = Booking
+        fields = "__all__"
