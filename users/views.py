@@ -286,7 +286,7 @@ class UserViewSet(viewsets.ModelViewSet):
         # print("request.data")
         # print(request.data)
         # print("request.data")
-        
+
         user = self.get_object()  # Fetch user by `unique_id`
         previous_status = {"is_approved": user.is_approved, "is_suspended": user.is_suspended}
 
@@ -419,12 +419,11 @@ class UserViewSet(viewsets.ModelViewSet):
             if email_subject and email_message:
                 send_mail(
                     email_subject,
-                    email_message,
                     settings.DEFAULT_FROM_EMAIL,
                     [user.email],
                     fail_silently=False,
+                    html_message=email_message,
                 )
-
             return Response(serializer.data, status=status.HTTP_200_OK)
         # print("serializer.errors")
         # print(serializer.errors)
