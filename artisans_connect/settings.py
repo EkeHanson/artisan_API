@@ -96,27 +96,14 @@ WSGI_APPLICATION = 'artisans_connect.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
-        'NAME': 'test_artisan_db_sc00',
-        'USER': 'test_artisan_db_sc00_user',
-        'PASSWORD': 'uX56iMstsVwV8lwu1wi6KmnHo6f3KIR3',
-        'HOST': 'dpg-cuqtnftds78s7382mchg-a.oregon-postgres.render.com',
-        'PORT': '5432',
-        'CONN_MAX_AGE': 600,  # Keeps connections open for performance
+        'NAME': 'test_artisan_db_tqtz',
+        'USER': 'test_artisan_db_tqtz_user',
+        'PASSWORD': '8wd1Rvk5SxqlRcFs9c1v9beMlJQu54Ei',
+        'HOST': 'dpg-cuu36prtq21c73b2i49g-a.oregon-postgres.render.com',
+        'PORT': '5432',  # Default PostgreSQL port
     }
 }
 
-
-# DATABASES = {
-#     'default': {
-#         'ENGINE': 'django.db.backends.postgresql',
-#         'NAME': 'simservicehubTestDatabase',
-#         'USER': 'postgres',
-#         'PASSWORD': 'pluralsight',
-#         'HOST': 'localhost',
-#         'PORT': '5432',
-#         'CONN_MAX_AGE': 600,  # Keeps connections open for performance
-#     }
-# }
 
 # DATABASES = {
 #     'default': {
@@ -124,22 +111,6 @@ DATABASES = {
 #         'NAME': BASE_DIR / 'db.sqlite3',
 #     }
 # }
-
-# DATABASES = {
-#     'default': {
-#         'ENGINE': 'django.db.backends.postgresql',
-#         'NAME': 'new_artisan_db_g9xw',
-#         'USER': 'new_artisan_db_g9xw_user',
-#         'PASSWORD': 'F1M5RUJyHGqyn0p2s70TZznXbvW4QldO',
-#         'HOST': 'dpg-cumvu6ij1k6c73b4op4g-a.oregon-postgres.render.com',
-#         'PORT': '5432',
-#         'CONN_MAX_AGE': 600,  # Keeps connections open for better performance
-#         'OPTIONS': {
-#             'sslmode': 'require',  # Enforces SSL for secure connections
-#         },
-#     }
-# }
-
 
 
 REST_FRAMEWORK = {
