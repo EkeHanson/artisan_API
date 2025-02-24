@@ -62,7 +62,6 @@ class ArtisanProfile(models.Model):
         null=True
     )
 
-    identification_code = models.CharField(max_length=20, unique=True, blank=True, null=True)
 
     def save(self, *args, **kwargs):
         if self.user.user_type != 'artisan':
@@ -72,14 +71,14 @@ class ArtisanProfile(models.Model):
         if self.previous_jobs and len(self.previous_jobs) > 5:
             raise ValidationError("You can upload a maximum of 5 qualification files.")
 
-        # Generate identification code if not set
-        if not self.identification_code:
-            date_joined = self.user.date_joined
-            month = date_joined.strftime("%m")  # Extract month as two digits
-            year_last_two = date_joined.strftime("%y")  # Extract last two digits of the year
-            user_id = self.user.id  # Get user ID
+        # # Generate identification code if not set
+        # if not self.identification_code:
+        #     date_joined = self.user.date_joined
+        #     month = date_joined.strftime("%m")  # Extract month as two digits
+        #     year_last_two = date_joined.strftime("%y")  # Extract last two digits of the year
+        #     user_id = self.user.id  # Get user ID
             
-            self.identification_code = f"SSH{month}{year_last_two}{user_id}"
+        #     self.identification_code = f"SSH{month}{year_last_two}{user_id}"
 
         super().save(*args, **kwargs)
 

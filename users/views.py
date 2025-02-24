@@ -89,15 +89,34 @@ class SendLoginTokenView(views.APIView):
             return Response({'message': 'Login token has been sent to your email'}, status=status.HTTP_200_OK)
         elif phone_number:
             try:
-                client = Client('AC500ccdccd6ebc368dc82d8e36731e000', 'ba57440dbf551131d0eb006dd9fdedc2')
-                client.messages.create(
-                    from_='+15074426880',
-                    body=sms_message_body,
-                    to=phone_number
-                )
-                return Response({'message': 'Login token has been sent via SMS'}, status=status.HTTP_200_OK)
+                import requests
+
+                # temii_api_url = "https://api.temii.com/sms/send"
+                temii_api_url = settings.Temii_BASR_URL
+                temii_api_key = settings.Temii_API_KEY  # Replace with your actual API key
+
+                payload = {
+                    "to": phone_number,
+                    "message": sms_message_body,
+                    "sender": "SimServiceHub"  # Replace with your sender ID if required
+                }
+
+                headers = {
+                    "Authorization": f"Bearer {temii_api_key}",
+                    "Content-Type": "application/json"
+                }
+
+                response = requests.post(temii_api_url, json=payload, headers=headers)
+                response_data = response.json()
+
+                if response.status_code == 200 and response_data.get("status") == "success":
+                    return Response({'message': 'Login token has been sent via SMS'}, status=status.HTTP_200_OK)
+                else:
+                    return Response({'error': response_data.get("message", "Failed to send SMS")}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+
             except Exception as e:
                 return Response({'error': str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+
 
 
 # class SendLoginTokenView(views.APIView):

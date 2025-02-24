@@ -165,6 +165,9 @@ DEFAULT_FROM_EMAIL = 'support@simservicehub.com'
 
 # CORS Configuration
 
+Temii_API_KEY = "TLKcDhVOKRAMuHsaWjmuEwduwgKlpjJtGTmrktulKivvPKKUFutJpbVATFCTdf"
+Temii_BASR_URL = "https://v3.api.termii.com"
+
 
 
 
