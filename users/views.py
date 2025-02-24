@@ -264,21 +264,173 @@ class UserViewSet(viewsets.ModelViewSet):
         unique_id = self.kwargs.get("unique_id")
         return get_object_or_404(CustomUser, unique_id=unique_id)
 
-    def partial_update(self, request, *args, **kwargs):
-        """Update user details using unique_id instead of pk."""
+    # def partial_update(self, request, *args, **kwargs):
+    #     """Update user details using unique_id instead of pk."""
 
+    #     # print("request.data")
+    #     # print(request.data)
+    #     # print("request.data")
+    #     user = self.get_object()  # Uses `get_object()` to fetch by `unique_id`
+    #     serializer = self.get_serializer(user, data=request.data, partial=True)
+    #     if serializer.is_valid():
+    #         serializer.save()
+    #         return Response(serializer.data, status=status.HTTP_200_OK)
+    #     # print("serializer.errors")
+    #     # print(serializer.errors)
+    #     # print("serializer.errors")
+    #     return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+    def partial_update(self, request, *args, **kwargs):
+        """Update user details and send email notifications for status changes."""
+        
         # print("request.data")
         # print(request.data)
         # print("request.data")
-        user = self.get_object()  # Uses `get_object()` to fetch by `unique_id`
+        
+        user = self.get_object()  # Fetch user by `unique_id`
+        previous_status = {"is_approved": user.is_approved, "is_suspended": user.is_suspended}
+
         serializer = self.get_serializer(user, data=request.data, partial=True)
         if serializer.is_valid():
             serializer.save()
+
+            # Check if status has changed
+            new_status = {
+                "is_approved": serializer.validated_data.get("is_approved", user.is_approved),
+                "is_suspended": serializer.validated_data.get("is_suspended", user.is_suspended),
+            }
+
+            email_subject = None
+            email_message = None
+
+            if previous_status["is_approved"] != new_status["is_approved"]:
+                if new_status["is_approved"]:
+                    email_subject = "Your Account Has Been Activated"
+                    email_message = f"""
+                    <html>
+                        <head>
+                            <meta charset="utf-8">
+                            <meta name="viewport" content="width=device-width, initial-scale=1">
+                            <title>CMVP Registration Email Verification </title>
+                        </head>
+                            <body style="margin: 0; padding: 0; font-family: Poppins, sans-serif; font-size: 15px; font-weight: 400; line-height: 1.5; width: 100%; background: #3B4B11; color: #FB9836; overflow-x: hidden; min-height: 100vh; text-align: center;">
+                                <div style="position: relative; width: 100%; height: auto; min-height: 100%; display: flex; justify-content: center;">
+                                    <div style="position: relative; width: 700px; height: auto; text-align: center; padding: 80px 0px; padding-bottom: 0px !important;">
+                                        <img src="https://www.simservicehub.com/assets/site-logo-marnjd0k.png" style="max-width: 150px; margin-bottom: 80px;" />
+                                        <h3 style="font-size: 30px; font-weight: 700;">Your Account Suspension Has Been Lifted</h3>
+                                        <h2>Dear {user.first_name},\n\nYour account has been activated. You can now log in and access all features.\n\nBest Regards,\nSupport Team</h2>
+
+                                    <footer style="position: relative; width: 100%; height: auto; margin-top: 50px; padding: 30px; background-color: rgba(255,255,255,0.1);">
+                                <h5>Thanks for using our platform</h5>
+                                <p style="font-size: 13px !important; color: #fff !important;">You can reach us via <a href="mailto:support@simservicehub.com" style="color:#D8F3DC !important; text-decoration: underline !important;">support@simservicehub.com</a></p>
+                                <p style="font-size: 13px !important; color: #fff !important;">© <script>document.write(new Date().getFullYear());</script> Simservicehub. All rights reserved.</p>
+                            </footer>
+                        </div>
+                        </div>
+                    </body>
+                    </html>
+                                
+                    """
+                else:
+                    email_subject = "Your Account Has Been Deactivated"
+                    email_message = f"""
+                    <html>
+                        <head>
+                            <meta charset="utf-8">
+                            <meta name="viewport" content="width=device-width, initial-scale=1">
+                            <title>CMVP Registration Email Verification </title>
+                        </head>
+                            <body style="margin: 0; padding: 0; font-family: Poppins, sans-serif; font-size: 15px; font-weight: 400; line-height: 1.5; width: 100%; background: #3B4B11; color: #FB9836; overflow-x: hidden; min-height: 100vh; text-align: center;">
+                                <div style="position: relative; width: 100%; height: auto; min-height: 100%; display: flex; justify-content: center;">
+                                    <div style="position: relative; width: 700px; height: auto; text-align: center; padding: 80px 0px; padding-bottom: 0px !important;">
+                                        <img src="https://www.simservicehub.com/assets/site-logo-marnjd0k.png" style="max-width: 150px; margin-bottom: 80px;" />
+                                        <h3 style="font-size: 30px; font-weight: 700;">Your Account Suspension Has Been Lifted</h3>
+                                        <h2>Dear {user.first_name},\n\nYour account has been deactivated. Please contact support for more information.\n\nBest Regards,\nSupport Team</h2>
+
+                                    <footer style="position: relative; width: 100%; height: auto; margin-top: 50px; padding: 30px; background-color: rgba(255,255,255,0.1);">
+                                <h5>Thanks for using our platform</h5>
+                                <p style="font-size: 13px !important; color: #fff !important;">You can reach us via <a href="mailto:support@simservicehub.com" style="color:#D8F3DC !important; text-decoration: underline !important;">support@simservicehub.com</a></p>
+                                <p style="font-size: 13px !important; color: #fff !important;">© <script>document.write(new Date().getFullYear());</script> Simservicehub. All rights reserved.</p>
+                            </footer>
+                        </div>
+                        </div>
+                    </body>
+                    </html>
+                                
+                    """
+            elif previous_status["is_suspended"] != new_status["is_suspended"]:
+
+                if new_status["is_suspended"]:
+                    email_subject = "Your Account Has Been Suspended"
+                    email_message = f"""
+                    <html>
+                        <head>
+                            <meta charset="utf-8">
+                            <meta name="viewport" content="width=device-width, initial-scale=1">
+                            <title>CMVP Registration Email Verification </title>
+                        </head>
+                            <body style="margin: 0; padding: 0; font-family: Poppins, sans-serif; font-size: 15px; font-weight: 400; line-height: 1.5; width: 100%; background: #3B4B11; color: #FB9836; overflow-x: hidden; min-height: 100vh; text-align: center;">
+                                <div style="position: relative; width: 100%; height: auto; min-height: 100%; display: flex; justify-content: center;">
+                                    <div style="position: relative; width: 700px; height: auto; text-align: center; padding: 80px 0px; padding-bottom: 0px !important;">
+                                        <img src="https://www.simservicehub.com/assets/site-logo-marnjd0k.png" style="max-width: 150px; margin-bottom: 80px;" />
+                                        <h3 style="font-size: 30px; font-weight: 700;">Your Account Suspension Has Been Lifted</h3>
+                                        <h2>Dear {user.first_name},\n\nYour account has been suspended due to policy violations. Please contact support for further details.\n\nBest Regards,\nSupport Team</h2>
+
+                                    <footer style="position: relative; width: 100%; height: auto; margin-top: 50px; padding: 30px; background-color: rgba(255,255,255,0.1);">
+                                <h5>Thanks for using our platform</h5>
+                                <p style="font-size: 13px !important; color: #fff !important;">You can reach us via <a href="mailto:support@simservicehub.com" style="color:#D8F3DC !important; text-decoration: underline !important;">support@simservicehub.com</a></p>
+                                <p style="font-size: 13px !important; color: #fff !important;">© <script>document.write(new Date().getFullYear());</script> Simservicehub. All rights reserved.</p>
+                            </footer>
+                        </div>
+                        </div>
+                    </body>
+                    </html>
+                                
+                    """
+                else:
+                    email_subject = "Your Account Suspension Has Been Lifted"
+                    email_message = f"""
+                    <html>
+                        <head>
+                            <meta charset="utf-8">
+                            <meta name="viewport" content="width=device-width, initial-scale=1">
+                            <title>CMVP Registration Email Verification </title>
+                        </head>
+                            <body style="margin: 0; padding: 0; font-family: Poppins, sans-serif; font-size: 15px; font-weight: 400; line-height: 1.5; width: 100%; background: #3B4B11; color: #FB9836; overflow-x: hidden; min-height: 100vh; text-align: center;">
+                                <div style="position: relative; width: 100%; height: auto; min-height: 100%; display: flex; justify-content: center;">
+                                    <div style="position: relative; width: 700px; height: auto; text-align: center; padding: 80px 0px; padding-bottom: 0px !important;">
+                                        <img src="https://www.simservicehub.com/assets/site-logo-marnjd0k.png" style="max-width: 150px; margin-bottom: 80px;" />
+                                        <h3 style="font-size: 30px; font-weight: 700;">Your Account Suspension Has Been Lifted</h3>
+                                        <h2>Dear {user.first_name},\n\nYour account suspension has been lifted. You can now log in again.\n\nBest Regards,\nSupport Team</h2>
+
+                                    <footer style="position: relative; width: 100%; height: auto; margin-top: 50px; padding: 30px; background-color: rgba(255,255,255,0.1);">
+                                <h5>Thanks for using our platform</h5>
+                                <p style="font-size: 13px !important; color: #fff !important;">You can reach us via <a href="mailto:support@simservicehub.com" style="color:#D8F3DC !important; text-decoration: underline !important;">support@simservicehub.com</a></p>
+                                <p style="font-size: 13px !important; color: #fff !important;">© <script>document.write(new Date().getFullYear());</script> Simservicehub. All rights reserved.</p>
+                            </footer>
+                        </div>
+                        </div>
+                    </body>
+                    </html>
+                                
+                    """
+
+            # Send email if there's a status change
+            if email_subject and email_message:
+                send_mail(
+                    email_subject,
+                    email_message,
+                    settings.DEFAULT_FROM_EMAIL,
+                    [user.email],
+                    fail_silently=False,
+                )
+
             return Response(serializer.data, status=status.HTTP_200_OK)
         # print("serializer.errors")
         # print(serializer.errors)
         # print("serializer.errors")
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+    
 
     def get_permissions(self):
         # For 'create' and 'list' actions, allow anyone

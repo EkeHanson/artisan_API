@@ -71,8 +71,8 @@ CORS_ALLOW_METHODS = [
     'OPTIONS'
 ]
 
-
 ROOT_URLCONF = 'artisans_connect.urls'
+
 
 
 TEMPLATES = [
