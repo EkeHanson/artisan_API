@@ -37,6 +37,7 @@ class ArtisanProfile(models.Model):
 
     is_suspended = models.BooleanField(default=False)
     is_subscribed = models.BooleanField(default=False)
+    is_approved = models.BooleanField(default=False)
 
     skills = models.JSONField(default=list)
     experience = models.PositiveIntegerField()

@@ -17,6 +17,7 @@ class CustomUserSerializer(serializers.ModelSerializer):
             'date_joined',
             'about_artisan',
             'business_location',
+            'is_approved',
         ]
 
 class ServiceCategorySerializer(serializers.ModelSerializer):
