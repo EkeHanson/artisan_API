@@ -83,15 +83,32 @@ class ArtisanProfileByUniqueIdView(APIView):
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 
+# class NonPaginatedProfileRequestViewSet(viewsets.ModelViewSet):
+#     """A ViewSet for listing Artisan Profiles without pagination."""
+#     queryset = ArtisanProfile.objects.all().order_by('-id')
+#     serializer_class = ArtisanProfileRequestSerializer
+#     permission_classes = [AllowAny]
+#     pagination_class = None  # ✅ Disable pagination for this viewset
+
+#     def list(self, request, *args, **kwargs):
+#         """Return all ArtisanProfiles without pagination."""
+#         queryset = self.get_queryset()
+#         serializer = self.get_serializer(queryset, many=True)
+#         return Response(serializer.data)
+
 class NonPaginatedProfileRequestViewSet(viewsets.ModelViewSet):
-    """A ViewSet for listing Artisan Profiles without pagination."""
-    queryset = ArtisanProfile.objects.all().order_by('-id')
+    """
+    A ViewSet for listing Artisan Profiles without pagination.
+    """
+    queryset = ArtisanProfile.objects.filter(user__is_approved=True).order_by('-id')
     serializer_class = ArtisanProfileRequestSerializer
     permission_classes = [AllowAny]
-    pagination_class = None  # ✅ Disable pagination for this viewset
+    pagination_class = None  # Disable pagination for this viewset
 
     def list(self, request, *args, **kwargs):
-        """Return all ArtisanProfiles without pagination."""
+        """
+        Return all approved ArtisanProfiles without pagination.
+        """
         queryset = self.get_queryset()
         serializer = self.get_serializer(queryset, many=True)
         return Response(serializer.data)
