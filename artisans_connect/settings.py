@@ -96,13 +96,14 @@ WSGI_APPLICATION = 'artisans_connect.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
-        'NAME': 'test_artisan_db_tqtz',
-        'USER': 'test_artisan_db_tqtz_user',
-        'PASSWORD': '8wd1Rvk5SxqlRcFs9c1v9beMlJQu54Ei',
-        'HOST': 'dpg-cuu36prtq21c73b2i49g-a.oregon-postgres.render.com',
-        'PORT': '5432',  # Default PostgreSQL port
+        'NAME': 'test_artisan_db_wsnp',
+        'USER': 'test_artisan_db_wsnp_user',
+        'PASSWORD': 'yO6Akgaw8xYAjbuug9HXTugtY6ZeCLFq',
+        'HOST': 'dpg-cuu7ao1opnds739u13t0-a.oregon-postgres.render.com',
+        'PORT': '5432',
     }
 }
+
 
 
 # DATABASES = {
