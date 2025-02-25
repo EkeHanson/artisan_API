@@ -429,7 +429,7 @@ class UserViewSet(viewsets.ModelViewSet):
                 #     fail_silently=False,
                 #     html_message=email_message,
                 # )
-                send_mail(subject, '', from_email, recipient_list, fail_silently=False, html_message=email_message)
+                send_mail(email_subject, '', from_email, recipient_list, fail_silently=False, html_message=email_message)
             return Response(serializer.data, status=status.HTTP_200_OK)
         # print("serializer.errors")
         # print(serializer.errors)
