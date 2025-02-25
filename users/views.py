@@ -417,13 +417,16 @@ class UserViewSet(viewsets.ModelViewSet):
 
             # Send email if there's a status change
             if email_subject and email_message:
-                send_mail(
-                    email_subject,
-                    settings.DEFAULT_FROM_EMAIL,
-                    [user.email],
-                    fail_silently=False,
-                    html_message=email_message,
-                )
+                recipient_list=[user.email]
+                from_email=settings.DEFAULT_FROM_EMAIL
+                # send_mail(
+                #     email_subject,
+                #     settings.DEFAULT_FROM_EMAIL,
+                #     [user.email],
+                #     fail_silently=False,
+                #     html_message=email_message,
+                # )
+                send_mail(subject, '', from_email, recipient_list, fail_silently=False, html_message=email_message)
             return Response(serializer.data, status=status.HTTP_200_OK)
         # print("serializer.errors")
         # print(serializer.errors)
