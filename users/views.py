@@ -317,8 +317,8 @@ class UserViewSet(viewsets.ModelViewSet):
                                 <div style="position: relative; width: 100%; height: auto; min-height: 100%; display: flex; justify-content: center;">
                                     <div style="position: relative; width: 700px; height: auto; text-align: center; padding: 80px 0px; padding-bottom: 0px !important;">
                                         <img src="https://www.simservicehub.com/assets/site-logo-marnjd0k.png" style="max-width: 150px; margin-bottom: 80px;" />
-                                        <h3 style="font-size: 30px; font-weight: 700;">Your Account Suspension Has Been Lifted</h3>
-                                        <h2>Dear {user.first_name},\n\nYour account has been activated. You can now log in and access all features.\n\nBest Regards,\nSupport Team</h2>
+                                        <h3 style="font-size: 30px; font-weight: 700;">Your Account Activation Has Been Completed</h3>
+                                        <h2>Dear {user.first_name},\n\nYour account has been approved and activated. You can now log in and access all features.\n\nBest Regards,\nSupport Team</h2>
 
                                     <footer style="position: relative; width: 100%; height: auto; margin-top: 50px; padding: 30px; background-color: rgba(255,255,255,0.1);">
                                 <h5>Thanks for using our platform</h5>
@@ -344,7 +344,7 @@ class UserViewSet(viewsets.ModelViewSet):
                                 <div style="position: relative; width: 100%; height: auto; min-height: 100%; display: flex; justify-content: center;">
                                     <div style="position: relative; width: 700px; height: auto; text-align: center; padding: 80px 0px; padding-bottom: 0px !important;">
                                         <img src="https://www.simservicehub.com/assets/site-logo-marnjd0k.png" style="max-width: 150px; margin-bottom: 80px;" />
-                                        <h3 style="font-size: 30px; font-weight: 700;">Your Account Suspension Has Been Lifted</h3>
+                                        <h3 style="font-size: 30px; font-weight: 700;">Your Account Has Been Deactivated</h3>
                                         <h2>Dear {user.first_name},\n\nYour account has been deactivated. Please contact support for more information.\n\nBest Regards,\nSupport Team</h2>
 
                                     <footer style="position: relative; width: 100%; height: auto; margin-top: 50px; padding: 30px; background-color: rgba(255,255,255,0.1);">
@@ -373,7 +373,7 @@ class UserViewSet(viewsets.ModelViewSet):
                                 <div style="position: relative; width: 100%; height: auto; min-height: 100%; display: flex; justify-content: center;">
                                     <div style="position: relative; width: 700px; height: auto; text-align: center; padding: 80px 0px; padding-bottom: 0px !important;">
                                         <img src="https://www.simservicehub.com/assets/site-logo-marnjd0k.png" style="max-width: 150px; margin-bottom: 80px;" />
-                                        <h3 style="font-size: 30px; font-weight: 700;">Your Account Suspension Has Been Lifted</h3>
+                                        <h3 style="font-size: 30px; font-weight: 700;">Your Account Has Been Suspended</h3>
                                         <h2>Dear {user.first_name},\n\nYour account has been suspended due to policy violations. Please contact support for further details.\n\nBest Regards,\nSupport Team</h2>
 
                                     <footer style="position: relative; width: 100%; height: auto; margin-top: 50px; padding: 30px; background-color: rgba(255,255,255,0.1);">
@@ -431,9 +431,9 @@ class UserViewSet(viewsets.ModelViewSet):
                 # )
                 send_mail(email_subject, '', from_email, recipient_list, fail_silently=False, html_message=email_message)
             return Response(serializer.data, status=status.HTTP_200_OK)
-        # print("serializer.errors")
-        # print(serializer.errors)
-        # print("serializer.errors")
+        print("serializer.errors")
+        print(serializer.errors)
+        print("serializer.errors")
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
     
 
