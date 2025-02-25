@@ -418,6 +418,9 @@ class UserViewSet(viewsets.ModelViewSet):
             # Send email if there's a status change
             if email_subject and email_message:
                 recipient_list=[user.email]
+                print("recipient_list")
+                print(recipient_list)
+                print("recipient_list")
                 from_email=settings.DEFAULT_FROM_EMAIL
                 # send_mail(
                 #     email_subject,
