@@ -105,16 +105,16 @@ WSGI_APPLICATION = 'artisans_connect.wsgi.application'
 #     }
 # }
 
-# DATABASES = {
-#     'default': {
-#         'ENGINE': 'django.db.backends.postgresql',
-#         'NAME': 'simservice',
-#         'USER': 'postgres',
-#         'PASSWORD': 'pluralsight',
-#         'HOST': 'localhost',
-#         'PORT': '5432',
-#     }
-# }
+DATABASES = {
+    'default': {
+        'ENGINE': 'django.db.backends.postgresql',
+        'NAME': 'simservice',
+        'USER': 'postgres',
+        'PASSWORD': 'pluralsight',
+        'HOST': 'localhost',
+        'PORT': '5432',
+    }
+}
 
 # DATABASES = {
 #     'default': {

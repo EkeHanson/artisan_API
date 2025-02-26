@@ -18,6 +18,7 @@ import random
 from django.core.cache import cache
 from django.conf import settings
 from django.shortcuts import get_object_or_404
+import requests
 
 
 class SendLoginTokenView(views.APIView):
@@ -90,29 +91,27 @@ class SendLoginTokenView(views.APIView):
         elif phone_number:
             try:
                 import requests
-
-                # temii_api_url = "https://api.temii.com/sms/send"
-                temii_api_url = settings.Temii_BASR_URL
-                temii_api_key = settings.Temii_API_KEY  # Replace with your actual API key
-
-                payload = {
+                
+                url = "https://www.bulksmsnigeria.com/api/v1/sms/create"
+                params = {
+                    "api_token": "iChBOImG7e8CPbZbMvPV9yHBmFCfL0FfBtz4t5cJFkbZe97tt3Q0xxVteSCt",
+                    "from": "Simservice Hub",
                     "to": phone_number,
-                    "message": sms_message_body,
-                    "sender": "SimServiceHub"  # Replace with your sender ID if required
+                    "body":sms_message_body
                 }
 
-                headers = {
-                    "Authorization": f"Bearer {temii_api_key}",
-                    "Content-Type": "application/json"
-                }
-
-                response = requests.post(temii_api_url, json=payload, headers=headers)
+                response =  response = requests.post(url, data=params)
+                
                 response_data = response.json()
 
-                if response.status_code == 200 and response_data.get("status") == "success":
+                # print("response_data")
+                # print(response_data)
+                # print("response_data")
+
+                if response_data.get("data", {}).get("message") == "Message Sent" and response_data.get("data", {}).get("status") == "success":
                     return Response({'message': 'Login token has been sent via SMS'}, status=status.HTTP_200_OK)
                 else:
-                    return Response({'error': response_data.get("message", "Failed to send SMS")}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+                    return Response({'error': response_data.get("data", {}).get("message", "Failed to send SMS")}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
 
             except Exception as e:
                 return Response({'error': str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
@@ -543,3 +542,6 @@ def send_contact_email(request):
             return Response({'error': 'Email not provided in POST data'}, status=400)
     else:
         return Response({'error': 'Invalid request method'}, status=400)
+
+
+
