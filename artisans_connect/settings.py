@@ -207,5 +207,8 @@ Temii_API_KEY = "TLKcDhVOKRAMuHsaWjmuEwduwgKlpjJtGTmrktulKivvPKKUFutJpbVATFCTdf"
 Temii_BASR_URL = "https://v3.api.termii.com"
 
 
+bulksmsnigeria_url = "https://www.bulksmsnigeria.com/api/v1/sms/create"
+BULK_SMS_api_token = "iChBOImG7e8CPbZbMvPV9yHBmFCfL0FfBtz4t5cJFkbZe97tt3Q0xxVteSCt",
+
 
 

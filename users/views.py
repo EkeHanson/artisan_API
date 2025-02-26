@@ -92,9 +92,9 @@ class SendLoginTokenView(views.APIView):
             try:
                 import requests
                 
-                url = "https://www.bulksmsnigeria.com/api/v1/sms/create"
+                url = settings.bulksmsnigeria_url
                 params = {
-                    "api_token": "iChBOImG7e8CPbZbMvPV9yHBmFCfL0FfBtz4t5cJFkbZe97tt3Q0xxVteSCt",
+                    "api_token": settings.BULK_SMS_api_token,
                     "from": "Simservice Hub",
                     "to": phone_number,
                     "body":sms_message_body
