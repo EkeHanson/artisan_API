@@ -52,6 +52,7 @@ class ArtisanProfile(models.Model):
     business_location = models.CharField(max_length=255, blank=True, null=True)
 
     #DOCS
+    
     proof_of_address = models.FileField(upload_to='artisan_files/', null=True, blank=True, validators=[validate_file_extension])
     driver_licence = models.FileField(upload_to='artisan_files/', null=True, blank=True, validators=[validate_file_extension])
     international_passport = models.FileField(upload_to='artisan_files/', null=True, blank=True, validators=[validate_file_extension])

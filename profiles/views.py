@@ -273,7 +273,7 @@ class ArtisanProfileByUniqueIdView(APIView):
 
                 # Add new files to the list
                 for file_obj in files:
-                    file_path = default_storage.save(f"qualificationsAndPreviousJobs/{file_obj.name}", ContentFile(file_obj.read()))
+                    file_path = default_storage.save(f"artisan_files/{file_obj.name}", ContentFile(file_obj.read()))
                     current_files.append(file_path)
 
                 # If the total number of files exceeds the limit, remove the oldest files

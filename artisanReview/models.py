@@ -2,8 +2,11 @@
 from django.db import models
 from users.models import CustomUser
 from jobs.models import ServiceCategory  # Assuming this model exists
+import uuid
+
 
 class ArtisanReview(models.Model):
+    unique_id = models.UUIDField(default=uuid.uuid4, editable=False, unique=True)  # Custom unique ID
     artisan = models.ForeignKey(
         CustomUser, 
         on_delete=models.SET_NULL, 
