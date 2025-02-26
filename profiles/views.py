@@ -9,6 +9,12 @@ from rest_framework.views import APIView
 from jobs.models import ServiceCategory
 from rest_framework.exceptions import NotFound
 from rest_framework.pagination import PageNumberPagination
+from django.core.files.storage import default_storage
+from django.core.files.base import ContentFile
+import json
+from django.core.files.base import ContentFile
+from django.core.files.storage import default_storage
+import json
 
 class NoPagination(PageNumberPagination):
     page_size = None
@@ -38,9 +44,205 @@ class ArtisanProfileByUniqueIdView(APIView):
 
         serializer = ArtisanProfileRequestSerializer(artisan_profiles.first())
         return Response(serializer.data, status=status.HTTP_200_OK)
+    
 
+    # def patch(self, request, *args, **kwargs):
+    #     print("request.data")
+    #     print(request.data)
+    #     print("request.data")
+    #     unique_id = request.query_params.get("unique_id")
+    #     if not unique_id:
+    #         return Response({"error": "unique_id query parameter is required."}, status=status.HTTP_400_BAD_REQUEST)
+
+    #     try:
+    #         artisan_profile = ArtisanProfile.objects.get(user__unique_id=unique_id)
+    #     except ArtisanProfile.DoesNotExist:
+    #         return Response({"error": "ArtisanProfile with this unique_id does not exist."}, status=status.HTTP_404_NOT_FOUND)
+
+    #     # data = request.data.copy()
+        
+
+    #     # data = deepcopy(request.data)
+    #     data = request.data.dict() if hasattr(request.data, "dict") else request.data
+        
+    #     file_fields = ['proof_of_address', 'international_passport', 'NIN_doc', 'other_doc', 'driver_licence']
+    #     for field in file_fields:
+    #         if field in request.FILES:
+    #             setattr(artisan_profile, field, request.FILES[field])
+        
+    #     file_list_fields = {"qualifications": 5, "previous_jobs": 5}
+    #     for field, max_files in file_list_fields.items():
+    #         files = request.FILES.getlist(field)
+    #         if files:
+    #             if len(files) > max_files:
+    #                 return Response({"error": f"You can only upload a maximum of {max_files} {field} files."}, status=status.HTTP_400_BAD_REQUEST)
+    #             setattr(artisan_profile, field, files)
+        
+    #     for field in file_list_fields.keys():
+    #         data.pop(field, None)
+        
+    #     serializer = ArtisanProfileRequestSerializer(artisan_profile, data=data, partial=True)
+    #     if serializer.is_valid():
+    #         serializer.save()
+    #         print("serializer.data")
+    #         print(serializer.data)
+    #         print("serializer.data")
+    #         return Response({"message": "Profile updated successfully", "data": serializer.data}, status=status.HTTP_200_OK)
+        
+    #     print("serializer.errors")
+    #     print(serializer.errors)
+    #     print("serializer.errors")
+    #     return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+    # def patch(self, request, *args, **kwargs):
+    #     print("request.data")
+    #     print(request.data)
+    #     print("request.data")
+
+    #     unique_id = request.query_params.get("unique_id")
+    #     if not unique_id:
+    #         return Response({"error": "unique_id query parameter is required."}, status=status.HTTP_400_BAD_REQUEST)
+
+    #     try:
+    #         artisan_profile = ArtisanProfile.objects.get(user__unique_id=unique_id)
+    #     except ArtisanProfile.DoesNotExist:
+    #         return Response({"error": "ArtisanProfile with this unique_id does not exist."}, status=status.HTTP_404_NOT_FOUND)
+
+    #     data = request.data.dict() if hasattr(request.data, "dict") else request.data
+
+    #     file_fields = ['proof_of_address', 'international_passport', 'NIN_doc', 'other_doc', 'driver_licence']
+    #     for field in file_fields:
+    #         if field in request.FILES:
+    #             file_obj = request.FILES[field]
+    #             file_path = default_storage.save(f"artisan_files/{file_obj.name}", ContentFile(file_obj.read()))
+    #             setattr(artisan_profile, field, file_path)
+
+    #     file_list_fields = {"qualifications": 5, "previous_jobs": 5}
+
+    #     for field, max_files in file_list_fields.items():
+    #         files = request.FILES.getlist(field)
+
+    #         # Retrieve existing files safely
+    #         existing_files = getattr(artisan_profile, field, "[]")
+    #         if isinstance(existing_files, str):  # Convert JSON string to list if necessary
+    #             existing_files = json.loads(existing_files)
+    #         elif not isinstance(existing_files, list):  # Ensure it's always a list
+    #             existing_files = []
+
+    #         print(f"Existing {field}: {len(existing_files)}")
+    #         print(f"Newly uploaded {field}: {len(files)}")
+
+    #         if files:
+    #             total_files = len(existing_files) + len(files)
+
+    #             if total_files > max_files:
+    #                 return Response(
+    #                     {
+    #                         "error": f"You can only upload {max_files} {field} files in total. "
+    #                                 f"You currently have {len(existing_files)} files."
+    #                     },
+    #                     status=status.HTTP_400_BAD_REQUEST
+    #                 )
+
+    #             # Save new files
+    #             saved_file_paths = existing_files[:]  # Keep a copy of existing files
+    #             for file_obj in files:
+    #                 file_path = default_storage.save(f"artisan_files/{file_obj.name}", ContentFile(file_obj.read()))
+    #                 saved_file_paths.append(file_path)
+
+    #             setattr(artisan_profile, field, json.dumps(saved_file_paths))  # Save as JSON string
+
+
+
+
+
+
+    #     for field in file_list_fields.keys():
+    #         data.pop(field, None)
+
+    #     serializer = ArtisanProfileRequestSerializer(artisan_profile, data=data, partial=True)
+    #     if serializer.is_valid():
+    #         serializer.save()
+    #         print("serializer.data")
+    #         print(serializer.data)
+    #         print("serializer.data")
+    #         return Response({"message": "Profile updated successfully", "data": serializer.data}, status=status.HTTP_200_OK)
+
+    #     print("serializer.errors")
+    #     print(serializer.errors)
+    #     print("serializer.errors")
+    #     return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+
+
+
+    # def patch(self, request, *args, **kwargs):
+    #     print("request.data")
+    #     print(request.data)
+    #     print("request.data")
+
+    #     unique_id = request.query_params.get("unique_id")
+    #     if not unique_id:
+    #         return Response({"error": "unique_id query parameter is required."}, status=status.HTTP_400_BAD_REQUEST)
+
+    #     try:
+    #         artisan_profile = ArtisanProfile.objects.get(user__unique_id=unique_id)
+    #     except ArtisanProfile.DoesNotExist:
+    #         return Response({"error": "ArtisanProfile with this unique_id does not exist."}, status=status.HTTP_404_NOT_FOUND)
+
+    #     data = request.data.dict() if hasattr(request.data, "dict") else request.data
+
+    #     # Handle Single File Fields (Proof of Address, Passport, etc.)
+    #     file_fields = ['proof_of_address', 'international_passport', 'NIN_doc', 'other_doc', 'driver_licence']
+    #     for field in file_fields:
+    #         if field in request.FILES:
+    #             file_obj = request.FILES[field]
+    #             file_path = default_storage.save(f"artisan_files/{file_obj.name}", ContentFile(file_obj.read()))
+    #             setattr(artisan_profile, field, file_path)
+
+    #     # Handle Multiple File Fields (Qualifications & Previous Jobs)
+    #     file_list_fields = {"qualifications": 5, "previous_jobs": 5}
+
+    #     for field, max_files in file_list_fields.items():
+    #         files = request.FILES.getlist(field)
+
+    #         if files:
+    #             if len(files) > max_files:
+    #                 return Response(
+    #                     {"error": f"You can only upload up to {max_files} {field} files at once."},
+    #                     status=status.HTTP_400_BAD_REQUEST,
+    #                 )
+
+    #             # **Ensure New Uploads Replace Old Files**
+    #             saved_file_paths = []
+    #             for file_obj in files:
+    #                 file_path = default_storage.save(f"artisan_files/{file_obj.name}", ContentFile(file_obj.read()))
+    #                 saved_file_paths.append(file_path)
+
+    #             setattr(artisan_profile, field, json.dumps(saved_file_paths))  # Save as JSON string
+
+    #     # Remove file fields from data before serialization
+    #     for field in file_list_fields.keys():
+    #         data.pop(field, None)
+
+    #     serializer = ArtisanProfileRequestSerializer(artisan_profile, data=data, partial=True)
+    #     if serializer.is_valid():
+    #         serializer.save()
+    #         print("serializer.data")
+    #         print(serializer.data)
+    #         print("serializer.data")
+    #         return Response({"message": "Profile updated successfully", "data": serializer.data}, status=status.HTTP_200_OK)
+
+    #     print("serializer.errors")
+    #     print(serializer.errors)
+    #     print("serializer.errors")
+    #     return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
     def patch(self, request, *args, **kwargs):
-        unique_id = request.query_params.get('unique_id')
+        # print("request.data")
+        # print(request.data)
+        # print("request.data")
+
+        unique_id = request.query_params.get("unique_id")
         if not unique_id:
             return Response({"error": "unique_id query parameter is required."}, status=status.HTTP_400_BAD_REQUEST)
 
@@ -49,52 +251,59 @@ class ArtisanProfileByUniqueIdView(APIView):
         except ArtisanProfile.DoesNotExist:
             return Response({"error": "ArtisanProfile with this unique_id does not exist."}, status=status.HTTP_404_NOT_FOUND)
 
-        # Convert request data to a mutable dictionary without using `.copy()`
-        data = dict(request.data)  # Avoid `copy()` to prevent deep copying of file objects
+        data = request.data.dict() if hasattr(request.data, "dict") else request.data
 
-        # Handle file uploads for qualifications
-        qualifications_files = request.FILES.getlist('qualifications')
-        if qualifications_files:
-            if len(qualifications_files) > 5:
-                return Response({"error": "You can only upload a maximum of 5 qualification files."}, status=status.HTTP_400_BAD_REQUEST)
-            artisan_profile.qualifications.extend(qualifications_files)
+        # Handle Single File Fields (Proof of Address, Passport, etc.)
+        file_fields = ['proof_of_address', 'international_passport', 'NIN_doc', 'other_doc', 'driver_licence']
+        for field in file_fields:
+            if field in request.FILES:
+                file_obj = request.FILES[field]
+                file_path = default_storage.save(f"artisan_files/{file_obj.name}", ContentFile(file_obj.read()))
+                setattr(artisan_profile, field, file_path)
 
-        # Handle file uploads for previous jobs
-        previous_jobs_files = request.FILES.getlist('previous_jobs')
-        if previous_jobs_files:
-            if len(previous_jobs_files) > 5:
-                return Response({"error": "You can only upload a maximum of 5 previous job files."}, status=status.HTTP_400_BAD_REQUEST)
-            artisan_profile.previous_jobs.extend(previous_jobs_files)
+        # Handle Multiple File Fields (Qualifications & Previous Jobs)
+        file_list_fields = {"qualifications": 5, "previous_jobs": 5}
 
-        # Remove file fields from data to prevent validation errors
-        data.pop('qualifications', None)
-        data.pop('previous_jobs', None)
+        for field, max_files in file_list_fields.items():
+            files = request.FILES.getlist(field)
 
-        # Update the profile with the new data
+            if files:
+                # Get the current files for the field
+                current_files = getattr(artisan_profile, field, []) or []
+
+                # Add new files to the list
+                for file_obj in files:
+                    file_path = default_storage.save(f"qualificationsAndPreviousJobs/{file_obj.name}", ContentFile(file_obj.read()))
+                    current_files.append(file_path)
+
+                # If the total number of files exceeds the limit, remove the oldest files
+                if len(current_files) > max_files:
+                    # Remove the oldest files (first in the list)
+                    num_files_to_remove = len(current_files) - max_files
+                    for _ in range(num_files_to_remove):
+                        file_to_remove = current_files.pop(0)
+                        # Delete the file from storage
+                        default_storage.delete(file_to_remove)
+
+                # Update the field with the new list of files
+                setattr(artisan_profile, field, current_files)
+
+        # Remove file fields from data before serialization
+        for field in file_list_fields.keys():
+            data.pop(field, None)
+
         serializer = ArtisanProfileRequestSerializer(artisan_profile, data=data, partial=True)
         if serializer.is_valid():
             serializer.save()
+            # print("serializer.data")
+            # print(serializer.data)
+            # print("serializer.data")
             return Response({"message": "Profile updated successfully", "data": serializer.data}, status=status.HTTP_200_OK)
-        
+
         # print("serializer.errors")
         # print(serializer.errors)
         # print("serializer.errors")
-
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
-
-
-# class NonPaginatedProfileRequestViewSet(viewsets.ModelViewSet):
-#     """A ViewSet for listing Artisan Profiles without pagination."""
-#     queryset = ArtisanProfile.objects.all().order_by('-id')
-#     serializer_class = ArtisanProfileRequestSerializer
-#     permission_classes = [AllowAny]
-#     pagination_class = None  # ✅ Disable pagination for this viewset
-
-#     def list(self, request, *args, **kwargs):
-#         """Return all ArtisanProfiles without pagination."""
-#         queryset = self.get_queryset()
-#         serializer = self.get_serializer(queryset, many=True)
-#         return Response(serializer.data)
 
 class NonPaginatedProfileRequestViewSet(viewsets.ModelViewSet):
     """

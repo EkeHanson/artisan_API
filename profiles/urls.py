@@ -9,6 +9,6 @@ router.register(r'artisan-profile-no-pagination', NonPaginatedProfileRequestView
 urlpatterns = [
     path('api/', include(router.urls)),
     path('artisans/by-service/<uuid:service_details_id>/', ArtisanByServiceDetailsView.as_view(), name='artisans-by-service'),
-    path('artisan-profile/', ArtisanProfileByUniqueIdView.as_view(), name='artisan-profile-by-unique-id'),
+    path('single-artisan-profile/', ArtisanProfileByUniqueIdView.as_view(), name='artisan-profile-by-unique-id'),
     
 ]

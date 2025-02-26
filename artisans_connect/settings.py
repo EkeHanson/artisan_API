@@ -94,16 +94,38 @@ TEMPLATES = [
 WSGI_APPLICATION = 'artisans_connect.wsgi.application'
 
 
-DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.postgresql',
-        'NAME': 'test_artisan_db_wsnp',
-        'USER': 'test_artisan_db_wsnp_user',
-        'PASSWORD': 'yO6Akgaw8xYAjbuug9HXTugtY6ZeCLFq',
-        'HOST': 'dpg-cuu7ao1opnds739u13t0-a.oregon-postgres.render.com',
-        'PORT': '5432',
-    }
-}
+# DATABASES = {
+#     'default': {
+#         'ENGINE': 'django.db.backends.postgresql',
+#         'NAME': 'test_artisan_db_wsnp',
+#         'USER': 'test_artisan_db_wsnp_user',
+#         'PASSWORD': 'yO6Akgaw8xYAjbuug9HXTugtY6ZeCLFq',
+#         'HOST': 'dpg-cuu7ao1opnds739u13t0-a.oregon-postgres.render.com',
+#         'PORT': '5432',
+#     }
+# }
+
+# DATABASES = {
+#     'default': {
+#         'ENGINE': 'django.db.backends.postgresql',
+#         'NAME': 'simservice',
+#         'USER': 'postgres',
+#         'PASSWORD': 'pluralsight',
+#         'HOST': 'localhost',
+#         'PORT': '5432',
+#     }
+# }
+
+# DATABASES = {
+#     'default': {
+#         'ENGINE': 'django.db.backends.postgresql',
+#         'NAME': 'simupwsv_simservicehub_db',
+#         'USER': 'simupwsv_ekenehanson',
+#         'PASSWORD': 'pluralsight',
+#         'HOST': 'localhost',
+#         'PORT': '5432',
+#     }
+# }
 
 
 
@@ -114,6 +136,20 @@ DATABASES = {
 #     }
 # }
 
+
+DATABASES = {
+    'default': {
+        'ENGINE': 'django.db.backends.postgresql',
+        'NAME': 'artisan_db_t3wt',
+        'USER': 'artisan_db_t3wt_user',
+        'PASSWORD': 'LRcOdNU9b5R55IpcUMZzvcqR4ofbjsT5',
+        'HOST': 'dpg-cuv9nkdds78s73cipupg-a.oregon-postgres.render.com',
+        'PORT': '5432',  # Default PostgreSQL port
+        'OPTIONS': {
+            'sslmode': 'require',  # Ensures secure connection
+        }
+    }
+}
 
 REST_FRAMEWORK = {
     'DEFAULT_PAGINATION_CLASS': 'rest_framework.pagination.PageNumberPagination',

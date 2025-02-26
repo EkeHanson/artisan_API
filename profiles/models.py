@@ -15,8 +15,6 @@ def validate_file_extension(value):
     if ext.lower() not in valid_extensions:
         raise ValidationError(f'Unsupported file extension. Allowed formats: PNG, JPG, JPEG, PDF')
 
-
-
 class ArtisanProfile(models.Model):
     user = models.OneToOneField(
         CustomUser,
@@ -25,6 +23,7 @@ class ArtisanProfile(models.Model):
         limit_choices_to={'user_type': 'artisan'},
         db_index=True,
     )
+
     service_details = models.ForeignKey(
         ServiceCategory,
         on_delete=models.SET_NULL,
@@ -49,38 +48,26 @@ class ArtisanProfile(models.Model):
 
     availability = models.JSONField(default=dict)
 
-    qualifications = ArrayField(
-        models.FileField(upload_to='qualifications/'),
-        size=5,
-        blank=True,
-        null=True
-    )
-    previous_jobs = ArrayField(
-        models.FileField(upload_to='previous_jobs/'),
-        size=5,
-        blank=True,
-        null=True
-    )
+    about_artisan = models.TextField(blank=True, null=True)
+    business_location = models.CharField(max_length=255, blank=True, null=True)
 
+    #DOCS
+    proof_of_address = models.FileField(upload_to='artisan_files/', null=True, blank=True, validators=[validate_file_extension])
+    driver_licence = models.FileField(upload_to='artisan_files/', null=True, blank=True, validators=[validate_file_extension])
+    international_passport = models.FileField(upload_to='artisan_files/', null=True, blank=True, validators=[validate_file_extension])
+    NIN_doc = models.FileField(upload_to='artisan_files/', null=True, blank=True, validators=[validate_file_extension])
+    other_doc = models.FileField(upload_to='artisan_files/', null=True, blank=True, validators=[validate_file_extension])
+
+    qualifications = ArrayField(models.FileField(upload_to='qualifications/'), size=5, blank=True, null=True)
+    previous_jobs = ArrayField(models.FileField(upload_to='previous_jobs/'), size=5, blank=True, null=True)
 
     def save(self, *args, **kwargs):
         if self.user.user_type != 'artisan':
             raise ValidationError("The associated user must be of type 'artisan'.")
-        if self.qualifications and len(self.qualifications) > 5:
-            raise ValidationError("You can upload a maximum of 5 qualification files.")
-        if self.previous_jobs and len(self.previous_jobs) > 5:
-            raise ValidationError("You can upload a maximum of 5 qualification files.")
-
-        # # Generate identification code if not set
-        # if not self.identification_code:
-        #     date_joined = self.user.date_joined
-        #     month = date_joined.strftime("%m")  # Extract month as two digits
-        #     year_last_two = date_joined.strftime("%y")  # Extract last two digits of the year
-        #     user_id = self.user.id  # Get user ID
-            
-        #     self.identification_code = f"SSH{month}{year_last_two}{user_id}"
-
         super().save(*args, **kwargs)
+
+    def __str__(self):
+        return f"ArtisanProfile for {self.user.get_full_name()} ({self.user.email})"
 
     def __str__(self):
         return f"ArtisanProfile for {self.user.get_full_name()} ({self.user.email})"

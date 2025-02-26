@@ -48,7 +48,7 @@ class MessageSerializer(serializers.ModelSerializer):
 class UserProfileSerializer(serializers.ModelSerializer):
     class Meta:
         model = CustomUser
-        fields = ['unique_id', 'first_name', 'last_name', 'user_image', 'email', 'address', 'phone']  # Include fields you want to display
+        fields = ['unique_id', 'first_name', 'last_name', 'user_image', 'email', 'phone']  # Include fields you want to display
 
 
 class MessageWithSenderSerializer(serializers.ModelSerializer):
