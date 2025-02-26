@@ -87,15 +87,14 @@ class SendLoginTokenView(views.APIView):
                 fail_silently=False,
                 html_message=email_message_body,
             )
-            
             return Response({'message': 'Login token has been sent to your email'}, status=status.HTTP_200_OK)
         elif phone_number:
             try:
                 import requests
-
-                url = settings.bulksmsnigeria_url
+                
+                url = "https://www.bulksmsnigeria.com/api/v1/sms/create"
                 params = {
-                    "api_token": settings.BULK_SMS_api_token,
+                    "api_token": "iChBOImG7e8CPbZbMvPV9yHBmFCfL0FfBtz4t5cJFkbZe97tt3Q0xxVteSCt",
                     "from": "Simservice Hub",
                     "to": phone_number,
                     "body":sms_message_body
