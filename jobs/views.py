@@ -122,9 +122,9 @@ class JobRequestViewSet(viewsets.ModelViewSet):
 
         print
         """
-        print("job_request")
-        print(job_request)
-        print("job_request")
+        # print("job_request")
+        # print(job_request)
+        # print("job_request")
         try:
             # Fetch the customer and artisan (if applicable)
             customer = job_request.customer
