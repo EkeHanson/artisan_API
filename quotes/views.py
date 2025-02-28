@@ -29,7 +29,7 @@ class QuotationViewSet(ModelViewSet):
         bookings = Booking.objects.filter(artisan__unique_id=artisan_id).select_related("quote", "artisan", "job_request")
         
         if not bookings.exists():
-            return Response({"error": "No bookings found for this artisan."}, status=status.HTTP_404_NOT_FOUND)
+            return Response({"error": "You do not have any bookings yet."}, status=status.HTTP_404_NOT_FOUND)
 
         serializer = BookingSerializer(bookings, many=True)
         return Response(serializer.data, status=status.HTTP_200_OK)

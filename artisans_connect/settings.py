@@ -1,7 +1,6 @@
 from datetime import timedelta
 from pathlib import Path
 import os
-import dj_database_url
 
 BASE_DIR = Path(__file__).resolve().parent.parent
 
@@ -33,6 +32,7 @@ INSTALLED_APPS = [
     'quotes',
     'payouts',
     'subscription',
+    'notification',
 ]
 
 
@@ -72,7 +72,6 @@ CORS_ALLOW_METHODS = [
 ]
 
 ROOT_URLCONF = 'artisans_connect.urls'
-
 
 
 TEMPLATES = [
@@ -115,6 +114,7 @@ WSGI_APPLICATION = 'artisans_connect.wsgi.application'
 #         'PORT': '5432',
 #     }
 # }
+
 
 # DATABASES = {
 #     'default': {
@@ -198,7 +198,7 @@ EMAIL_HOST = 'mail.privateemail.com'
 EMAIL_PORT = 465
 EMAIL_USE_SSL = True
 EMAIL_HOST_USER = 'support@simservicehub.com'
-EMAIL_HOST_PASSWORD = 'Michael@2024'
+EMAIL_HOST_PASSWORD = 'Highwycombe02'
 DEFAULT_FROM_EMAIL = 'support@simservicehub.com'
 
 # CORS Configuration

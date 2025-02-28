@@ -93,9 +93,11 @@ class SendLoginTokenView(views.APIView):
                 import requests
                 
                 url = "https://www.bulksmsnigeria.com/api/v1/sms/create"
+                # url = "https://www.bulksmsnigeria.com/api/v1/sms/create"
                 params = {
-                    "api_token": "iChBOImG7e8CPbZbMvPV9yHBmFCfL0FfBtz4t5cJFkbZe97tt3Q0xxVteSCt",
-                    "from": "Simservice Hub",
+                    "api_token": "kr1TtEUXYV2Jh6dIUphB9SyAuyBQB4WF97lPN1cW7KNh0dS1hTjDotZLIisi",
+                    # "api_token": "iChBOImG7e8CPbZbMvPV9yHBmFCfL0FfBtz4t5cJFkbZe97tt3Q0xxVteSCt",
+                    "from": "SimserviceHub",
                     "to": phone_number,
                     "body":sms_message_body
                 }
@@ -532,7 +534,7 @@ def send_contact_email(request):
             </html>
 
             '''
-            recipient_list = ['ekehanson@gmail.com']
+            recipient_list = ['Simulcontactcenter@simu-l.com']
 
             from_email = settings.DEFAULT_FROM_EMAIL
 

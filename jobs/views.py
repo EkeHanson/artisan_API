@@ -1,6 +1,6 @@
-from django.shortcuts import render
-
+from notification.models import  Notofication
 # Create your views here.
+from rest_framework.exceptions import NotFound
 from rest_framework.decorators import action
 from rest_framework.response import Response
 from rest_framework import status, viewsets
@@ -51,6 +51,20 @@ class JobRequestViewSet(viewsets.ModelViewSet):
     queryset = JobRequest.objects.all().order_by('-id')
     permission_classes = [AllowAny]
 
+    def get(self, request, *args, **kwargs):
+        unique_id = request.query_params.get('unique_id')
+        if not unique_id:
+            return Response({"error": "unique_id query parameter is required."}, status=status.HTTP_400_BAD_REQUEST)
+
+        job_profiles = JobRequest.objects.filter(unique_id=unique_id)
+
+        if not job_profiles.exists():
+            raise NotFound({"error": "ArtisanProfile with this unique_id does not exist."})
+
+      
+        serializer = JobRequestSerializer(job_profiles.first())
+        return Response(serializer.data, status=status.HTTP_200_OK)
+
     def get_serializer_class(self):
         if self.action == 'create':
             return JobRequestCreateSerializer  # Use this for POST requests
@@ -88,7 +102,47 @@ class JobRequestViewSet(viewsets.ModelViewSet):
             return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
         
         self.perform_create(serializer)
+
+        # Create a notification for the job creation
+        # print("request.data")
+        # print(request.data)
+        # print("request.data")
+        # self.create_notification_for_job(request.data)
+                # Save the job request
+        job_request = serializer.save()
+
+        # Create a notification for the job creation
+        self.create_notification_for_job(job_request)
+ 
         return Response(serializer.data, status=status.HTTP_201_CREATED)
+
+    def create_notification_for_job(self, job_request):
+        """
+        Create a notification when a job is created.
+
+        print
+        """
+        print("job_request")
+        print(job_request)
+        print("job_request")
+        try:
+            # Fetch the customer and artisan (if applicable)
+            customer = job_request.customer
+            artisan = job_request.artisan  # Assuming artisan is linked to the job request
+
+            # Create the notification message
+            notification_message = f"A new job '{job_request.title}' has been created by {customer.first_name} {customer.last_name}."
+
+            # Create the notification
+            Notofication.objects.create(
+                artisan=artisan,
+                customer=customer,
+                job_request=job_request,
+                notification_message=notification_message,
+            )
+            print(f"Notification created for job: {job_request.unique_id}")
+        except Exception as e:
+            print(f"Error creating notification: {e}")
 
     def partial_update(self, request, *args, **kwargs):
         """Handle PATCH requests with detailed error logging."""

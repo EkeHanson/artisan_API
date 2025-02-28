@@ -17,6 +17,11 @@ class ServiceCategory(models.Model):
 
 
 class JobRequest(models.Model):
+
+    artisan_done = models.BooleanField(default=False)
+    customer_done = models.BooleanField(default=False)
+    admin_done = models.BooleanField(default=False)
+
     unique_id = models.UUIDField(default=uuid.uuid4, editable=False, unique=True)  # Custom unique ID
 
     customer = models.ForeignKey(CustomUser, on_delete=models.CASCADE, related_name="job_requests", to_field='unique_id')

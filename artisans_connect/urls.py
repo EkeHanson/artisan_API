@@ -28,6 +28,7 @@ urlpatterns = [
     path('api/auth/subscriptions/', include('subscription.urls')),
 
     path('api/auth/payouts/', include('payouts.urls')),
+    path('api/auth/notification/', include('notification.urls')),
 
     path('admin/', admin.site.urls),
 ]
