@@ -104,28 +104,19 @@ WSGI_APPLICATION = 'artisans_connect.wsgi.application'
 #     }
 # }
 
-# DATABASES = {
-#     'default': {
-#         'ENGINE': 'django.db.backends.postgresql',
-#         'NAME': 'simservice',
-#         'USER': 'postgres',
-#         'PASSWORD': 'pluralsight',
-#         'HOST': 'localhost',
-#         'PORT': '5432',
-#     }
-# }
+
+DATABASES = {
+    'default': {
+        'ENGINE': 'django.db.backends.postgresql',
+        'NAME': 'simservice',
+        'USER': 'postgres',
+        'PASSWORD': 'pluralsight',
+        'HOST': 'localhost',
+        'PORT': '5432',
+    }
+}
 
 
-# DATABASES = {
-#     'default': {
-#         'ENGINE': 'django.db.backends.postgresql',
-#         'NAME': 'simupwsv_simservicehub_db',
-#         'USER': 'simupwsv_ekenehanson',
-#         'PASSWORD': 'pluralsight',
-#         'HOST': 'localhost',
-#         'PORT': '5432',
-#     }
-# }
 
 
 
@@ -137,19 +128,19 @@ WSGI_APPLICATION = 'artisans_connect.wsgi.application'
 # }
 
 
-DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.postgresql',
-        'NAME': 'artisan_db_t3wt',
-        'USER': 'artisan_db_t3wt_user',
-        'PASSWORD': 'LRcOdNU9b5R55IpcUMZzvcqR4ofbjsT5',
-        'HOST': 'dpg-cuv9nkdds78s73cipupg-a.oregon-postgres.render.com',
-        'PORT': '5432',  # Default PostgreSQL port
-        'OPTIONS': {
-            'sslmode': 'require',  # Ensures secure connection
-        }
-    }
-}
+# DATABASES = {
+#     'default': {
+#         'ENGINE': 'django.db.backends.postgresql',
+#         'NAME': 'artisan_db_t3wt',
+#         'USER': 'artisan_db_t3wt_user',
+#         'PASSWORD': 'LRcOdNU9b5R55IpcUMZzvcqR4ofbjsT5',
+#         'HOST': 'dpg-cuv9nkdds78s73cipupg-a.oregon-postgres.render.com',
+#         'PORT': '5432',  # Default PostgreSQL port
+#         'OPTIONS': {
+#             'sslmode': 'require',  # Ensures secure connection
+#         }
+#     }
+# }
 
 REST_FRAMEWORK = {
     'DEFAULT_PAGINATION_CLASS': 'rest_framework.pagination.PageNumberPagination',
@@ -206,6 +197,3 @@ DEFAULT_FROM_EMAIL = 'support@simservicehub.com'
 
 # bulksmsnigeria_url = "https://www.bulksmsnigeria.com/api/v1/sms/create"
 # BULK_SMS_api_token = "iChBOImG7e8CPbZbMvPV9yHBmFCfL0FfBtz4t5cJFkbZe97tt3Q0xxVteSCt",
-
-
-
