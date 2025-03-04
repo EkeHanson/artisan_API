@@ -218,7 +218,6 @@ class JobRequestViewSet(viewsets.ModelViewSet):
         serializer = self.get_serializer(jobs, many=True, context={'request': request})  # Pass request context to serializer
         return Response(serializer.data, status=status.HTTP_200_OK)
 
-
 class ReviewViewSet(viewsets.ModelViewSet):
     queryset = Review.objects.all()
     serializer_class = ReviewSerializer

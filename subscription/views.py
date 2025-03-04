@@ -9,6 +9,9 @@ from users.models import CustomUser
 from rest_framework.decorators import action
 from django.utils.timezone import now
 from notification.models import  Notofication
+from django.shortcuts import get_object_or_404
+from payments.models import Payment
+
 
 class SubscriptionPlanViewSet(viewsets.ModelViewSet):
     permission_classes = [AllowAny]
@@ -80,6 +83,11 @@ class UserSubscriptionViewSet(viewsets.ModelViewSet):
     def create(self, request, *args, **kwargs):
         """Handle POST requests with detailed error logging."""
         serializer = self.get_serializer(data=request.data)
+
+        print("request.data")
+        print(request.data)
+        print("request.data")
+
         if not serializer.is_valid():
             # Log and print the errors
             error_message = f"POST request errors: {serializer.errors}"
@@ -92,7 +100,9 @@ class UserSubscriptionViewSet(viewsets.ModelViewSet):
             return Response({'detail': 'Subscribed duration is required.'}, status=status.HTTP_400_BAD_REQUEST)
 
         user_id = request.data.get('user')
+
         subscription_plan_uuid = request.data.get('subscription_plan')
+        payment_reference = request.data.get('payment_reference')  # Get from frontend
 
         if not user_id or not subscription_plan_uuid:
             error_message = "User ID and Subscription Plan UUID must be provided in the request."
@@ -111,6 +121,11 @@ class UserSubscriptionViewSet(viewsets.ModelViewSet):
             user=user,
             end_date__gte=now().date()  # Checks if there's any subscription that hasn't expired
         ).exists()
+
+            # Fetch the payment details
+        payment = get_object_or_404(Payment, reference=payment_reference, user=user)
+        if payment.status != "success":
+            return Response({"detail": "Payment verification failed."}, status=status.HTTP_400_BAD_REQUEST)
 
         # print(f"Found active subscriptions:")
 
@@ -144,6 +159,8 @@ class UserSubscriptionViewSet(viewsets.ModelViewSet):
         return Response(serializer.data, status=status.HTTP_201_CREATED)
 
 
+
+
 class UserSubscriptionDetailView(generics.RetrieveAPIView):
     queryset = UserSubscription.objects.all()
     serializer_class = UserSubscriptionDetailSerializer
@@ -157,6 +174,7 @@ class UserSubscriptionDetailView(generics.RetrieveAPIView):
         queryset = self.get_queryset()
         obj = generics.get_object_or_404(queryset)
         return obj
+
 
 class UserSubscriptionListView(generics.ListAPIView):  # Change from RetrieveAPIView to ListAPIView
     permission_classes = [AllowAny]

@@ -9,6 +9,8 @@ from jobs.models import JobRequest
 from rest_framework.decorators import action
 from .serializers import CustomUserSerializer 
 from notification.models import  Notofication
+from payments.models import Payment
+from django.shortcuts import get_object_or_404
 
 class QuotationViewSet(ModelViewSet):
     permission_classes = [AllowAny]
@@ -55,8 +57,8 @@ class QuotationViewSet(ModelViewSet):
 
 
 
-    @action(detail=True, methods=["post"], url_path="accept")
-    def accept_quote(self, request, unique_id=None):  # ✅ Use unique_id instead of pk
+    @action(detail=True, methods=["post"], url_path="accept_quote_via_artisan")
+    def accept_quote_via_artisan(self, request, unique_id=None):  # ✅ Use unique_id instead of pk
         """
         Accepts a quote and creates a booking for it.
         """
@@ -76,6 +78,15 @@ class QuotationViewSet(ModelViewSet):
         if Booking.objects.filter(quote=quote).exists():
             return Response({"error": "This quote has already been accepted"}, status=status.HTTP_400_BAD_REQUEST)
 
+        # Get payment reference from request
+        payment_reference = request.data.get("payment_reference")
+
+        # Fetch payment details
+        payment = get_object_or_404(Payment, reference=payment_reference, user=customer)
+
+        if payment.status != "success":
+            return Response({"error": "Payment verification failed"}, status=status.HTTP_400_BAD_REQUEST)
+
         # Create a new booking     
         booking = Booking.objects.create(
             quote=quote,
@@ -84,7 +95,64 @@ class QuotationViewSet(ModelViewSet):
             job_request=quote.job_request,
         )
         
-        self.create_notification_for_job(quote.artisan, customer, quote,quote.job_request)
+        # self.create_notification_for_job(quote.artisan, customer, quote,quote.job_request)
+
+        Notofication.objects.create(
+        artisan=quote.artisan,
+        customer=customer,
+        notification_message=f" {customer.first_name} {customer.last_name} has successfully paid {quote.bid_amount} to {quote.artisan.first_name} {quote.artisan.last_name} for {quote.job_request.title} job which is supposed to be completed at {quote.job_request.location} in {quote.job_duration}.",
+        notification_type="payment_made"
+        )
+
+        return Response(BookingSerializer(booking).data, status=status.HTTP_201_CREATED)
+    
+
+    @action(detail=True, methods=["post"], url_path="accept_quote_via_escrow")
+    def accept_quote_via_escrow(self, request, unique_id=None):  # ✅ Use unique_id instead of pk
+        """
+        Accepts a quote and creates a booking for it.
+        """
+  
+        try:
+            quote = QuoteRequest.objects.get(unique_id=unique_id)  # ✅ Ensure lookup uses unique_id
+            customer = quote.job_request.customer  # ✅ Directly assign the customer instance
+            if not isinstance(customer, CustomUser):  # Safety check
+                return Response({"error": "Invalid customer reference"}, status=status.HTTP_400_BAD_REQUEST)
+        except QuoteRequest.DoesNotExist:
+            return Response({"error": "Quote not found"}, status=status.HTTP_404_NOT_FOUND)
+        except Exception as e:
+            return Response({"error": str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+
+
+        # Check if booking already exists
+        if Booking.objects.filter(quote=quote).exists():
+            return Response({"error": "This quote has already been accepted"}, status=status.HTTP_400_BAD_REQUEST)
+
+        # Get payment reference from request
+        payment_reference = request.data.get("payment_reference")
+
+        # Fetch payment details
+        payment = get_object_or_404(Payment, reference=payment_reference, user=customer)
+
+        if payment.status != "success":
+            return Response({"error": "Payment verification failed"}, status=status.HTTP_400_BAD_REQUEST)
+
+        # Create a new booking     
+        booking = Booking.objects.create(
+            quote=quote,
+            customer=quote.job_request.customer,
+            artisan=quote.artisan,
+            job_request=quote.job_request,
+        )
+        
+        # self.create_notification_for_job(quote.artisan, customer, quote,quote.job_request)
+        
+        Notofication.objects.create(
+        artisan=quote.artisan,
+        customer=customer,
+        notification_message=f" {customer.first_name} {customer.last_name} has successfully paid  {quote.bid_amount} to the SimserviceHub Escrow Account.",
+        notification_type="payment_made"
+        )
 
         return Response(BookingSerializer(booking).data, status=status.HTTP_201_CREATED)
     
@@ -183,28 +251,23 @@ class QuotationViewSet(ModelViewSet):
                 status=status.HTTP_500_INTERNAL_SERVER_ERROR
             )
     
-    def create_notification_for_job(self, artisan, customer, quote, job_request):
-        """
-        Create a notification when a job is created.
+    # def create_notification_for_job(self, artisan, customer, quote, job_request):
+    #     """
+    #     Create a notification when a job is created.
 
-        print
-        """
+    #     print
+    #     """
         
-        try:
+    #     try:         
+    #         Notofication.objects.create(
+    #         artisan=artisan,
+    #         customer=customer,
+    #         notification_message=f" {customer.first_name} {customer.last_name} has successfully paid  {quote.bid_amount} to the SimserviceHub Escrow Account.",
+    #         notification_type="payment_made"
+    #     )
            
-            # Create the notification message
-            notification_message = f"{customer.first_name} {customer.last_name}' has paid {quote.bid_amount} to {artisan.first_name} {artisan.last_name} for {job_request.title} job which is supposed to be completed at {job_request.location} in {quote.job_duration}."
-
-            # Create the notification
-            Notofication.objects.create(
-                artisan=artisan,
-                customer=customer,
-                job_request=job_request,
-                notification_message=notification_message,
-            )
-           
-        except Exception as e:
-            print(f"Error creating notification: {e}")
+    #     except Exception as e:
+    #         print(f"Error creating notification: {e}")
 
 
     def partial_update(self, request, *args, **kwargs):

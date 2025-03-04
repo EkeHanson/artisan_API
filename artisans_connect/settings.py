@@ -182,4 +182,5 @@ DEFAULT_FROM_EMAIL = 'support@simservicehub.com'
 # bulksmsnigeria_url = "https://www.bulksmsnigeria.com/api/v1/sms/create"
 # BULK_SMS_api_token = "iChBOImG7e8CPbZbMvPV9yHBmFCfL0FfBtz4t5cJFkbZe97tt3Q0xxVteSCt",
 
-PAYSTACK_SECRET_KEY = "sk_live_3a8cbaa90397f9aadbfefbc11dcc2f8a006bf344"
+# PAYSTACK_SECRET_KEY = "sk_live_3a8cbaa90397f9aadbfefbc11dcc2f8a006bf344"
+PAYSTACK_SECRET_KEY = "sk_test_44aed516a35d8dc69ea97aab6681a5418704ccfc"

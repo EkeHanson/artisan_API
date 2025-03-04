@@ -19,6 +19,7 @@ from django.conf import settings
 from django.shortcuts import get_object_or_404
 import requests
 from django.http import JsonResponse
+from payments.models import Payment
 
 
 class SendLoginTokenView(views.APIView):
@@ -554,18 +555,49 @@ def send_contact_email(request):
 @api_view(["POST"])
 @permission_classes([AllowAny])
 def verify_payment(request):
-    reference = request.data.get("reference")
+
+    print("request.data.get")
+    print(request.data)
+    print("request.data.get")
+
+    user_id = request.data.get("user")
+    if not user_id:
+        return Response({"detail": "User ID is required."}, status=400)
+
+    try:
+        user = CustomUser.objects.get(unique_id=user_id)
+    except CustomUser.DoesNotExist:
+        return Response({"detail": "User not found."}, status=404)
+
+    payment_reference = request.data.get('reference')
+    if not payment_reference:
+        return Response({"detail": "Payment reference is required."}, status=400)
+    url = f"https://api.paystack.co/transaction/verify/{payment_reference}"
+    headers = {
+        "Authorization": f"Bearer {settings.PAYSTACK_SECRET_KEY}",
+        "Content-Type": "application/json"
+    }
     
-    if not reference:
-        return JsonResponse({"error": "Transaction reference is required"}, status=400)
-
-    url = f"https://api.paystack.co/transaction/verify/{reference}"
-    headers = {"Authorization": f"Bearer {settings.PAYSTACK_SECRET_KEY}"}
-
     response = requests.get(url, headers=headers)
     data = response.json()
 
     if data.get("status") and data["data"]["status"] == "success":
-        return JsonResponse({"status": "success", "message": "Payment verified successfully"})
-    else:
-        return JsonResponse({"status": "failed", "message": "Payment verification failed"}, status=400)
+        amount = data["data"]["amount"] / 100  # Convert from kobo to Naira
+        transaction_id = data["data"]["id"]
+      
+        payment_type = request.data.get("payment_type")
+
+        payment, created = Payment.objects.get_or_create(
+            user=user,
+            reference=payment_reference,
+            defaults={
+                "transaction_id": transaction_id,
+                "amount": amount,
+                "status": "success",
+                "payment_type": payment_type,
+            }
+        )
+
+        return Response({"status": "success", "payment": payment.reference}, status=200)
+
+    return Response({"detail": "Payment verification failed."}, status=400)
