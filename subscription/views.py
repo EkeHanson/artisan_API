@@ -127,8 +127,6 @@ class UserSubscriptionViewSet(viewsets.ModelViewSet):
 
         subscription = serializer.save(user=user, subscription_plan=subscription_plan)
 
-
-
         # Ensure is_active is updated after saving
         subscription.is_active = True
         subscription.subscribing_user_name = f"{user.first_name}  {user.last_name}"

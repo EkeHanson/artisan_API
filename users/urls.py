@@ -2,7 +2,7 @@ from django.urls import path, include
 from rest_framework.routers import DefaultRouter
 from .views import (
     UserViewSet, LoginView, ResetPasswordView, 
-    ConfirmResetPasswordView, SendLoginTokenView, VerifyLoginTokenView, send_contact_email
+    ConfirmResetPasswordView, SendLoginTokenView, VerifyLoginTokenView, send_contact_email, verify_payment
 )
 
 router = DefaultRouter()
@@ -20,4 +20,6 @@ urlpatterns = [
     path('reset-password/<uidb64>/<token>/', ConfirmResetPasswordView.as_view(), name='reset-password'),
     path('api/send-login-token/', SendLoginTokenView.as_view(), name='send-login-token'),
     path('api/verify-login-token/', VerifyLoginTokenView.as_view(), name='verify-login-token'),
+
+    path("paystack/verify-payment/", verify_payment, name="verify-payment"),
 ]

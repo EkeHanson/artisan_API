@@ -93,32 +93,29 @@ TEMPLATES = [
 WSGI_APPLICATION = 'artisans_connect.wsgi.application'
 
 
-# DATABASES = {
-#     'default': {
-#         'ENGINE': 'django.db.backends.postgresql',
-#         'NAME': 'test_artisan_db_wsnp',
-#         'USER': 'test_artisan_db_wsnp_user',
-#         'PASSWORD': 'yO6Akgaw8xYAjbuug9HXTugtY6ZeCLFq',
-#         'HOST': 'dpg-cuu7ao1opnds739u13t0-a.oregon-postgres.render.com',
-#         'PORT': '5432',
-#     }
-# }
-
-
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
-        'NAME': 'simservice',
-        'USER': 'postgres',
-        'PASSWORD': 'pluralsight',
-        'HOST': 'localhost',
-        'PORT': '5432',
+        'NAME': 'artisan_db_7nrl',
+        'USER': 'artisan_db_7nrl_user',
+        'PASSWORD': 'KHDm1NL0PBtWQX73gTZEVjkK50xfJ4vN',
+        'HOST': 'dpg-cv33r1ggph6c73cmim1g-a.oregon-postgres.render.com',
+        'PORT': '5432',  # Default PostgreSQL port
     }
 }
 
 
 
-
+# DATABASES = {
+#     'default': {
+#         'ENGINE': 'django.db.backends.postgresql',
+#         'NAME': 'simservice',
+#         'USER': 'postgres',
+#         'PASSWORD': 'pluralsight',
+#         'HOST': 'localhost',
+#         'PORT': '5432',
+#     }
+# }
 
 # DATABASES = {
 #     'default': {
@@ -128,19 +125,6 @@ DATABASES = {
 # }
 
 
-# DATABASES = {
-#     'default': {
-#         'ENGINE': 'django.db.backends.postgresql',
-#         'NAME': 'artisan_db_t3wt',
-#         'USER': 'artisan_db_t3wt_user',
-#         'PASSWORD': 'LRcOdNU9b5R55IpcUMZzvcqR4ofbjsT5',
-#         'HOST': 'dpg-cuv9nkdds78s73cipupg-a.oregon-postgres.render.com',
-#         'PORT': '5432',  # Default PostgreSQL port
-#         'OPTIONS': {
-#             'sslmode': 'require',  # Ensures secure connection
-#         }
-#     }
-# }
 
 REST_FRAMEWORK = {
     'DEFAULT_PAGINATION_CLASS': 'rest_framework.pagination.PageNumberPagination',
@@ -197,3 +181,5 @@ DEFAULT_FROM_EMAIL = 'support@simservicehub.com'
 
 # bulksmsnigeria_url = "https://www.bulksmsnigeria.com/api/v1/sms/create"
 # BULK_SMS_api_token = "iChBOImG7e8CPbZbMvPV9yHBmFCfL0FfBtz4t5cJFkbZe97tt3Q0xxVteSCt",
+
+PAYSTACK_SECRET_KEY = "sk_live_3a8cbaa90397f9aadbfefbc11dcc2f8a006bf344"

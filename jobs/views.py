@@ -13,7 +13,8 @@ from .models import ServiceCategory, JobRequest
 from .serializers import ServiceCategorySerializer, ServiceCategoryBulkCreateSerializer, JobRequestSerializer
 from rest_framework.views import APIView
 from .serializers import ServiceCategoryBulkCreateSerializer, ServiceCategorySerializer
-
+from django.shortcuts import get_object_or_404
+from users.models import CustomUser
 
 class BulkServiceCategoryCreateView(APIView):
     permission_classes = [AllowAny]
@@ -144,6 +145,7 @@ class JobRequestViewSet(viewsets.ModelViewSet):
         except Exception as e:
             print(f"Error creating notification: {e}")
 
+
     def partial_update(self, request, *args, **kwargs):
         """Handle PATCH requests with detailed error logging."""
         partial = kwargs.pop('partial', True)
@@ -157,7 +159,47 @@ class JobRequestViewSet(viewsets.ModelViewSet):
         
         self.perform_update(serializer)
         return Response(serializer.data, status=status.HTTP_200_OK)
+    
+        # Custom endpoint to edit job by unique_id
+    
+    
+    @action(detail=False, methods=['patch'], url_path='edit-by-unique-id')
+    def edit_by_unique_id(self, request):
+        """Handle PATCH requests to update job using unique_id."""
+        print("Received request data:", request.data)
+        
+        unique_id = request.query_params.get('unique_id')
 
+        if not unique_id:
+            return Response({"error": "unique_id query parameter is required."}, status=status.HTTP_400_BAD_REQUEST)
+
+        job = get_object_or_404(JobRequest, unique_id=unique_id)
+
+        # Pass the request context to the serializer
+        serializer = self.get_serializer(job, data=request.data, partial=True, context={'request': request})
+        if not serializer.is_valid():
+            return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+        self.perform_update(serializer)
+        return Response(serializer.data, status=status.HTTP_200_OK)
+    # def edit_by_unique_id(self, request):
+    #     """Handle PATCH requests to update job using unique_id."""
+    #     print("Received request data:", request.data)
+
+    #     unique_id = request.query_params.get('unique_id')
+
+    #     if not unique_id:
+    #         return Response({"error": "unique_id query parameter is required."}, status=status.HTTP_400_BAD_REQUEST)
+
+    #     job = get_object_or_404(JobRequest, unique_id=unique_id)
+
+    #     serializer = self.get_serializer(job, data=request.data, partial=True)
+    #     if not serializer.is_valid():
+    #         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+    #     self.perform_update(serializer)
+    #     return Response(serializer.data, status=status.HTTP_200_OK)
+    
     # Custom action to filter jobs by user (using the user's unique_id)
     @action(detail=False, methods=['get'], url_path='user-jobs')
     def get_user_jobs(self, request):

@@ -354,7 +354,7 @@ class ProfileRequestViewSet(viewsets.ModelViewSet):
             return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
         try:
-            self.perform_create(serializer)
+            self.perform_create(serializer)   
         except IntegrityError as e:
             error_message = "Foreign key constraint failed. Ensure the 'user' UUID exists and is an 'artisan'."
             return Response({"error": error_message}, status=status.HTTP_400_BAD_REQUEST)

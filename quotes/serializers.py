@@ -15,8 +15,8 @@ class CustomUserSerializer(serializers.ModelSerializer):
             "last_name",
             "user_type",
             "date_joined",
-            "about_artisan",
-            "business_location",
+            # "about_artisan",
+            # "business_location",
         ]
 
 class JobRequestSerializer(serializers.ModelSerializer):
@@ -53,6 +53,7 @@ class QuoteRequestSerializer(serializers.ModelSerializer):
             "job_request",
             "job_request_id",
             "bid_amount",
+            "customer",  
             "freelancer_service_fee",
             "job_duration",
             "created_at",
@@ -82,9 +83,25 @@ class QuoteRequestSerializer(serializers.ModelSerializer):
         return super().create(validated_data)
 
 
+# class BookingSerializer(serializers.ModelSerializer):
+#     quote = QuoteRequestSerializer(read_only=True)
+
+#     class Meta:
+#         model = Booking
+#         fields = "__all__"
 class BookingSerializer(serializers.ModelSerializer):
     quote = QuoteRequestSerializer(read_only=True)
+    artisan = CustomUserSerializer(read_only=True)
+    customer = CustomUserSerializer(read_only=True)
+    job_request = JobRequestSerializer(read_only=True)
 
     class Meta:
         model = Booking
-        fields = "__all__"
+        fields = [
+            "id",
+            "unique_id",
+            "quote",
+            "customer",
+            "artisan",
+            "job_request"
+        ]

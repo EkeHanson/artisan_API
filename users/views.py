@@ -13,12 +13,12 @@ from django.utils.encoding import force_bytes
 from django.conf import settings
 from rest_framework.decorators import api_view, permission_classes
 from django.core.files.base import ContentFile
-from twilio.rest import Client
 import random
 from django.core.cache import cache
 from django.conf import settings
 from django.shortcuts import get_object_or_404
 import requests
+from django.http import JsonResponse
 
 
 class SendLoginTokenView(views.APIView):
@@ -237,7 +237,9 @@ class UserViewSet(viewsets.ModelViewSet):
                                     <div style="position: relative; width: 700px; height: auto; text-align: center; padding: 80px 0px; padding-bottom: 0px !important;">
                                         <img src="https://www.simservicehub.com/assets/site-logo-marnjd0k.png" style="max-width: 150px; margin-bottom: 80px;" />
                                         <h3 style="font-size: 30px; font-weight: 700;">Your Account Activation Has Been Completed</h3>
-                                        <h2>Dear {user.first_name},\n\nYour account has been approved and activated. You can now log in and access all features.\n\nBest Regards,\nSupport Team</h2>
+                                        <h2>Dear {user.first_name},\n\nYour account has been approved and activated. You can now
+                                         <a href="simservicehub.com/login" style="color:#D8F3DC !important; text-decoration: underline !important;">log in</a>
+                                           and access all features.\n\nBest Regards,\nSupport Team</h2>
 
                                     <footer style="position: relative; width: 100%; height: auto; margin-top: 50px; padding: 30px; background-color: rgba(255,255,255,0.1);">
                                 <h5>Thanks for using our platform</h5>
@@ -547,3 +549,23 @@ def send_contact_email(request):
 
 
 
+
+
+@api_view(["POST"])
+@permission_classes([AllowAny])
+def verify_payment(request):
+    reference = request.data.get("reference")
+    
+    if not reference:
+        return JsonResponse({"error": "Transaction reference is required"}, status=400)
+
+    url = f"https://api.paystack.co/transaction/verify/{reference}"
+    headers = {"Authorization": f"Bearer {settings.PAYSTACK_SECRET_KEY}"}
+
+    response = requests.get(url, headers=headers)
+    data = response.json()
+
+    if data.get("status") and data["data"]["status"] == "success":
+        return JsonResponse({"status": "success", "message": "Payment verified successfully"})
+    else:
+        return JsonResponse({"status": "failed", "message": "Payment verification failed"}, status=400)

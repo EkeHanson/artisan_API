@@ -8,6 +8,7 @@ from users.models import CustomUser
 from jobs.models import JobRequest
 from rest_framework.decorators import action
 from .serializers import CustomUserSerializer 
+from notification.models import  Notofication
 
 class QuotationViewSet(ModelViewSet):
     permission_classes = [AllowAny]
@@ -16,23 +17,42 @@ class QuotationViewSet(ModelViewSet):
     lookup_field = "unique_id"  # ✅ Ensure DRF matches unique_id instead of id (pk)
 
  
+    # @action(detail=False, methods=["get"], url_path="artisan-bookings")
+    # def artisan_bookings(self, request):
+    #     """
+    #     Returns all bookings for a particular artisan along with complete quote data.
+    #     """
+    #     artisan_id = request.query_params.get("artisan_id")
+        
+    #     if not artisan_id:
+    #         return Response({"error": "artisan_id is required."}, status=status.HTTP_400_BAD_REQUEST)
+
+    #     bookings = Booking.objects.filter(artisan__unique_id=artisan_id).select_related("quote", "artisan", "job_request")
+        
+    #     if not bookings.exists():
+    #         return Response({"error": "You do not have any bookings yet."}, status=status.HTTP_404_NOT_FOUND)
+
+    #     serializer = BookingSerializer(bookings, many=True)
+    #     return Response(serializer.data, status=status.HTTP_200_OK)
+
     @action(detail=False, methods=["get"], url_path="artisan-bookings")
     def artisan_bookings(self, request):
         """
         Returns all bookings for a particular artisan along with complete quote data.
         """
         artisan_id = request.query_params.get("artisan_id")
-        
+
         if not artisan_id:
             return Response({"error": "artisan_id is required."}, status=status.HTTP_400_BAD_REQUEST)
 
         bookings = Booking.objects.filter(artisan__unique_id=artisan_id).select_related("quote", "artisan", "job_request")
-        
+
         if not bookings.exists():
             return Response({"error": "You do not have any bookings yet."}, status=status.HTTP_404_NOT_FOUND)
 
         serializer = BookingSerializer(bookings, many=True)
         return Response(serializer.data, status=status.HTTP_200_OK)
+
 
 
     @action(detail=True, methods=["post"], url_path="accept")
@@ -56,15 +76,18 @@ class QuotationViewSet(ModelViewSet):
         if Booking.objects.filter(quote=quote).exists():
             return Response({"error": "This quote has already been accepted"}, status=status.HTTP_400_BAD_REQUEST)
 
-        # Create a new booking
+        # Create a new booking     
         booking = Booking.objects.create(
             quote=quote,
-            customer=customer,
+            customer=quote.job_request.customer,
             artisan=quote.artisan,
             job_request=quote.job_request,
         )
+        
+        self.create_notification_for_job(quote.artisan, customer, quote,quote.job_request)
 
         return Response(BookingSerializer(booking).data, status=status.HTTP_201_CREATED)
+    
 
     @action(detail=False, methods=["get"], url_path="artisans-for-job")
     def artisans_for_job(self, request):
@@ -85,7 +108,7 @@ class QuotationViewSet(ModelViewSet):
             {
                 "artisan": {
                     **CustomUserSerializer(quote.artisan).data,
-                    "about_artisan": quote.artisan.about_artisan.split("\n\n")[0],  # Remove duplicate paragraphs
+                    # "about_artisan": quote.artisan.about_artisan.split("\n\n")[0],  # Remove duplicate paragraphs
                 },
                 "quote": QuoteRequestSerializer(quote).data,
             }
@@ -136,6 +159,10 @@ class QuotationViewSet(ModelViewSet):
         # Serialize and validate the request data
         serializer = self.get_serializer(data=request.data)
         if not serializer.is_valid():
+
+            # print("serializer.errors")
+            # print(serializer.errors)
+            # print("serializer.errors")
             return Response(
                 {"error": "Invalid data provided.", "details": serializer.errors},
                 status=status.HTTP_400_BAD_REQUEST
@@ -143,9 +170,9 @@ class QuotationViewSet(ModelViewSet):
 
         # Save the quote request and update job.num_appllications
         try:
-            serializer.save(artisan=artisan, job_request=job)
+            quote_data  = serializer.save(artisan=artisan, job_request=job)
 
-            # Increment the number of applications
+
             job.num_appllications += 1
             job.save(update_fields=["num_appllications"])
 
@@ -155,6 +182,30 @@ class QuotationViewSet(ModelViewSet):
                 {"error": "An unexpected error occurred while saving the quote.", "details": str(e)},
                 status=status.HTTP_500_INTERNAL_SERVER_ERROR
             )
+    
+    def create_notification_for_job(self, artisan, customer, quote, job_request):
+        """
+        Create a notification when a job is created.
+
+        print
+        """
+        
+        try:
+           
+            # Create the notification message
+            notification_message = f"{customer.first_name} {customer.last_name}' has paid {quote.bid_amount} to {artisan.first_name} {artisan.last_name} for {job_request.title} job which is supposed to be completed at {job_request.location} in {quote.job_duration}."
+
+            # Create the notification
+            Notofication.objects.create(
+                artisan=artisan,
+                customer=customer,
+                job_request=job_request,
+                notification_message=notification_message,
+            )
+           
+        except Exception as e:
+            print(f"Error creating notification: {e}")
+
 
     def partial_update(self, request, *args, **kwargs):
         instance = self.get_object()
