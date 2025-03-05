@@ -7,7 +7,7 @@ from users.models import CustomUser  # Ensure you import the CustomUser model
 class CustomUserSerializer(serializers.ModelSerializer):
     class Meta:
         model = CustomUser
-        fields = ['first_name', 'last_name', 'email', 'phone']  # Include only the required fields
+        fields = ['unique_id', 'first_name', 'last_name', 'email', 'phone']  # Include only the required fields
 
 class ServiceCategorySerializer(serializers.ModelSerializer):
     class Meta:

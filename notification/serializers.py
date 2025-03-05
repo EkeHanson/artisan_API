@@ -60,15 +60,7 @@ class NotoficationRequestSerializer(serializers.ModelSerializer):
             "created_at",
         ]
 
-    # def validate(self, data):
-    #     """Ensure an artisan can only submit one quote per job."""
-    #     artisan_id = data.get("artisan_id")
-    #     job_request_id = data.get("job_request_id")
-
-    #     if Notofication.objects.filter(artisan__unique_id=artisan_id, job_request__unique_id=job_request_id).exists():
-    #         raise serializers.ValidationError("You have already submitted a quote for this job.")
-
-        # return data
+  
 
     def create(self, validated_data):
         """Create a Notification with validated artisan, customer, and job request."""

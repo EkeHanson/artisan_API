@@ -50,6 +50,9 @@ class SendLoginTokenView(views.APIView):
 
 
         token = random.randint(10000, 99999)
+        # print("token")
+        # print(token)
+        # print("token")
         cache_key = f'login_token_{email or phone_number}'
         cache.set(cache_key, token, timeout=300)
 
@@ -148,6 +151,7 @@ class VerifyLoginTokenView(views.APIView):
                     'email': user.email,
                    
                     'user_type': user.user_type,
+                   
                     'phone': user.phone,
                     'first_name': user.first_name,
                     'last_name': user.last_name,
@@ -556,9 +560,9 @@ def send_contact_email(request):
 @permission_classes([AllowAny])
 def verify_payment(request):
 
-    print("request.data.get")
-    print(request.data)
-    print("request.data.get")
+    # print("request.data.get")
+    # print(request.data)
+    # print("request.data.get")
 
     user_id = request.data.get("user")
     if not user_id:

@@ -21,6 +21,7 @@ class CustomUserSerializer(serializers.ModelSerializer):
             'user_type',
             'date_joined',
             'is_approved',
+            'identification_code',
         ]
 
 class ServiceCategorySerializer(serializers.ModelSerializer):

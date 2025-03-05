@@ -47,9 +47,20 @@ class NotoficationViewSet(ModelViewSet):
         return Response(serializer.data, status=status.HTTP_200_OK)
 
     def create(self, request, *args, **kwargs):
+
+        # print("request.data.get")
+        # print(request.data)
+        # print("request.data.get")
+
         artisan_id = request.data.get("artisan_id")
         customer_id = request.data.get("customer_id")
         job_request_id = request.data.get("job_request_id")
+
+        # print("request.data.get")
+        # print(artisan_id)
+        # print(customer_id)
+        # print(job_request_id)
+        # print("request.data.get")
 
         # if not artisan_id or not job_request_id or not customer_id:
         #     return Response(
@@ -66,14 +77,30 @@ class NotoficationViewSet(ModelViewSet):
                 status=status.HTTP_400_BAD_REQUEST
             )
 
-        # Check if artisan exists
+        # print("request.data.get")
+        # print(artisan_id)
+        # print(customer_id)
+        # print(job_request_id)
+        # print("request.data.get")
+     
         try:
+            print("request.data.get")
+            print(artisan_id)
+            print("request.data.get")
+
             artisan = CustomUser.objects.get(unique_id=artisan_id, user_type="artisan")
+            print("request.data.get")
+            print(artisan)
+            print("request.data.get")
         except CustomUser.DoesNotExist:
             return Response(
                 {"error": "Invalid artisan_id. No artisan found with this ID."},
                 status=status.HTTP_400_BAD_REQUEST
             )
+        
+        print("request.data.get")
+        print(artisan)
+        print("request.data.get")
 
         # Check if job request exists
         try:
@@ -83,11 +110,19 @@ class NotoficationViewSet(ModelViewSet):
                 {"error": "Invalid job_request_id. No job found with this ID."},
                 status=status.HTTP_400_BAD_REQUEST
             )
+        
+        print("job")
+        print(job)
+        print("job")
 
         # Proceed with creating the notification
         serializer = self.get_serializer(data=request.data)
         if serializer.is_valid():
             serializer.save()
             return Response(serializer.data, status=status.HTTP_201_CREATED)
+     
         else:
+            print("serializer.errors")
+            print(serializer.errors)
+            print("serializer.errors")
             return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)

@@ -93,29 +93,17 @@ TEMPLATES = [
 WSGI_APPLICATION = 'artisans_connect.wsgi.application'
 
 
+
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
-        'NAME': 'artisan_db_7nrl',
-        'USER': 'artisan_db_7nrl_user',
-        'PASSWORD': 'KHDm1NL0PBtWQX73gTZEVjkK50xfJ4vN',
-        'HOST': 'dpg-cv33r1ggph6c73cmim1g-a.oregon-postgres.render.com',
-        'PORT': '5432',  # Default PostgreSQL port
+        'NAME': 'simserviceHUB',
+        'USER': 'postgres',
+        'PASSWORD': 'pluralsight',
+        'HOST': 'localhost',
+        'PORT': '5432',
     }
 }
-
-
-
-# DATABASES = {
-#     'default': {
-#         'ENGINE': 'django.db.backends.postgresql',
-#         'NAME': 'simservice',
-#         'USER': 'postgres',
-#         'PASSWORD': 'pluralsight',
-#         'HOST': 'localhost',
-#         'PORT': '5432',
-#     }
-# }
 
 # DATABASES = {
 #     'default': {
@@ -125,10 +113,9 @@ DATABASES = {
 # }
 
 
-
 REST_FRAMEWORK = {
     'DEFAULT_PAGINATION_CLASS': 'rest_framework.pagination.PageNumberPagination',
-    'PAGE_SIZE': 10,  # 10 messages per page
+    'PAGE_SIZE': 10,
 
     'DEFAULT_AUTHENTICATION_CLASSES': [
     'rest_framework.authentication.TokenAuthentication',
@@ -183,4 +170,4 @@ DEFAULT_FROM_EMAIL = 'support@simservicehub.com'
 # BULK_SMS_api_token = "iChBOImG7e8CPbZbMvPV9yHBmFCfL0FfBtz4t5cJFkbZe97tt3Q0xxVteSCt",
 
 # PAYSTACK_SECRET_KEY = "sk_live_3a8cbaa90397f9aadbfefbc11dcc2f8a006bf344"
-PAYSTACK_SECRET_KEY = "sk_test_44aed516a35d8dc69ea97aab6681a5418704ccfc"
+PAYSTACK_SECRET_KEY = "sk_live_3a8cbaa90397f9aadbfefbc11dcc2f8a006bf344"
